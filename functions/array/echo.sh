@@ -8,7 +8,7 @@
 # 2
 # 3
 
-function x-array-echo () {
+function echo () {
     local i
     for i in $(eval echo \${!$1[@]})
     do

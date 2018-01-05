@@ -1,4 +1,4 @@
-function x-array-ilast () {
+function ilast () {
     eval echo \${!$1[@]} | awk '{print $NF}'
     return $PIPESTATUS
 }

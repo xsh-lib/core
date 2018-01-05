@@ -9,7 +9,7 @@
 # echo ${x[@]}
 # 1 2 3 4 5 6
 
-function x-array-concat () {
+function concat () {
     local i j
     i=$(xsh array/ilast $1)
     i=$((i + 1))

@@ -10,7 +10,7 @@
 # echo ${y[@]}
 # 1 2 3
 
-function x-array-copy () {
+function copy () {
     [[ $1 == $2 ]] && return 9
     unset $2
     local i

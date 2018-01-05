@@ -9,7 +9,7 @@
 # x[1]=1
 # $foo x[1] y[1]
 
-function x-string-copy () {
+function copy () {
     [[ "$1" == "$2" ]] && return 9
     unset $2  # in case $2 is an array
     eval $2=\${$1}

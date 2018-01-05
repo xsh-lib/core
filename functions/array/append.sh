@@ -7,7 +7,7 @@
 # echo ${x[@]}
 # 1 2 3 4
 
-function x-array-append () {
+function append () {
     eval $1[$(xsh array/inext "$1")]=\$2
     return $?
 }
