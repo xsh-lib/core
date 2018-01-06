@@ -8,6 +8,6 @@
 # 1 2 3 4
 
 function append () {
-    eval $1[$(xsh array/inext "$1")]=\$2
+    eval $1[$(xsh /array/inext "$1")]=\$2
     return $?
 }

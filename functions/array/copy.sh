@@ -16,7 +16,7 @@ function copy () {
     local i
     for i in $(eval echo \${!$1[@]})
     do
-	    xsh string/copy "$1[$i]" "$2[$i]" || return $?
+	    xsh /string/copy "$1[$i]" "$2[$i]" || return $?
     done
     return $?
 }
