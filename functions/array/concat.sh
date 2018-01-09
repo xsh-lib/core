@@ -1,14 +1,16 @@
-# foo:desc:
-# Concat array 2 (named by $2) to array 1 (named by $1).
-# Both array's index will be kept.
-
-# foo:usage:
-# x=(1 2 3)
-# y=(4 5 6)
-# $foo x y
-# echo ${x[@]}
-# 1 2 3 4 5 6
-
+#? Usage:
+#?   @concat ARRAY1 ARRAY2
+#?
+#? Output:
+#?   Nothing
+#?
+#? Example:
+#?   arr1=(1 2 3)
+#?   arr2=(4 5 6)
+#?   @concat arr1 arr2
+#?   echo ${arr1[@]}
+#?   1 2 3 4 5 6
+#?
 function concat () {
     local i j
     i=$(xsh /array/ilast $1)
@@ -18,5 +20,4 @@ function concat () {
     do
 	    xsh /string/copy "$2[$j]" "$1[$(( i + j ))]" || return $?
     done
-    return $?
 }
