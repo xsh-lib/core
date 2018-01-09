@@ -1,4 +1,18 @@
+#? Usage:
+#?   @inext ARRAY
+#?
+#? Options:
+#?   ARRAY  Array name.
+#?
+#? Output:
+#?   The index of next element in the array.
+#?
+#? Example:
+#?   unset arr; arr[3]=III; arr[4]=IV
+#?   @inext arr
+#?   5
+#?
 function inext () {
-    xsh /array/ilast "$1" | awk '{if ($0 != "") print $0 + 1; else print 0; }'
-    return $PIPESTATUS
+    local index=$(xsh /array/ilast "$1")
+    [[ -n $index ]] && echo $((index + 1)) || echo 0
 }
