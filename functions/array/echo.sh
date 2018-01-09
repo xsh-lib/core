@@ -1,18 +1,20 @@
-# foo:desc:
-# echo each item of an Array as a line.
-
-# foo:usage:
-# x=(1 2 3)
-# $foo x
-# 1
-# 2
-# 3
-
+#? Usage:
+#?   @echo ARRAY
+#?
+#? Options:
+#?   ARRAY  Array name.
+#?
+#? Examples:
+#?   arr=(1 2 3)
+#?   @echo arr
+#?   1
+#?   2
+#?   3
+#?
 function echo () {
     local i
-    for i in $(eval echo \${!$1[@]})
-    do
+    
+    for i in $(eval echo \${!$1[@]}); do
         eval echo \"\${$1[$i]}\"
     done
-    return $?
 }
