@@ -6,7 +6,7 @@
 #?   ARRAY2  Array name joining from.
 #?
 #? Output:
-#?   Nothing
+#?   Nothing.
 #?
 #? Example:
 #?   arr1=(1 2 3)

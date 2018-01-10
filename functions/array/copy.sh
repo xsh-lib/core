@@ -5,6 +5,9 @@
 #?   SRC_ARRAY  Array name copying from.
 #?   NEW_ARRAY  Array name copying to.
 #?
+#? Output:
+#?   Nothing.
+#?
 #? Example:
 #?   src=(1 2 3)
 #?   @copy src new

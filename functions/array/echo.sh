@@ -4,7 +4,10 @@
 #? Options:
 #?   ARRAY  Array name.
 #?
-#? Examples:
+#? Output:
+#?   Nothing.
+#?
+#? Example:
 #?   arr=(1 2 3)
 #?   @echo arr
 #?   1
@@ -12,9 +15,5 @@
 #?   3
 #?
 function echo () {
-    local i
-    
-    for i in $(eval echo \${!$1[@]}); do
-        eval echo \"\${$1[$i]}\"
-    done
+    eval printf \"%s\\n\" \"\${$1[@]}\"
 }

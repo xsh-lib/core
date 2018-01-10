@@ -6,7 +6,7 @@
 #?   VALUE  Value to append.
 #?
 #? Output:
-#?   Nothing
+#?   Nothing.
 #?
 #? Example:
 #?   arr=(1 2 3)
