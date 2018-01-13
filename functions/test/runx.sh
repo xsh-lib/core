@@ -1,7 +1,8 @@
 #? Usage:
-#?   @runx N CMD [CMD_OPTIONS]
+#?   @runx [-s] N CMD [CMD_OPTIONS]
 #?
 #? Options:
+#?   [-s]           Shell mode, the command will be executed with eval.
 #?   N              How many times the command will be run. Default is 1.
 #?   CMD            Command will be run.
 #?   [CMD_OPTIONS]  Command options, will be passed to command directly.
@@ -15,9 +16,22 @@
 #?   Hello World
 #?
 function runx () {
-    local i
+    local OPTARG OPTIND opt
+    local shell i
+    
+    while getopts s opt; do
+        case ${opt} in
+            s)
+                shell=eval
+                ;;
+            *)
+                return 255
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
 
     for ((i=0; i<$1; i++)); do
-        "${@:2}"
+        $shell "${@:2}"
     done
 }
