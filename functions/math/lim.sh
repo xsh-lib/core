@@ -15,7 +15,7 @@
 #?   Solve[k1 k2^n == m, n]
 #?   n=log(m/k1)/log(k2)
 #?
-lim () {
+function lim () {
     local m=$1 k1=$2 k2=$3
 
     awk -v m=${m} -v k1=${k1} -v k2=${k2} '{print int(log(m/k1)/log(k2))}'
