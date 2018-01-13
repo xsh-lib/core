@@ -17,7 +17,7 @@
 function runx () {
     local i
 
-    for i in {1..$1}; do
+    for ((i=0; i<$1; i++)); do
         "${@:2}"
     done
 }
