@@ -16,17 +16,17 @@
 #?
 function repeat () {
     local str=$1 times=${2:-1}
-    local pmln i i_str
+    local n i i_str
 
     if [[ -z ${str} ]]; then
         return
     fi
 
-    pmln=$(( $(xsh /math/log-pmln "${#str}" 2 "${times}") + 2 )) || return
+    n=$(( $(xsh /math/lim "${times}" "${#str}" 2) + 2 )) || return
 
     i=0
     i_str=${str}
-    while [[ ${i} -lt ${pmln} ]]; do
+    while [[ ${i} -lt ${n} ]]; do
         i_str=${i_str}${i_str} || return
         let i++
     done
