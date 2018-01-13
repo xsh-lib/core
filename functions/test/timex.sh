@@ -36,8 +36,8 @@ function timex () {
     shift $((OPTIND - 1))
 
     if [[ ${quiet} -eq 1 ]]; then
-        xsh /test/runx "$@" >/dev/null
+        time xsh /test/runx "$@" >/dev/null
     else
-        xsh /test/runx "$@"
+        time xsh /test/runx "$@"
     fi
 }
