@@ -22,7 +22,7 @@ function repeat () {
         return
     fi
 
-    n=$(( $(xsh /math/lim "${times}" "${#str}" 2) + 2 )) || return
+    n=$(xsh /math/lim "${times}" "${#str}" 2) || return
 
     i=0
     i_str=${str}
@@ -31,5 +31,5 @@ function repeat () {
         let i++
     done
 
-    echo "${i_str}" | cut -c1-$(( ${#str} * times ))
+    echo "${i_str}"
 }
