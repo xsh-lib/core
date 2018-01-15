@@ -16,20 +16,10 @@
 #?
 function repeat () {
     local str=$1 times=${2:-1}
-    local n i i_str
 
     if [[ -z ${str} ]]; then
         return
     fi
 
-    n=$(xsh /math/lim "${times}" "${#str}" 2) || return
-
-    i=0
-    i_str=${str}
-    while [[ ${i} -lt ${n} ]]; do
-        i_str=${i_str}${i_str} || return
-        let i++
-    done
-
-    echo "${i_str}"
+    yes "${str}" | tr -d '\n' | head -c "${times}"
 }

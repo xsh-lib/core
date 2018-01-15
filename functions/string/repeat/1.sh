@@ -21,5 +21,5 @@ function repeat () {
         return
     fi
 
-    head -c "${times}" < /dev/zero | sed "s|.|${str}|g"
+    head -c "${times}" /dev/zero | sed "s|.|${str}|g"
 }
