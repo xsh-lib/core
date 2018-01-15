@@ -2,7 +2,7 @@
 #?   @sign NUMBER
 #?
 #? Output:
-#?   1, -1, 0, -1, or ''.
+#?   1, -1, 0, -0, or ''.
 #?
 function sign () {
     if test "$1" == '0'; then

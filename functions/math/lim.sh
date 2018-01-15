@@ -18,5 +18,5 @@
 function lim () {
     local m=$1 k1=$2 k2=$3
 
-    awk -v m=${m} -v k1=${k1} -v k2=${k2} '{print int(log(m/k1)/log(k2))}' <(echo)
+    awk -v m=${m} -v k1=${k1} -v k2=${k2} 'BEGIN {print int(log(m/k1)/log(k2))}'
 }
