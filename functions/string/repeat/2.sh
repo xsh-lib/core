@@ -22,7 +22,7 @@ function repeat () {
         return
     fi
 
-    n=$(xsh /math/lim "${times}" "${#str}" 2) || return
+    n=$(xsh /math/lim "$((times * ${#str}))" "${#str}" 2) || return
 
     i=0
     i_str=${str}

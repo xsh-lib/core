@@ -22,5 +22,4 @@ function repeat () {
     fi
 
     head -c "${times}" < /dev/zero | sed "s|.|${str}|g"
-    printf '\n'
 }
