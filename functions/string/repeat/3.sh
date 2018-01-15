@@ -21,5 +21,5 @@ function repeat () {
         return
     fi
 
-    yes "${str}" | tr -d '\n' | head -c "${times}"
+    yes "${str}" | head -"${times}" | tr -d '\n'
 }
