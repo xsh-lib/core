@@ -16,20 +16,29 @@
 #?
 function repeat () {
     local str=$1 times=${2:-1}
-    local n i i_str
+    local result len lim remain_times i
 
     if [[ -z ${str} ]]; then
         return
     fi
 
-    n=$(xsh /math/lim "$((times * ${#str}))" "${#str}" 2) || return
+    len=$((${#str} * times))
+    lim=$(xsh /math/lim "${len}" "${#str}" 2) || return
 
     i=0
-    i_str=${str}
-    while [[ ${i} -le ${n} ]]; do
-        i_str=${i_str}${i_str} || return
+    result=${str}
+    while [[ ${i} -lt ${n} ]]; do
+        result=${result}${result} || return
         let i++
     done
 
-    echo "${i_str}"
+    remain_times=$(((len - ${#str} * (2 ** lim)) / ${#str}))
+
+    if [[ ${remain_times} -gt 0 ]]; then
+        result=${result}$(xsh /string/repeat "${str}" "${remain_times}")
+    else
+        :
+    fi
+
+    echo "${result}"
 }
