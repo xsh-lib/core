@@ -27,7 +27,7 @@ function repeat () {
 
     i=0
     result=${str}
-    while [[ ${i} -lt ${n} ]]; do
+    while [[ ${i} -lt ${lim} ]]; do
         result=${result}${result} || return
         let i++
     done
