@@ -26,7 +26,7 @@ function repeat () {
 
     i=0
     i_str=${str}
-    while [[ ${i} -lt ${n} ]]; do
+    while [[ ${i} -le ${n} ]]; do
         i_str=${i_str}${i_str} || return
         let i++
     done
