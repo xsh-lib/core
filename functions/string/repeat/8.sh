@@ -25,6 +25,7 @@ function repeat () {
         return
     fi
 
+    lstr=${#str}
     lresult=$((lstr * times))
     limit=$(xsh /math/lim "${lresult}" "${lstr}" 2) || return
 
@@ -39,8 +40,6 @@ function repeat () {
 
     if [[ ${remain_times} -gt 0 ]]; then
         result=${result}$(xsh /string/repeat "${str}" "${remain_times}")
-    else
-        :
     fi
 
     echo "${result}"

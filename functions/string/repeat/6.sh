@@ -1,5 +1,5 @@
 #? Version:
-#?   Way of printf %Ns and sed.
+#?   Way of awk printf in while.
 #?
 #? Usage:
 #?   @repeat STRING [N]
@@ -24,5 +24,5 @@ function repeat () {
         return
     fi
 
-    printf "%${times}s" | sed "s| |${str}|g"
+    awk -v str=${str} -v times=${times} 'BEGIN {while (i++ < times) printf str}'
 }
