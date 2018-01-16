@@ -1,3 +1,6 @@
+#? Version:
+#?   Way of recursion with awk.
+#?
 #? Usage:
 #?   @repeat STRING [N]
 #?
@@ -21,5 +24,30 @@ function repeat () {
         return
     fi
 
-    head -c "${times}" /dev/zero | sed "s|.|${str}|g"
+    awk -v str=${str} \
+        -v times=${times} '
+        function lim(m, k1, k2) {
+            return int(log(m/k1)/log(k2))
+        }
+        function repeat(str, times,
+                        # local variables
+                        lstr, lresult, limit, result, i, remain_times) {
+            lstr=length(str)
+            lresult=lstr*times
+            limit=lim(lresult, lstr, 2)
+
+            result=str
+            for (i=0; i<limit; i++) {
+                result=result result
+            }
+
+            remain_times=(lresult-lstr*(2^limit))/lstr
+
+            if (remain_times > 0) {
+                result=result repeat(str, remain_times)
+            }
+
+            return result
+        }
+        BEGIN { print repeat(str, times) }'
 }

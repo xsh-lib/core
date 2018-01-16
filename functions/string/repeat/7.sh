@@ -1,5 +1,5 @@
 #? Version:
-#?   Way of head -c N /dev/zero and sed.
+#?   Way of yes, head -N, and tr.
 #?
 #? Usage:
 #?   @repeat STRING [N]
@@ -24,5 +24,5 @@ function repeat () {
         return
     fi
 
-    head -c "${times}" /dev/zero | sed "s|.|${str}|g"
+    yes "${str}" | head -"${times}" | tr -d '\n'
 }

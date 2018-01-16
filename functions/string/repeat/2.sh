@@ -1,3 +1,6 @@
+#? Version:
+#?   Way of BSD seq - macOS only.
+#?
 #? Usage:
 #?   @repeat STRING [N]
 #?
@@ -16,29 +19,10 @@
 #?
 function repeat () {
     local str=$1 times=${2:-1}
-    local result len lim remain_times i
 
     if [[ -z ${str} ]]; then
         return
     fi
 
-    len=$((${#str} * times))
-    lim=$(xsh /math/lim "${len}" "${#str}" 2) || return
-
-    i=0
-    result=${str}
-    while [[ ${i} -lt ${lim} ]]; do
-        result=${result}${result} || return
-        let i++
-    done
-
-    remain_times=$(((len - ${#str} * (2 ** lim)) / ${#str}))
-
-    if [[ ${remain_times} -gt 0 ]]; then
-        result=${result}$(xsh /string/repeat "${str}" "${remain_times}")
-    else
-        :
-    fi
-
-    echo "${result}"
+    seq -f "${str}" -s "" "${times}"
 }

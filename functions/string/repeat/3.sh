@@ -1,3 +1,6 @@
+#? Version:
+#?   Way of jot - macOS only.
+#?
 #? Usage:
 #?   @repeat STRING [N]
 #?
@@ -21,5 +24,5 @@ function repeat () {
         return
     fi
 
-    yes "${str}" | head -"${times}" | tr -d '\n'
+    jot -b "${str}" -s "" "${times}"
 }
