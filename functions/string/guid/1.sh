@@ -17,5 +17,3 @@ function guid () {
     # [2-17][integer in 18 strings of bit]
     printf %X $((RANDOM % 9 + RANDOM % 8 + 2))$(echo $RANDOM$RANDOM$RANDOM$RANDOM$RANDOM | cut -c1-18)
 }
-
-od  -vN "16" -An -tx1 /dev/urandom | tr -d " \n"; echo;
