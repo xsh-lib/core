@@ -39,7 +39,7 @@ function repeat () {
     remain_times=$(((lresult - lstr * (2 ** limit)) / lstr))
 
     if [[ ${remain_times} -gt 0 ]]; then
-        result=${result}$(xsh /string/repeat "${str}" "${remain_times}")
+        result=${result}$(xsh /string/repeat/8 "${str}" "${remain_times}")
     fi
 
     echo "${result}"
