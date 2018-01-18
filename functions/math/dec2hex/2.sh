@@ -12,7 +12,7 @@
 #?
 #? Example:
 #?   @dec2hex 255
-#?   0xff
+#?   FF
 #?
 function dec2hex () {
     bc <<<$(echo "obase=16; ibase=10; $1")
