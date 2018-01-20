@@ -40,7 +40,7 @@ function parse () {
                 if (match($0, /^\[.+\]$/) > 0) {
                     sv=remove_bracket($0); 
                     sn=fixname(sv); 
-                    print prefix sn "=" sv
+                    print prefix sn "=\"" sv "\""
                 } else {
                     kn=fixname($1); 
                     $1=""; 
