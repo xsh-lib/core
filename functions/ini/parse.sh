@@ -13,20 +13,20 @@
 #?   foo=bar
 #?
 #?   @parse foo.ini
-#?   echo $__ini_my_section  # 'my section'
-#?   echo $__ini_my_section_foo  # 'bar'
+#?   echo $__INI_SECTION_my_section  # 'my section'
+#?   echo $__INI_VAR_my_section_foo  # 'bar'
 function parse () {
     local ini_file=$1
     local kvs
 
     kvs=$(
         awk -F= \
-            -v prefix="__ini_" '
+            -v prefix="__INI_" '
             function trim(str) {
                 gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str); 
                 return str
             }
-            function fixname(str) {
+            function get_var_name(str) {
                 str=trim(str); 
                 str=remove_bracket(str); 
                 gsub(/[^[:alnum:]]/, "_", str); 
@@ -36,16 +36,16 @@ function parse () {
                 gsub(/\[|\]/, "", str); 
                 return str
             } 
-            !/^;/ {
-                if (match($0, /^\[.+\]$/) > 0) {
+            !/^;/ {  # filter comments
+                if (match($0, /^\[.+\]$/) > 0) {  # sections
                     sv=remove_bracket($0); 
-                    sn=fixname(sv); 
-                    print prefix sn "=\"" sv "\""
-                } else {
-                    kn=fixname($1); 
+                    sn=get_var_name(sv); 
+                    print prefix "SECTION_" sn "=\"" sv "\""
+                } else {  # variables
+                    kn=get_var_name($1); 
                     $1=""; 
                     vv=trim($0); 
-                    print prefix sn "_" kn "=\"" vv "\""
+                    print prefix "VAR_" sn "_" kn "=\"" vv "\""
                 }
             }' "${ini_file}"
        )
