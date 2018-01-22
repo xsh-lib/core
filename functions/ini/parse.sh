@@ -67,17 +67,17 @@ function parse () {
                 if (match($0, /^\[.+\]$/) > 0) {  # sections
                     sv=remove_bracket($0);
                     sn=get_var_name(sv);
-                    print prefix "SECTIONS_" sn "=\"" sv "\""
+                    print prefix "SECTIONS_" sn "=" sv
                 } else {  # variables
                     kn=get_var_name($1);
                     $1="";
                     vv=trim($0);
-                    print prefix "KEYS_" sn "_" kn "=\"" vv "\""
+                    print prefix "KEYS_" sn "_" kn "=" vv
                 }
             }' "${ini_file}"
       )
 
     while read ln; do
         export "${ln}"
-    done <<<$(echo "${kvs}")
+    done <<<"$(echo "${kvs}")"
 }
