@@ -1,9 +1,11 @@
 #? Usage:
-#?   @parse [-p PREFIX] INI_FILE
+#?   @parse [-p PREFIX] [-x] INI_FILE
 #?
 #? Options:
 #?   [-p PREFIX]  Prefix variable name with PREFIX.
 #?                Default is '__INI_'.
+#?
+#?   [-x]         To make variables export.
 #?
 #?   INI_FILE     Full path of INI file to parse.
 #?
@@ -25,13 +27,16 @@
 #?
 function parse () {
     local opt OPTIND OPTARG
-    local prefix ini_file
-    local keyvalues
+    local prefix declare_options ini_file
+    local kv
 
-    while getopts p: opt; do
+    while getopts p:x opt; do
         case ${opt} in
             p)
                 prefix=${OPTARG}
+                ;;
+            x)
+                declare_options='-x'
                 ;;
             *)
                 return 255
@@ -46,7 +51,7 @@ function parse () {
         return 255
     fi
 
-    keyvalues=$(
+    kv=$(
         awk -F= \
             -v prefix="${prefix:-__INI_}" '
             function trim(str) {
@@ -63,7 +68,7 @@ function parse () {
                 gsub(/\[|\]/, "", str);
                 return str
             }
-            !/^;/ {  # filter comments
+            !/^;/ {  # filter commented lines
                 if (match($0, /^\[.+\]$/) > 0) {  # sections
                     sv=remove_bracket($0);
                     sn=get_var_name(sv);
@@ -75,6 +80,7 @@ function parse () {
                     print prefix "KEYS_" sn "_" kn "=\"" vv "\""
                 }
             }' "${ini_file}"
-       )
-    eval "${keyvalues}"
+      )
+
+    declare ${declare_options} "{kv}"
 }
