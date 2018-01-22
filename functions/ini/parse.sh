@@ -26,7 +26,7 @@
 function parse () {
     local opt OPTIND OPTARG
     local prefix ini_file
-    local kvs
+    local kvs ln
 
     while getopts p: opt; do
         case ${opt} in
@@ -77,5 +77,7 @@ function parse () {
             }' "${ini_file}"
       )
 
-    export ${kvs}
+    while read ln; do
+        export "${ln}"
+    done <<<$(echo "${kvs}")
 }
