@@ -82,5 +82,5 @@ function parse () {
             }' "${ini_file}"
       )
 
-    declare ${declare_options} "{kv}"
+    declare ${declare_options} "${kv}"
 }
