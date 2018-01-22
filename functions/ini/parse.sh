@@ -16,22 +16,22 @@
 #?   foo=bar
 #?
 #?   @parse foo.ini
-#?   echo $__INI_SECTION_my_section  # 'my section'
-#?   echo $__INI_VAR_my_section_foo  # 'bar'
+#?   echo $__INI_SECTIONS_my_section  # 'my section'
+#?   echo $__INI_KEYS_my_section_foo  # 'bar'
 #?
-#?   @parse -p __INI_FOO_ foo.ini
-#?   echo $__INI_FOO_SECTION_my_section  # 'my section'
-#?   echo $__INI_FOO_VAR_my_section_foo  # 'bar'
+#?   @parse -p __FOO_INI_ foo.ini
+#?   echo $__FOO_INI_SECTIONS_my_section  # 'my section'
+#?   echo $__FOO_INI_KEYS_my_section_foo  # 'bar'
 #?
 function parse () {
     local opt OPTIND OPTARG
     local prefix ini_file
-    local kvs
+    local keyvalues
 
     while getopts p: opt; do
-        case $opt in
+        case ${opt} in
             p)
-                prefix=$OPTARG
+                prefix=${OPTARG}
                 ;;
             *)
                 return 255
@@ -41,15 +41,14 @@ function parse () {
     shift $((OPTIND - 1))
     ini_file=$1
 
-    if [[ -z $ini_file ]]; then
-        printf "ERROR: parameter 'INI_FILE' null or not set."
+    if [[ -z ${ini_file} ]]; then
+        printf "ERROR: parameter 'INI_FILE' null or not set.\n" >&2
+        return 255
     fi
 
-    prefix=${prefix:-__INI_}
-
-    kvs=$(
+    keyvalues=$(
         awk -F= \
-            -v prefix="$prefix" '
+            -v prefix="${prefix:-__INI_}" '
             function trim(str) {
                 gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str);
                 return str
@@ -68,14 +67,14 @@ function parse () {
                 if (match($0, /^\[.+\]$/) > 0) {  # sections
                     sv=remove_bracket($0);
                     sn=get_var_name(sv);
-                    print prefix "SECTION_" sn "=\"" sv "\""
+                    print prefix "SECTIONS_" sn "=\"" sv "\""
                 } else {  # variables
                     kn=get_var_name($1);
                     $1="";
                     vv=trim($0);
-                    print prefix "VAR_" sn "_" kn "=\"" vv "\""
+                    print prefix "KEYS_" sn "_" kn "=\"" vv "\""
                 }
             }' "${ini_file}"
        )
-    eval "$kvs"
+    eval "${keyvalues}"
 }
