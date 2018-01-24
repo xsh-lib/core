@@ -95,5 +95,5 @@ function parse () {
             }' "${ini_file}"
       )
 
-    source <<<"$(echo "${kvs}")"
+    source /dev/stdin <<<"$(echo "${kvs}")"
 }
