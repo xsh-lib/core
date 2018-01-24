@@ -50,30 +50,48 @@ function parse () {
         awk -F= \
             -v prefix="${prefix:-__INI_}" '
             function trim(str) {
-                gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str);
+                gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
                 return str
             }
             function get_var_name(str) {
-                str=trim(str);
-                str=remove_bracket(str);
-                gsub(/[^[:alnum:]]/, "_", str);
+                str=trim(str)
+                str=remove_bracket(str)
+                gsub(/[^[:alnum:]]/, "_", str)
                 return str
             }
             function remove_bracket(str) {
-                gsub(/\[|\]/, "", str);
+                gsub(/\[|\]/, "", str)
                 return str
             }
             !/^;/ {  # filter commented lines
                 if (match($0, /^\[.+\]$/) > 0) {  # sections
-                    sv=remove_bracket($0);
-                    sn=get_var_name(sv);
+                    if (sn) {
+                        print prefix "KEYS_" sn "=("
+                        for (i in kns) {
+                            print kns[i]
+                        }
+                        print ")"
+                    }
+                    sn=get_var_name($0)
+                    sns[length(sns)+1]=sn
+                    sv=remove_bracket($0)
                     print prefix "SECTIONS_" sn "=" sv
                 } else {  # variables
-                    kn=get_var_name($1);
-                    $1="";
-                    vv=trim($0);
-                    print prefix "KEYS_" sn "_" kn "=" vv
+                    kn=get_var_name($1)
+                    kns[length(kns)+1]=kn
+                    kv=$1
+                    $1=""
+                    vv=trim($0)
+                    print prefix "KEYS_" sn "_" kn "=" kv
+                    print prefix "VALUES_" sn "_" kn "=" vv
                 }
+            }
+            END {
+                print prefix "SECTIONS=("
+                for (i in sns) {
+                    print sns[i]
+                }
+                print ")"
             }' "${ini_file}"
       )
 
