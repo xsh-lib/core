@@ -65,11 +65,10 @@ function parse () {
             function gen_variables(name, value) {
                 print name "=" "\047" value "\047"
             }
-            function gen_array_variables(name, array,
-                                         index) {
+            function gen_array_variables(name, array,   idx) {
                 printf name "=("
-                for (index in array) {
-                    printf "\047" array[index] "\047" OFS
+                for (idx in array) {
+                    printf "\047" array[idx] "\047" OFS
                 }
                 print ")"
             }
