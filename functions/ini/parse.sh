@@ -54,8 +54,8 @@ function parse () {
                 return str
             }
             function get_var_name(str) {
-                str=trim(str)
-                str=remove_bracket(str)
+                str = trim(str)
+                str = remove_bracket(str)
                 gsub(/[^[:alnum:]]/, "_", str)
                 return str
             }
@@ -66,32 +66,32 @@ function parse () {
             !/^;/ {  # filter commented lines
                 if (match($0, /^\[.+\]$/) > 0) {  # sections
                     if (sn) {
-                        print prefix "KEYS_" sn "=("
+                        printf prefix "KEYS_" sn "=("
                         for (i in kns) {
-                            print kns[i]
+                            printf kns[i] OFS
                         }
-                        print ")"
+                        printf ")"
                     }
-                    sn=get_var_name($0)
-                    sns[length(sns)+1]=sn
-                    sv=remove_bracket($0)
+                    sn = get_var_name($0)
+                    sns[length(sns)+1] = sn
+                    sv = remove_bracket($0)
                     print prefix "SECTIONS_" sn "=" sv
                 } else {  # variables
-                    kn=get_var_name($1)
-                    kns[length(kns)+1]=kn
-                    kv=$1
-                    $1=""
-                    vv=trim($0)
+                    kn = get_var_name($1)
+                    kns[length(kns)+1] = kn
+                    kv = $1
+                    $1 = ""
+                    vv = trim($0)
                     print prefix "KEYS_" sn "_" kn "=" kv
                     print prefix "VALUES_" sn "_" kn "=" vv
                 }
             }
             END {
-                print prefix "SECTIONS=("
+                printf prefix "SECTIONS=("
                 for (i in sns) {
-                    print sns[i]
+                    printf sns[i] OFS
                 }
-                print ")"
+                printf ")"
             }' "${ini_file}"
       )
 
