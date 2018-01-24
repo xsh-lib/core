@@ -95,7 +95,5 @@ function parse () {
             }' "${ini_file}"
       )
 
-    while read ln; do
-        export "${ln}"
-    done <<<"$(echo "${kvs}")"
+    source <<<"$(echo "${kvs}")"
 }
