@@ -71,6 +71,7 @@ function parse () {
                             printf SQ kns[i] SQ OFS
                         }
                         print ")"
+                        delete kns
                     }
                     sn = get_var_name($0)
                     sns[length(sns)+1] = sn
