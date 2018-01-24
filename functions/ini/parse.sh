@@ -48,6 +48,7 @@ function parse () {
 
     kvs=$(
         awk -F= \
+            -v SQ="'" \
             -v prefix="${prefix:-__INI_}" '
             function trim(str) {
                 gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
@@ -68,32 +69,32 @@ function parse () {
                     if (sn) {
                         printf prefix "KEYS_" sn "=("
                         for (i in kns) {
-                            printf kns[i] OFS
+                            printf SQ kns[i] SQ OFS
                         }
                         print ")"
                     }
                     sn = get_var_name($0)
                     sns[length(sns)+1] = sn
                     sv = remove_bracket($0)
-                    print prefix "SECTIONS_" sn "=" sv
+                    print prefix "SECTIONS_" sn "=" SQ sv SQ
                 } else {  # variables
                     kn = get_var_name($1)
                     kns[length(kns)+1] = kn
                     kv = $1
                     $1 = ""
                     vv = trim($0)
-                    print prefix "KEYS_" sn "_" kn "=" kv
-                    print prefix "VALUES_" sn "_" kn "=" vv
+                    print prefix "KEYS_" sn "_" kn "=" SQ kv SQ
+                    print prefix "VALUES_" sn "_" kn "=" SQ vv SQ
                 }
             }
             END {
                 printf prefix "SECTIONS=("
                 for (i in sns) {
-                    printf sns[i] OFS
+                    printf SQ sns[i] SQ OFS
                 }
                 print ")"
             }' "${ini_file}"
-      )
+       )
 
     source /dev/stdin <<<"$(echo "${kvs}")"
 }
