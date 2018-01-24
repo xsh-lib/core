@@ -70,7 +70,7 @@ function parse () {
                         for (i in kns) {
                             printf kns[i] OFS
                         }
-                        printf ")"
+                        print ")"
                     }
                     sn = get_var_name($0)
                     sns[length(sns)+1] = sn
@@ -91,7 +91,7 @@ function parse () {
                 for (i in sns) {
                     printf sns[i] OFS
                 }
-                printf ")"
+                print ")"
             }' "${ini_file}"
       )
 
