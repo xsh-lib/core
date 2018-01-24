@@ -59,7 +59,8 @@ function parse () {
                 return str
             }
             function get_var_name(str) {
-                gsub(/[^[:alnum:]]/, "_", remove_bracket(trim(str)))
+                str = remove_bracket(trim(str))
+                gsub(/[^[:alnum:]]/, "_", str)
                 return str
             }
             !/^;/ {  # filter commented lines
