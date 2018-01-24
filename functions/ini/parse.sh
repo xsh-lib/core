@@ -48,7 +48,6 @@ function parse () {
 
     kvs=$(
         awk -F= \
-            -v SQ="'" \
             -v prefix="${prefix:-__INI_}" '
             function trim(str) {
                 gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
@@ -63,36 +62,42 @@ function parse () {
                 gsub(/[^[:alnum:]]/, "_", str)
                 return str
             }
-            !/^;/ {  # filter commented lines
+            function gen_variables(name, value) {
+                print name "=" "\047" value "\047"
+            }
+            function gen_array_variables(name, array,
+                                         index) {
+                printf name "=("
+                for (index in array) {
+                    printf "\047" array[index] "\047" OFS
+                }
+                print ")"
+            }
+            !/^;/ {  # filter out commented lines
                 if (match($0, /^\[.+\]$/) > 0) {  # sections
                     if (sn) {
-                        printf prefix "KEYS_" sn "=("
-                        for (i in kns) {
-                            printf SQ kns[i] SQ OFS
-                        }
-                        print ")"
-                        delete kns
+                        gen_array_variables(prefix "KEYS_" sn, kns)
                     }
+                    delete kns
                     sn = get_var_name($0)
                     sns[length(sns)+1] = sn
                     sv = remove_bracket($0)
-                    print prefix "SECTIONS_" sn "=" SQ sv SQ
+                    gen_variables(prefix "SECTIONS_" sn, sv)
                 } else {  # variables
                     kn = get_var_name($1)
                     kns[length(kns)+1] = kn
                     kv = trim($1)
                     $1 = ""
                     vv = trim($0)
-                    print prefix "KEYS_" sn "_" kn "=" SQ kv SQ
-                    print prefix "VALUES_" sn "_" kn "=" SQ vv SQ
+                    gen_variables(prefix "KEYS_" sn "_" kn, kv)
+                    gen_variables(prefix "VALUES_" sn "_" kn, vv)
                 }
             }
             END {
-                printf prefix "SECTIONS=("
-                for (i in sns) {
-                    printf SQ sns[i] SQ OFS
+                if (sn) {
+                    gen_array_variables(prefix "KEYS_" sn, kns)
                 }
-                print ")"
+                gen_array_variables(prefix "SECTIONS", sns)
             }' "${ini_file}"
        )
 
