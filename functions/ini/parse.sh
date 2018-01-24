@@ -54,14 +54,12 @@ function parse () {
                 gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
                 return str
             }
-            function get_var_name(str) {
-                str = trim(str)
-                str = remove_bracket(str)
-                gsub(/[^[:alnum:]]/, "_", str)
-                return str
-            }
             function remove_bracket(str) {
                 gsub(/\[|\]/, "", str)
+                return str
+            }
+            function get_var_name(str) {
+                gsub(/[^[:alnum:]]/, "_", remove_bracket(trim(str)))
                 return str
             }
             !/^;/ {  # filter commented lines
@@ -80,7 +78,7 @@ function parse () {
                 } else {  # variables
                     kn = get_var_name($1)
                     kns[length(kns)+1] = kn
-                    kv = $1
+                    kv = trim($1)
                     $1 = ""
                     vv = trim($0)
                     print prefix "KEYS_" sn "_" kn "=" SQ kv SQ
