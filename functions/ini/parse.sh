@@ -26,7 +26,6 @@
 function parse () {
     local opt OPTIND OPTARG
     local prefix ini_file
-    local kvs ln
 
     while getopts p: opt; do
         case ${opt} in
@@ -46,59 +45,57 @@ function parse () {
         return 255
     fi
 
-    kvs=$(
-        awk -F= \
-            -v prefix="${prefix:-__INI_}" '
-            function trim(str) {
-                gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
-                return str
+    source /dev/stdin <<<"$(awk \
+        -F= \
+        -v prefix="${prefix:-__INI_}" '
+        function trim(str) {
+            gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
+            return str
+        }
+        function remove_bracket(str) {
+            gsub(/\[|\]/, "", str)
+            return str
+        }
+        function get_var_name(str) {
+            str = remove_bracket(trim(str))
+            gsub(/[^[:alnum:]]/, "_", str)
+            return str
+        }
+        function gen_variables(name, value) {
+            print name "=" "\047" value "\047"
+        }
+        function gen_array_variables(name, array,   idx) {
+            printf name "=("
+            for (idx in array) {
+                printf "\047" array[idx] "\047" OFS
             }
-            function remove_bracket(str) {
-                gsub(/\[|\]/, "", str)
-                return str
-            }
-            function get_var_name(str) {
-                str = remove_bracket(trim(str))
-                gsub(/[^[:alnum:]]/, "_", str)
-                return str
-            }
-            function gen_variables(name, value) {
-                print name "=" "\047" value "\047"
-            }
-            function gen_array_variables(name, array,   idx) {
-                printf name "=("
-                for (idx in array) {
-                    printf "\047" array[idx] "\047" OFS
-                }
-                print ")"
-            }
-            !/^;/ {  # filter out commented lines
-                if (match($0, /^\[.+\]$/) > 0) {  # sections
-                    if (sn) {
-                        gen_array_variables(prefix "KEYS_" sn, kns)
-                    }
-                    delete kns
-                    sn = get_var_name($0)
-                    sns[length(sns)+1] = sn
-                    sv = remove_bracket($0)
-                    gen_variables(prefix "SECTIONS_" sn, sv)
-                } else {  # variables
-                    kn = get_var_name($1)
-                    kns[length(kns)+1] = kn
-                    kv = trim($1)
-                    $1 = ""
-                    vv = trim($0)
-                    gen_variables(prefix "KEYS_" sn "_" kn, kv)
-                    gen_variables(prefix "VALUES_" sn "_" kn, vv)
-                }
-            }
-            END {
+            print ")"
+        }
+        !/^;/ {  # filter out commented lines
+            if (match($0, /^\[.+\]$/) > 0) {  # sections
                 if (sn) {
                     gen_array_variables(prefix "KEYS_" sn, kns)
                 }
-                gen_array_variables(prefix "SECTIONS", sns)
-            }' "${ini_file}"
-       )
-
-    source /dev/stdin <<<"$(echo "${kvs}")"
+                delete kns
+                sn = get_var_name($0)
+                sns[length(sns)+1] = sn
+                sv = remove_bracket($0)
+                gen_variables(prefix "SECTIONS_" sn, sv)
+            } else {  # variables
+                kn = get_var_name($1)
+                kns[length(kns)+1] = kn
+                kv = trim($1)
+                $1 = ""
+                vv = trim($0)
+                gen_variables(prefix "KEYS_" sn "_" kn, kv)
+                gen_variables(prefix "VALUES_" sn "_" kn, vv)
+            }
+        }
+        END {
+            if (sn) {
+                gen_array_variables(prefix "KEYS_" sn, kns)
+            }
+            gen_array_variables(prefix "SECTIONS", sns)
+        }' "${ini_file}"
+    )"
 }
