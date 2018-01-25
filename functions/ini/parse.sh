@@ -53,7 +53,7 @@ function parse () {
             return str
         }
         function remove_bracket(str) {
-            gsub(/\[|\]/, "", str)
+            gsub(/^\[|\]$/, "", str)
             return str
         }
         function get_var_name(str) {
@@ -74,7 +74,7 @@ function parse () {
         !/^;/ {  # filter out commented lines
             if (match($0, /^\[.+\]$/) > 0) {  # sections
                 if (sn) {
-                    gen_array_variables(prefix "KEYS_" sn, kns)
+                    gen_array_variables(prefix "SECTIONS_" sn "_KEYS", kns)
                 }
                 delete kns
                 sn = get_var_name($0)
@@ -87,13 +87,13 @@ function parse () {
                 kv = trim($1)
                 $1 = ""
                 vv = trim($0)
-                gen_variables(prefix "KEYS_" sn "_" kn, kv)
-                gen_variables(prefix "VALUES_" sn "_" kn, vv)
+                gen_variables(prefix "SECTIONS_" sn "_KEYS_" kn, kv)
+                gen_variables(prefix "SECTIONS_" sn "_VALUES_" kn, vv)
             }
         }
         END {
             if (sn) {
-                gen_array_variables(prefix "KEYS_" sn, kns)
+                gen_array_variables(prefix "SECTIONS_" sn "_KEYS", kns)
             }
             gen_array_variables(prefix "SECTIONS", sns)
         }' "${ini_file}"
