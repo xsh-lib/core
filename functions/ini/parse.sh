@@ -10,18 +10,42 @@
 #? Output:
 #?   None.
 #?
+#? Desription:
+#?   Parse an INI file into shell environment variables.
+#?   Link: https://en.wikipedia.org/wiki/INI_file
+#?
+#?   Below variables are set after INI file is parsed.
+#?     __INI_SECTIONS: Array, variable name suffix for all sections
+#?     __INI_SECTIONS_<section>: Value of <section>, without 
+#?     __INI_SECTIONS_<section>_KEYS: Array, variable name suffix of all keys in <section>
+#?     __INI_SECTIONS_<section>_KEYS_<key>: variable name suffix of <key> in <section>
+#?     __INI_SECTIONS_<section>_VALUES_<key>: Value of <key> in <section>
+#?
 #? Example:
-#?   cat foo.ini
-#?   [my section]
-#?   foo=bar
+#?   foo.ini
+#?     [section a]
+#?     key1=1
+#?     key2=2
+#?
+#?     [section b]
+#?     key3=3
+#?     key4=4
 #?
 #?   @parse foo.ini
-#?   echo $__INI_SECTIONS_my_section  # 'my section'
-#?   echo $__INI_KEYS_my_section_foo  # 'bar'
-#?
-#?   @parse -p __FOO_INI_ foo.ini
-#?   echo $__FOO_INI_SECTIONS_my_section  # 'my section'
-#?   echo $__FOO_INI_KEYS_my_section_foo  # 'bar'
+#?   Following variables are set:
+#?     __INI_SECTIONS=([0]="section_b" [1]="section_a")
+#?     __INI_SECTIONS_section_a='section a'
+#?     __INI_SECTIONS_section_a_KEYS=([0]="key2" [1]="" [2]="key1")
+#?     __INI_SECTIONS_section_a_KEYS_key1=key1
+#?     __INI_SECTIONS_section_a_KEYS_key2=key2
+#?     __INI_SECTIONS_section_a_VALUES_key1=1
+#?     __INI_SECTIONS_section_a_VALUES_key2=2
+#?     __INI_SECTIONS_section_b='section b'
+#?     __INI_SECTIONS_section_b_KEYS=([0]="key4" [1]="key3")
+#?     __INI_SECTIONS_section_b_KEYS_key3=key3
+#?     __INI_SECTIONS_section_b_KEYS_key4=key4
+#?     __INI_SECTIONS_section_b_VALUES_key3=3
+#?     __INI_SECTIONS_section_b_VALUES_key4=4
 #?
 function parse () {
     local opt OPTIND OPTARG
@@ -71,7 +95,7 @@ function parse () {
             }
             print ")"
         }
-        !/^;/ {  # filter out commented lines
+        NF>0 && !/^;/ {  # filter out empty and commented lines
             if (match($0, /^\[.+\]$/) > 0) {  # sections
                 if (sn) {
                     gen_array_variables(prefix "SECTIONS_" sn "_KEYS", kns)
