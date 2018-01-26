@@ -73,22 +73,49 @@ function select () {
     XFS=${XFS:-}
 
     RESERVED_KEYWORDS=(
-        [0]="distinct"
-        [1]="count"
-        #[2]="max"
-        #[3]="min"
-        [4]="from"
-        [5]="where"
-        [6]="and"
-        [7]="or"
-        #[8]="order by"
-        #[9]="asc"
-        #[10]="desc"
+        "*"
+        "as"
+        "distinct"
+
+        # from
+        "from"
+        "inner"
+        "left"
+        "right"
+        "full"
+        "cross"
+        "join"
+        "on"
+
+        # where
+        "where"
+        "and"
+        "or"
+
+        # group by
+        "group by"
+        "having"
+
+        # order by
+        "order by"
+        "asc"
+        "desc"
+
+        # union
+        "union"
+        "all"
+
+        # functions
+        "count"
+        "max"
+        "min"
+        "avg"
+        "sum"
     )
 
     OPERATORS=(
         [0]="like"
-        [1]="=="
+        [1]="="
         [2]="!="
         [3]=">"
         [4]="<"
@@ -98,35 +125,29 @@ function select () {
 
     # main begin
 
-    validate ()
-    {
-        echo "$@"
-    }
-
-
-    local __querycols __queryfile __predicates
+    local querycols queryfile predicates
 
     parse ()
     {
-        local __part="querycols"
+        local part="querycols"
         while [[ $# -gt 0 ]]; do
             case $1 in
                 from)
-                    __part="queryfile"
+                    part="queryfile"
                     ;;
                 where)
-                    __part="predicates"
+                    part="predicates"
                     ;;
                 *)
-                    case ${__part} in
+                    case ${part} in
                         querycols)
-                            __querycols[$(xarr.inext __querycols)]=$1
+                            querycols[$(xarr.inext querycols)]=$1
                             ;;
                         queryfile)
-                            __queryfile=$1
+                            queryfile=$1
                             ;;
                         predicates)
-                            __predicates[$(xarr.inext __predicates)]=$1
+                            predicates[$(xarr.inext predicates)]=$1
                     esac
                     ;;
             esac
@@ -135,29 +156,28 @@ function select () {
     }
 
 
-    validate "$@"
     parse "$@"
 
-    echo ${__querycols[@]}
-    echo ${__queryfile[@]}
-    echo ${__predicates[@]}
+    echo ${querycols[@]}
+    echo ${queryfile[@]}
+    echo ${predicates[@]}
 
-    [[ -z ${__querycols} || -z ${__queryfile} ]] && return 1
+    [[ -z ${querycols} || -z ${queryfile} ]] && return 1
 
     # Parsing select list into array
-    if [[ ${__querycols:1:6} == 'count(' ]] ; then
-        local __count=1
-        __querycols=$(echo ${__querycols} |sed 's/^count(//' |sed 's/)$//')
+    if [[ ${querycols:1:6} == 'count(' ]] ; then
+        local count=1
+        querycols=$(echo ${querycols} |sed 's/^count(//' |sed 's/)$//')
     fi
 
-    if [[ ${__querycols:1:8} == 'distinct' ]] ; then
-        local __distinct=1
-        __querycols=$(echo ${__querycols} |sed 's/^distinct//')
+    if [[ ${querycols:1:8} == 'distinct' ]] ; then
+        local distinct=1
+        querycols=$(echo ${querycols} |sed 's/^distinct//')
     fi
-    __querycols=( $(echo "${__querycols[@]}" |sed 's/,/ /g') )
+    querycols=( $(echo "${querycols[@]}" |sed 's/,/ /g') )
 
 
-    local __tmpfile=/tmp/$$
+    local tmpfile=/tmp/$$
 
     # Remove the null lines
     # Lines leading with '#' is commented
@@ -166,7 +186,7 @@ function select () {
     # Remove the leading and trailing blank space for each line
     # Remove the leading and trailing blank space for each column
 
-    awk NF ${__queryfile} | awk '!/^#/' | sed -r "s/([^\\])\\${IFS}/\1${XFS}/g" | sed "s/[\\]${IFS}/${IFS}/g" | sed -r 's/^[ \t]+|[ \t]+$|//g' | sed -r "s/[ \t]*($XFS)[ \t]*/\1/g" > $tmp
+    awk NF ${queryfile} | awk '!/^#/' | sed -r "s/([^\\])\\${IFS}/\1${XFS}/g" | sed "s/[\\]${IFS}/${IFS}/g" | sed -r 's/^[ \t]+|[ \t]+$|//g' | sed -r "s/[ \t]*($XFS)[ \t]*/\1/g" > $tmp
 
     ROW_COUNT=$(awk 'END {debug NR - 1}' $tmp)
 
