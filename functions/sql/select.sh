@@ -1,16 +1,78 @@
-function select ()
-{
+#? Usage:
+#?   @select SELECT-CLAUSE FROM-CLAUSE \
+#?          [WHERE-CLAUSE] \
+#?          [GROUP-BY-CLAUSE [HAVING-CLAUSE]] \
+#?          [ORDER-BY-CLAUSE]
+#?
+#? Options:
+#?   SELECT-CLAUSE
+#?     select [distinct] [*] [FIELDS] [EXPOSED-NAME.*]
+#?
+#?       distinct
+#?
+#?       + *
+#?
+#?       FIELDS
+#?
+#?       EXPOSED-NAME.*
+#?
+#?
+#?   FROM-CLAUSE
+#?     from TABLE-NAME | JOINED-TABLE
+#?
+#?       TABLE-NAME
+#?
+#?
+#?       JOINED-TABLE
+#?         TABLE-NAME [inner | left | right | full] join TABLE-NAME on JOIN-CONDITION
+#?         TABLE-NAME cross join TABLE-NAME
+#?
+#?           inner
+#?
+#?           left
+#?
+#?           right
+#?
+#?           full
+#?
+#?           cross
+#?
+#?           JOIN-CONDITION
+#?             A JOIN-CONDITION is a SEARCH-CONDITION.
+#?
+#?
+#?   [WHERE-CLAUSE]
+#?     where SEARCH-CONDITION
+#?
+#?     SEARCH-CONDITION
+#?
+#?
+#?   [GROUP-BY-CLAUSE]
+#?     group by GROUPING-EXPRESSION
+#?
+#?       GROUPING-EXPRESSION
+#?
+#?
+#?   [HAVING-CLAUSE]
+#?     having SEARCH-CONDITION
+#?
+#?
+#?   [ORDER-BY-CLAUSE]
+#?     order by FIELD [asc | desc]
+#?
+#?
+function select () {
     # IFS: Input FS
     # OFS: Output FS
     # XFS: xsql internal FS
     local IFS OFS XFS
-    local __RESERVED_KEYWORDS __OPERATORS
+    local RESERVED_KEYWORDS OPERATORS
 
-    [[ -z ${IFS} ]] && IFS='|'
-    [[ -z ${OFS} ]] && OFS='\t\t'
-    [[ -z ${XFS} ]] && XFS=''
+    IFS=${IFS:-|}
+    OFS=${OFS:-\t\t}
+    XFS=${XFS:-}
 
-    __RESERVED_KEYWORDS=(
+    RESERVED_KEYWORDS=(
         [0]="distinct"
         [1]="count"
         #[2]="max"
@@ -24,7 +86,7 @@ function select ()
         #[10]="desc"
     )
 
-    __OPERATORS=(
+    OPERATORS=(
         [0]="like"
         [1]="=="
         [2]="!="
