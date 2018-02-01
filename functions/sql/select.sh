@@ -73,6 +73,7 @@ function select () {
     XFS=${XFS:-}
 
     RESERVED_KEYWORDS=(
+        "select"
         "*"
         "as"
         "distinct"
@@ -125,29 +126,49 @@ function select () {
 
     # main begin
 
-    local querycols queryfile predicates
+    local select_clause from_clause join_clause where_clause \
+          group_clause order_clause
 
-    parse ()
-    {
-        local part="querycols"
+
+    function parse () {
+        local clause
+
         while [[ $# -gt 0 ]]; do
             case $1 in
+                'select')
+                    clause='select'
+                    ;;
                 from)
-                    part="queryfile"
+                    clause="from"
+                    ;;
+                inner|left|right|full|cross|join)
+                    clause="join"
                     ;;
                 where)
-                    part="predicates"
+                    clause="where"
+                    ;;
+                group)
+                    clause="group"
+                    ;;
+                order)
+                    clause="order"
                     ;;
                 *)
-                    case ${part} in
-                        querycols)
-                            querycols[$(xarr.inext querycols)]=$1
+                    case ${clause} in
+                        'select')
                             ;;
-                        queryfile)
-                            queryfile=$1
+                        from)
                             ;;
-                        predicates)
-                            predicates[$(xarr.inext predicates)]=$1
+                        join)
+                            ;;
+                        where)
+                            ;;
+                        group)
+                            ;;
+                        order)
+                            ;;
+                        *)
+                            ;;
                     esac
                     ;;
             esac

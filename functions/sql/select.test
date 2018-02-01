@@ -1,30 +1,40 @@
-select * from foo
+select '*' from foo
 union
-select distinct * from foo
+select 'distinct *' from foo
 
 
-select foo.*, bar.b from foo join bar on foo.a = bar.a
+select 'foo.*, bar.b' from 'foo as f' join 'bar on foo.a = bar.a'
 union
-select foo.*, bar.b from foo full join bar on foo.a = bar.a
+select 'foo.*, bar.b' from foo full join bar on 'foo.a = bar.a and foo.b = bar.b'
 union
-select foo.*, bar.b from foo left join bar on foo.a = bar.b where foo.a = 'a' and foo.b = 'b'
+select 'foo.*, bar.b' from foo left join bar on 'foo.a = bar.a' where "foo.a > 1 and foo.b = 'b'"
 
-select count(*) from foo
+select 'count(*)' from foo
 union
-select count(distinct a) from foo
+select 'count(distinct a)' from foo
 union
-select min(a) from foo
+select 'min(a)' from foo
 union
-select max(a) from foo
+select 'max(a)' from foo
 union
-select sum(a) from foo
+select 'sum(a)' from foo
 union
-select avg(a) from foo
+select 'avg(a)' from foo
 
-select a, count(*) from foo group by a
+select 'a, count(*)' from foo group by a
 order by a asc
 union all
-select a, count(*) from foo group by a having count(*) > 1
+select 'a, count(*)' from foo group by a having 'count(*) > 1'
 order by a desc
 
 https://www.ibm.com/support/knowledgecenter/en/SSEPGG_9.7.0/com.ibm.db2.luw.sql.ref.doc/doc/r0000875.html
+
+xsh /sql "select
+    name,
+    region,
+    aws_access_key_id,
+    aws_secret_access_key,
+    output
+from profile
+where name = 'profile  oc-cn-ne1'
+"
