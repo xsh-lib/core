@@ -14,5 +14,5 @@
 function first () {
     # try to declare nothing, new variable may override input variable.
     set -- "$1[$(xsh /array/ifirst "$1")]"
-    printf "%s" "${!1}"
+    printf "%s\n" "${!1}"
 }
