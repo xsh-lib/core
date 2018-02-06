@@ -17,10 +17,9 @@
 function push () {
     xsh /string/copy \
         "$1" \
-        "_$(declare \
-                    | egrep -o "^[_]*$1[_]*" \
+        "_$(declare | egrep -o "^[_]*$1[_]*" \
                     | awk -F "$1" '$1 == $2' \
                     | sort \
                     | head -1)_" \
-        && eval $1=\${!2}
+        && read "$1" <<< "$2"
 }

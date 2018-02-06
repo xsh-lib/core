@@ -8,11 +8,11 @@
 #?   The index of last element in the array.
 #?
 #? Example:
-#?   unset arr; arr[3]=III; arr[4]=IV
-#?   @ilast arr
-#?   4
+#?   arr=([3]="III" [4]="IV"); @ilast arr
+#?   # 4
 #?
 function ilast () {
-    local index=$(eval echo \${!$1[@]})
-    echo ${index/ */}
+    # try to declare nothing, new variable may override input variable.
+    set -- $(xsh /array/index "$1")
+    printf "%s" "${1##* }"
 }
