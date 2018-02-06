@@ -8,10 +8,11 @@
 #?   The last element in the array.
 #?
 #? Example:
-#?   unset arr; arr[3]=III; arr[4]=IV
-#?   @last arr
-#?   IV
+#?   arr=([3]="III" [4]="IV"); @last arr
+#?   # IV
 #?
 function last () {
-    eval echo \"\${$1[$(xsh /array/ilast "$1")]}\"
+    # try to declare nothing, new variable may override input variable.
+    set -- "$1[$(xsh /array/ilast "$1")]"
+    printf "%s\n" "${!1}"
 }

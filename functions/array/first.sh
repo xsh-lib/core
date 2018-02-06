@@ -8,10 +8,11 @@
 #?   The first element in the array.
 #?
 #? Example:
-#?   unset arr; arr[3]=III; arr[4]=IV
-#?   @first arr
-#?   III
+#?   arr=([3]="III" [4]="IV"); @first arr
+#?   # III
 #?
 function first () {
-    eval echo \"\${$1[$(xsh /array/ifirst "$1")]}\"
+    # try to declare nothing, new variable may override input variable.
+    set -- "$1[$(xsh /array/ifirst "$1")]"
+    printf "%s\n" "${!1}"
 }

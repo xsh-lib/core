@@ -9,18 +9,15 @@
 #?   Nothing.
 #?
 #? Example:
-#?   arr1=(1 2 3)
-#?   arr2=(4 5 6)
-#?   @concat arr1 arr2
-#?   echo ${arr1[@]}
-#?   1 2 3 4 5 6
+#?   arr1=([3]="III" [4]="IV"); arr2=([0]="V" [1]="VI")
+#?   @concat arr1 arr2; declare -p arr1
+#?   # declare -a arr1='([3]="III" [4]="IV" [5]="V" [6]="VI")'
 #?
 function concat () {
-    local i j
-    i=$(xsh /array/ilast $1)
-    i=$((i + 1))
+    local __i __j
 
-    for j in $(eval echo \${!$2[@]}); do
-	    xsh /string/copy "$2[$j]" "$1[$(( i + j ))]" || return $?
+    __i=$(xsh /array/inext "$1")
+    for __j in $(xsh /array/index "$2"); do
+	    xsh /string/copy "$2[${__j}]" "$1[$((__i+__j))]" || return $?
     done
 }

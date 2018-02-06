@@ -9,21 +9,19 @@
 #?   Nothing.
 #?
 #? Example:
-#?   src=(1 2 3)
-#?   @copy src new
-#?   echo ${new[@]}
-#?   1 2 3
+#?   src=([3]="III" [4]="IV"); @copy src new; declare -p new
+#?   # declare -a new='([3]="III" [4]="IV")'
 #?
 function copy () {
-    local i
+    local __i
 
     if [[ $1 == $2 ]]; then
-        return 9
+        return 255
     else
-        unset $2
+        unset "$2"
     fi
 
-    for i in $(eval echo \${!$1[@]}); do
-	    xsh /string/copy "$1[$i]" "$2[$i]" || return $?
+    for __i in $(xsh /array/index "$1"); do
+	    xsh /string/copy "$1[${__i}]" "$2[${__i}]" || return $?
     done
 }

@@ -8,12 +8,12 @@
 #?   Nothing.
 #?
 #? Example:
-#?   arr=(1 2 3)
-#?   @echo arr
-#?   1
-#?   2
-#?   3
+#?   arr=([3]="III" [4]="IV"); @echo arr
+#?   # III
+#?   # IV
 #?
 function echo () {
-    eval printf \"%s\\n\" \"\${$1[@]}\"
+    # try to declare nothing, new variable may override input variable.
+    set -- "$1[@]"
+    printf "%s\n" "${!1}"
 }

@@ -9,11 +9,9 @@
 #?   Nothing.
 #?
 #? Example:
-#?   arr=(1 2 3)
-#?   @append arr 4
-#?   echo ${arr[@]}
-#?   1 2 3 4
+#?   arr=([3]="III" [4]="IV"); @append arr "V"; declare -p arr
+#?   # declare -a arr='([3]="III" [4]="IV" [5]="V")'
 #?
 function append () {
-    eval $1[$(xsh /array/inext "$1")]=\$2
+    read "$1[$(xsh /array/inext "$1")]" <<< "$2"
 }
