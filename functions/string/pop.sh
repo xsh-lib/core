@@ -2,19 +2,17 @@
 #?   @pop VAR
 #?
 #? Options:
-#?   VAR  Variable name poping from.
+#?   VAR  Variable name popping from.
 #?
 #? Output:
-#?   The value poped.
+#?   The value popped.
 #?
 #? Example:
-#?   var=0
-#?   @push var 10
-#?   @push var 20
-#?   echo $var  # 20
-#?   @pop var  # 20
-#?   @pop var  # 10
-#?   echo $var  # 0
+#?   var=0; @push var 10; @push var 20
+#?   @pop var; @pop var; echo $var
+#?   # 20
+#?   # 10
+#?   # 0
 #?
 function pop () {
     local var
@@ -27,8 +25,8 @@ function pop () {
               | head -1)
 
     if [[ -z ${var} ]]; then
-	    echo "$FUNCNAME: no further can be poped." >&2
-	    return 9
+	    echo "$FUNCNAME: no further can be popped." >&2
+	    return 255
     fi
 
     if xsh /string/copy "${var}" "$1"; then

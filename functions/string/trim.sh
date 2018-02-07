@@ -6,7 +6,7 @@
 #?
 #? Example:
 #?   @trim '  Foo  '
-#?   'Foo'
+#?   # 'Foo'
 #?
 function trim () {
     echo "$@" | xsh /string/pipe/trim

@@ -12,7 +12,7 @@
 #?
 #? Example:
 #?   @hex2dec FF
-#?   255
+#?   # 255
 #?
 function hex2dec () {
     local hex

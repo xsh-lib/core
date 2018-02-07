@@ -1,6 +1,9 @@
 #? Usage:
 #?   @abs NUMBER
 #?
+#? Output:
+#?   The absolute value of NUMBER.
+#?
 function abs () { 
-    echo ${1#-}
+    printf "%s\n" "${1#-}"
 }

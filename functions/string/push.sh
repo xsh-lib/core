@@ -9,10 +9,8 @@
 #?   Nothing.
 #?
 #? Example:
-#?   var=0
-#?   @push var 10
-#?   @push var 20
-#?   echo $var  # 20
+#?   var=0; @push var 10; @push var 20; echo $var
+#?   # 20
 #?
 function push () {
     xsh /string/copy \

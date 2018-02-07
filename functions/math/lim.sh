@@ -9,7 +9,7 @@
 #?
 #? Example:
 #?   @lim 28 3 2
-#?   3
+#?   # 3
 #? 
 #? WolframAlpha:
 #?   Solve[k1 k2^n == m, n]

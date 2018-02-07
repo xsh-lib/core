@@ -9,7 +9,7 @@
 #?
 #? Example:
 #?   @space 6
-#?   '     '
+#?   # '     '
 #?
 function space () {
     xsh /string/repeat ' ' "${1:-1}"

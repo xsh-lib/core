@@ -6,7 +6,7 @@
 #?
 #? Example:
 #?   @upper Foo
-#?   FOO
+#?   # FOO
 #?
 function upper () {
     echo "$@" | xsh /string/pipe/upper

@@ -8,7 +8,7 @@
 #?
 #? Example:
 #?   @guid 16
-#?   8B5C9A13836CFFE6EAD2F2C9475511D4
+#?   # 8B5C9A13836CFFE6EAD2F2C9475511D4
 #?
 function guid () {
     # the number in below range have 16 char in HEX

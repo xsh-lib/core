@@ -12,10 +12,8 @@
 #?   Concatenation of N STRINGs.
 #?
 #? Example:
-#?   @repeat Foo
-#?   Foo
 #?   @repeat Foo 3
-#?   FooFooFoo
+#?   # FooFooFoo
 #?
 function repeat () {
     local str=$1 times=${2:-1}

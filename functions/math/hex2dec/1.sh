@@ -16,7 +16,7 @@
 #?
 #? Example:
 #?   @hex2dec FF
-#?   255
+#?   # 255
 #?
 function hex2dec () {
     case ${1:0:1} in

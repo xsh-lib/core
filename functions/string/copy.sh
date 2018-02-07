@@ -10,9 +10,9 @@
 #?
 #? Example:
 #?   src=1; @copy src new; echo $new
-#?   foo
+#?   # foo
 #?   src=(x y z); @copy src[0] new[0]; echo ${new[0]}
-#?   x
+#?   # x
 #?
 function copy () {
     if [[ "$1" == "$2" ]]; then

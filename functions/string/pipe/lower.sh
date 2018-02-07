@@ -6,7 +6,7 @@
 #?
 #? Example:
 #?   echo Foo | @lower
-#?   FOO
+#?   # foo
 #?
 function lower () {
     tr [:upper:] [:lower:] < /dev/stdin

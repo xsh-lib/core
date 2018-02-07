@@ -6,7 +6,7 @@
 #?
 #? Example:
 #?   echo '  Foo  ' | @trim
-#?   'Foo'
+#?   # 'Foo'
 #?
 function trim () {
     sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' < /dev/stdin

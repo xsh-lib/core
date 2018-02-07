@@ -16,7 +16,7 @@
 #?
 #? Example:
 #?   @dec2hex 255
-#?   FF
+#?   # FF
 #?
 function dec2hex () {
     if [[ $1 -gt 0 ]]; then

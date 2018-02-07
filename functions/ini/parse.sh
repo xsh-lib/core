@@ -32,20 +32,20 @@
 #?     key4=4
 #?
 #?   @parse foo.ini
-#?   Following variables are set:
-#?     __INI_SECTIONS=([0]="section_b" [1]="section_a")
-#?     __INI_SECTIONS_section_a='section a'
-#?     __INI_SECTIONS_section_a_KEYS=([0]="key2" [1]="" [2]="key1")
-#?     __INI_SECTIONS_section_a_KEYS_key1=key1
-#?     __INI_SECTIONS_section_a_KEYS_key2=key2
-#?     __INI_SECTIONS_section_a_VALUES_key1=1
-#?     __INI_SECTIONS_section_a_VALUES_key2=2
-#?     __INI_SECTIONS_section_b='section b'
-#?     __INI_SECTIONS_section_b_KEYS=([0]="key4" [1]="key3")
-#?     __INI_SECTIONS_section_b_KEYS_key3=key3
-#?     __INI_SECTIONS_section_b_KEYS_key4=key4
-#?     __INI_SECTIONS_section_b_VALUES_key3=3
-#?     __INI_SECTIONS_section_b_VALUES_key4=4
+#?   # Following variables were set:
+#?   # __INI_SECTIONS=([0]="section_b" [1]="section_a")
+#?   # __INI_SECTIONS_section_a='section a'
+#?   # __INI_SECTIONS_section_a_KEYS=([0]="key2" [1]="" [2]="key1")
+#?   # __INI_SECTIONS_section_a_KEYS_key1=key1
+#?   # __INI_SECTIONS_section_a_KEYS_key2=key2
+#?   # __INI_SECTIONS_section_a_VALUES_key1=1
+#?   # __INI_SECTIONS_section_a_VALUES_key2=2
+#?   # __INI_SECTIONS_section_b='section b'
+#?   # __INI_SECTIONS_section_b_KEYS=([0]="key4" [1]="key3")
+#?   # __INI_SECTIONS_section_b_KEYS_key3=key3
+#?   # __INI_SECTIONS_section_b_KEYS_key4=key4
+#?   # __INI_SECTIONS_section_b_VALUES_key3=3
+#?   # __INI_SECTIONS_section_b_VALUES_key4=4
 #?
 function parse () {
     local opt OPTIND OPTARG
