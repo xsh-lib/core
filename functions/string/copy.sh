@@ -20,5 +20,5 @@ function copy () {
     else
         unset "$2"  # in case $2 is Array
     fi
-    read "$2" <<< "${!1}"
+    read -r "$2" <<< "${!1}"
 }

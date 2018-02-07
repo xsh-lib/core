@@ -19,5 +19,5 @@ function push () {
                     | awk -F "$1" '$1 == $2' \
                     | sort \
                     | head -1)_" \
-        && read "$1" <<< "$2"
+        && read -r "$1" <<< "$2"
 }
