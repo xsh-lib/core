@@ -2,19 +2,19 @@ function parser (separator, enclosure, header) {
     result = parse_record($0, separator, enclosure)
 }
 
-function parse_record (record, separator, enclosure, pos,   result, i) {
+function parse_record (record, separator, enclosure,   result, pos, nfield) {
     pos = 1
 
-    i = 1
+    nfield = 1
     while (pos <= length(record)) {
-        pos = parse_field(record, separator, enclosure, i, pos)
-        i++
+        pos = parse_field(record, separator, enclosure, nfield, pos)
+        nfield++
     }
 
     return result
 }
 
-function parse_field (record, separator, enclosure, start, nfield, pos,   field, char, quoted) {
+function parse_field (record, separator, enclosure, nfield, pos,   field, char, quoted) {
     quoted = 0
 
     while (pos <= length(record)) {
@@ -22,8 +22,9 @@ function parse_field (record, separator, enclosure, start, nfield, pos,   field,
 
         if (quoted) {
             if (char == enclosure) {
+                pos++
                 if (substr(record, pos+1, 1) == enclosure) {
-                    field = enclosure enclosure
+                    field = field char
                 } else {
                     break
                 }
@@ -31,16 +32,16 @@ function parse_field (record, separator, enclosure, start, nfield, pos,   field,
                 field = field char
             }
         } else {
-            if (char == quote) {
+            if (char == enclosure) {
                 quoted = 1
             }
         }
         pos++
-        quoted = 0
-
-        start = end + 1
     }
 
-    result[NR,nfield] = substr($0, start, end - start)
+    pos++
+    quoted = 0
+    result[NR,nfield] = field
+
     return pos
 }

@@ -1,12 +1,12 @@
 #? Usage:
-#?   @parser [-t DELIMITER] CSV_FILE
-#?   @parser -e [-p PREFIX] CSV_FILE
+#?   @parser [-t DELIMITER | -e [-p PREFIX]] CSV_FILE
 #?
 #? Options:
 #?   [-t DELIMITER]  Delimiter to be used as output field separator.
 #?                   Default is '|'.
 #?
-#?   -e              Set result as shell environment variables.
+#?   [-e]            Output result in the syntax of shell environment
+#?                   variables.
 #?
 #?   [-p PREFIX]     Prefix variable name with PREFIX.
 #?                   Default is '__CSV_'.
@@ -16,7 +16,7 @@
 #?                   and first line as header.
 #?
 #? Output:
-#?   The parsed result(default) or shell variables.
+#?   The parsed result or shell variables.
 #?
 #? Desription:
 #?   Parse a CSV file.
@@ -38,7 +38,6 @@
 #?
 #?   @parser foo.csv
 #?   # Following variables were set:
-
 #?
 function parser () {
     local opt OPTIND OPTARG
