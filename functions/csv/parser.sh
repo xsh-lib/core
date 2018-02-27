@@ -43,7 +43,7 @@ function parser () {
     local opt OPTIND OPTARG
     local display_separator action prefix csv_file
     local SEPARATOR=',' ENCLOSURE='"'
-    local BASE_DIR="${XSH_HOME}/x/functions/csv"
+    local BASE_DIR="${XSH_HOME}/lib/x/functions/csv"
 
     action='display'
 
@@ -75,7 +75,7 @@ function parser () {
         awk -v SEPARATOR=${SEPARATOR} \
             -v ENCLOSURE=${ENCLOSURE} \
             -v OUTPUT_SEPARATOR=${output_separator:-|} \
-            -f "${base_dir}/parser.awk" \
+            -f "${BASE_DIR}/parser.awk" \
             "${csv_file}"
     elif [[ ${action} == 'setenv' ]]; then
         source /dev/stdin <<< "$(
