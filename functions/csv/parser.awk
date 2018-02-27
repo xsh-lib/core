@@ -1,21 +1,22 @@
-function display (result, output_separator,   idx, a, last_cfr) {
-    for (idx in result) {
+function display (   idx, a, last_cfr) {
+    for (idx in RESULT) {
         split(idx, a, ",")
         if (last_cfr != a[1]) {
             print ""
         }
         if (a[2] > 1) {
-            printf output_separator
+            printf OUTPUT_SEPARATOR
         }
-        printf result[idx]
+        printf RESULT[idx]
         last_cfr = a[1]
+    }
 }
 
-function parse_line (separator, enclosure,   pos) {
+function parse_line (   pos) {
     pos = 1
 
     while (pos <= length($0)) {
-        pos = parse_field($0, separator, enclosure, pos)
+        pos = parse_field($0, pos)
         CNF++
     }
 
@@ -30,14 +31,14 @@ function parse_line (separator, enclosure,   pos) {
 #   CNF
 #   FIELD
 #   QUOTED
-function parse_field (line, separator, enclosure, pos,   char) {
+function parse_field (line, pos,   char) {
 
     while (pos <= length(line)) {
         char = substr(line, pos, 1)
 
         if (QUOTED) {
-            if (char == enclosure) {
-                if (substr(line, pos, 1) == enclosure) {
+            if (char == ENCLOSURE) {
+                if (substr(line, pos, 1) == ENCLOSURE) {
                     FIELD = FIELD char
                     pos++
                 } else {
@@ -50,9 +51,9 @@ function parse_field (line, separator, enclosure, pos,   char) {
                 FIELD = FIELD char
             }
         } else {
-            if (char == enclosure) {
+            if (char == ENCLOSURE) {
                 QUOTED = 1
-            } else if (char == separator) {
+            } else if (char == SEPARATOR) {
                 # do nothing
             } else {
                 # error
@@ -69,9 +70,9 @@ function parse_field (line, separator, enclosure, pos,   char) {
 {
     CNR=1
     CNF=1
-    parse_line(separator, enclosure)
+    parse_line()
 }
 
 END {
-    display(RESULT, output_separator)
+    display()
 }

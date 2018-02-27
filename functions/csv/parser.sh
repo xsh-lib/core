@@ -41,11 +41,11 @@
 #?
 function parser () {
     local opt OPTIND OPTARG
-    local base_dir display_separator action prefix csv_file
+    local display_separator action prefix csv_file
     local SEPARATOR=',' ENCLOSURE='"'
+    local BASE_DIR="${XSH_HOME}/x/functions/csv"
 
     action='display'
-    base_dir=$(cd "$(dirname "$0")" && pwd)
 
     while getopts t:ep: opt; do
         case ${opt} in
@@ -72,9 +72,9 @@ function parser () {
     fi
 
     if [[ ${action} == 'display' ]]; then
-        awk -v separator=${SEPARATOR} \
-            -v enclosure=${ENCLOSURE} \
-            -v output_separator=${output_separator:-|} \
+        awk -v SEPARATOR=${SEPARATOR} \
+            -v ENCLOSURE=${ENCLOSURE} \
+            -v OUTPUT_SEPARATOR=${output_separator:-|} \
             -f "${base_dir}/parser.awk" \
             "${csv_file}"
     elif [[ ${action} == 'setenv' ]]; then
@@ -82,7 +82,7 @@ function parser () {
             awk -v separator=${SEPARATOR} \
                 -v enclosure=${ENCLOSURE} \
                 -v prefix=${prefix:-__CSV_} \
-                '{csv_parse_and_setenv(separator, enclosure, prefix)}' \
+                -f "${BASE_DIR}/parser.awk" \
                 "${csv_file}"
         )"
     else
