@@ -65,3 +65,13 @@ function parse_field (line, separator, enclosure, pos,   char) {
 
     return pos
 }
+
+{
+    CNR=1
+    CNF=1
+    parse_line(separator, enclosure)
+}
+
+END {
+    display(RESULT, output_separator)
+}
