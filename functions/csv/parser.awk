@@ -1,5 +1,5 @@
-function display (output_separator,   idx, a, last_cfr) {
-    for (idx in RESULT) {
+function display (result, output_separator,   idx, a, last_cfr) {
+    for (idx in result) {
         split(idx, a, ",")
         if (last_cfr != a[1]) {
             print ""
@@ -7,7 +7,7 @@ function display (output_separator,   idx, a, last_cfr) {
         if (a[2] > 1) {
             printf output_separator
         }
-        printf RESULT[idx]
+        printf result[idx]
         last_cfr = a[1]
 }
 
