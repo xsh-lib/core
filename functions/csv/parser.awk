@@ -7,12 +7,12 @@
 function parse_line (   pos, char) {
     pos = 1
 
-    while (pos <= length(line)) {
-        char = substr(line, pos, 1)
+    while (pos <= length($0)) {
+        char = substr($0, pos, 1)
 
         if (QUOTED) {
             if (char == ENCLOSURE) {
-                if (substr(line, pos, 1) == ENCLOSURE) {
+                if (substr($0, pos+1, 1) == ENCLOSURE) {
                     FIELD = FIELD char
                     pos++
                 } else {
@@ -25,7 +25,7 @@ function parse_line (   pos, char) {
             if (char == ENCLOSURE) {
                 QUOTED = 1
             } else if (char == SEPARATOR) {
-                RESULT[CNR,CNF] = FIELD
+                RESULT[CNR "," CNF] = FIELD
                 FIELD = ""
                 CNF++
             } else {
@@ -37,36 +37,43 @@ function parse_line (   pos, char) {
     }
 
     if (!QUOTED) {
-        RESULT[CNR,CNF] = FIELD
+        RESULT[CNR "," CNF] = FIELD
         FIELD = ""
         CNR++
-        CNF++
+        CNF=1
     }
 }
 
-function display (   idx, a, last_cfr) {
-    for (idx in RESULT) {
-        split(idx, a, ",")
-        if (last_cfr != a[1]) {
-            print ""
+function display (   i, j) {
+    for (i=1;i<=CNR;i++) {
+        for (j=1;j<=CNF;j++) {
+            if (j > 1) {
+                printf OUTPUT_SEPARATOR
+            }
+
+            printf RESULT[i "," j]
+
+            if (j == CNF) {
+                print ""
+            }
         }
-        if (a[2] > 1) {
-            printf OUTPUT_SEPARATOR
-        }
-        printf RESULT[idx]
-        last_cfr = a[1]
     }
 }
 
 function setenv () {
 }
 
-{
+BEGIN {
     CNR=1
     CNF=1
+}
+
+{
     parse_line()
 }
 
 END {
+    CNR--
+    CNF=length(RESULT)/CNR
     display()
 }
