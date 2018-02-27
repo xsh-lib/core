@@ -1,47 +1,67 @@
-function parser (separator, enclosure, header) {
-    result = parse_record($0, separator, enclosure)
+function display (output_separator,   idx, a, last_cfr) {
+    for (idx in RESULT) {
+        split(idx, a, ",")
+        if (last_cfr != a[1]) {
+            print ""
+        }
+        if (a[2] > 1) {
+            printf output_separator
+        }
+        printf RESULT[idx]
+        last_cfr = a[1]
 }
 
-function parse_record (record, separator, enclosure,   result, pos, nfield) {
+function parse_line (separator, enclosure,   pos) {
     pos = 1
 
-    nfield = 1
-    while (pos <= length(record)) {
-        pos = parse_field(record, separator, enclosure, nfield, pos)
-        nfield++
+    while (pos <= length($0)) {
+        pos = parse_field($0, separator, enclosure, pos)
+        CNF++
     }
 
-    return result
+    if (!QUOTED) {
+        CNR++
+    }
 }
 
-function parse_field (record, separator, enclosure, nfield, pos,   field, char, quoted) {
-    quoted = 0
+# Global Variables:
+#   RESULT
+#   CNR
+#   CNF
+#   FIELD
+#   QUOTED
+function parse_field (line, separator, enclosure, pos,   char) {
 
-    while (pos <= length(record)) {
-        char = substr(record, pos, 1)
+    while (pos <= length(line)) {
+        char = substr(line, pos, 1)
 
-        if (quoted) {
+        if (QUOTED) {
             if (char == enclosure) {
-                pos++
-                if (substr(record, pos+1, 1) == enclosure) {
-                    field = field char
+                if (substr(line, pos, 1) == enclosure) {
+                    FIELD = FIELD char
+                    pos++
                 } else {
-                    break
+                    QUOTED = 0
+                    RESULT[CNR,CNF] = FIELD
+                    FIELD = ""
+                    CNF++
                 }
             } else {
-                field = field char
+                FIELD = FIELD char
             }
         } else {
             if (char == enclosure) {
-                quoted = 1
+                QUOTED = 1
+            } else if (char == separator) {
+                # do nothing
+            } else {
+                # error
+                return 255
             }
         }
+
         pos++
     }
-
-    pos++
-    quoted = 0
-    result[NR,nfield] = field
 
     return pos
 }

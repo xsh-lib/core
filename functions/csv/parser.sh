@@ -75,7 +75,8 @@ function parser () {
         awk -v separator=${SEPARATOR} \
             -v enclosure=${ENCLOSURE} \
             -v output_separator=${output_separator:-|} \
-            '{csv_parse_and_display(separator, enclosure, output_separator)}' \
+            '{CNR=1; CNF=1; parse_line(separator, enclosure)}' \
+            'END {display(RESULT, output_separator)}' \
             "${csv_file}"
     elif [[ ${action} == 'setenv' ]]; then
         source /dev/stdin <<< "$(
