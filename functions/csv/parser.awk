@@ -4,15 +4,15 @@
 #   CNF
 #   FIELD
 #   QUOTED
-function parse_line (   pos, char) {
+function parse (line, separator, enclosure,   pos, char) {
     pos = 1
 
-    while (pos <= length($0)) {
-        char = substr($0, pos, 1)
+    while (pos <= length(line)) {
+        char = substr(line, pos, 1)
 
         if (QUOTED) {
-            if (char == ENCLOSURE) {
-                if (substr($0, pos+1, 1) == ENCLOSURE) {
+            if (char == enclosure) {
+                if (substr(line, pos+1, 1) == enclosure) {
                     FIELD = FIELD char
                     pos++
                 } else {
@@ -22,9 +22,9 @@ function parse_line (   pos, char) {
                 FIELD = FIELD char
             }
         } else {
-            if (char == ENCLOSURE) {
+            if (char == enclosure) {
                 QUOTED = 1
-            } else if (char == SEPARATOR) {
+            } else if (char == separator) {
                 RESULT[CNR "," CNF] = FIELD
                 FIELD = ""
                 CNF++
@@ -44,14 +44,14 @@ function parse_line (   pos, char) {
     }
 }
 
-function display (   i, j) {
+function output_table (arr, ofs,   i, j) {
     for (i=1;i<=CNR;i++) {
         for (j=1;j<=CNF;j++) {
             if (j > 1) {
-                printf OUTPUT_SEPARATOR
+                printf ofs
             }
 
-            printf RESULT[i "," j]
+            printf arr[i "," j]
 
             if (j == CNF) {
                 print ""
@@ -60,7 +60,7 @@ function display (   i, j) {
     }
 }
 
-function setenv () {
+function output_setenv (arr, prefix) {
 }
 
 BEGIN {
@@ -69,11 +69,16 @@ BEGIN {
 }
 
 {
-    parse_line()
+    parse($0, separator, enclosure)
 }
 
 END {
     CNR--
     CNF=length(RESULT)/CNR
-    display()
+
+    if (output == "table") {
+        output_table(RESULT, table_separator)
+    } else if (output == "setenv") {
+        output_setenv(RESULT, prefix)
+    }
 }

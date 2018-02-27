@@ -37,23 +37,30 @@
 #?     air, moon roof, loaded",4799.00
 #?
 #?   @parser foo.csv
+#?   # Year|Make|Model|Description|Price
+#?   # 1997|Ford|E350|ac, abs, moon|3000.00
+#?   # 1999|Chevy|Venture "Extended Edition"||4900.00
+#?   # 1999|Chevy|Venture "Extended Edition, Very Large"||5000.00
+#?   # 1996|Jeep|Grand Cherokee|MUST SELL!air, moon roof, loaded|4799.00
+#?
+#?   @parser -e foo.csv
 #?   # Following variables were set:
 #?
 function parser () {
     local opt OPTIND OPTARG
-    local display_separator action prefix csv_file
+    local table_separator output prefix csv_file
     local SEPARATOR=',' ENCLOSURE='"'
     local BASE_DIR="${XSH_HOME}/lib/x/functions/csv"
 
-    action='display'
+    output='table'
 
     while getopts t:ep: opt; do
         case ${opt} in
             t)
-                display_separator=${OPTARG}
+                table_separator=${OPTARG}
                 ;;
             e)
-                action=setenv
+                output=setenv
                 ;;
             p)
                 prefix=${OPTARG}
@@ -71,22 +78,24 @@ function parser () {
         return 255
     fi
 
-    if [[ ${action} == 'display' ]]; then
-        awk -v SEPARATOR=${SEPARATOR} \
-            -v ENCLOSURE=${ENCLOSURE} \
-            -v OUTPUT_SEPARATOR=${output_separator:-|} \
+    if [[ ${output} == 'table' ]]; then
+        awk -v separator=${SEPARATOR} \
+            -v enclosure=${ENCLOSURE} \
+            -v output=${output} \
+            -v table_separator=${table_separator:-|} \
             -f "${BASE_DIR}/parser.awk" \
             "${csv_file}"
-    elif [[ ${action} == 'setenv' ]]; then
+    elif [[ ${output} == 'setenv' ]]; then
         source /dev/stdin <<< "$(
             awk -v separator=${SEPARATOR} \
                 -v enclosure=${ENCLOSURE} \
+                -v output=${output} \
                 -v prefix=${prefix:-__CSV_} \
                 -f "${BASE_DIR}/parser.awk" \
                 "${csv_file}"
         )"
     else
-        printf "ERROR: unsupported action '%s'.\n" "${action}" >&2
+        printf "ERROR: unsupported output '%s'.\n" "${output}" >&2
         return 255
     fi
 }
