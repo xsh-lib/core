@@ -12,7 +12,7 @@
 #?                   Default is '__CSV_'.
 #?
 #?   CSV_FILE        Full path of CSV file to parse.
-#?                   Separated by commas, enclosured by double quote,
+#?                   Separated by commas, quoted between double quotes,
 #?                   and first line as header.
 #?
 #? Output:
@@ -49,7 +49,7 @@
 function parser () {
     local opt OPTIND OPTARG
     local table_separator output prefix csv_file
-    local SEPARATOR=',' ENCLOSURE='"'
+    local SEPARATOR=',' BETWEEN='"'
     local BASE_DIR="${XSH_HOME}/lib/x/functions/csv"
 
     output='table'
@@ -80,7 +80,7 @@ function parser () {
 
     if [[ ${output} == 'table' ]]; then
         awk -v separator=${SEPARATOR} \
-            -v enclosure=${ENCLOSURE} \
+            -v between=${BETWEEN} \
             -v output=${output} \
             -v table_separator=${table_separator:-|} \
             -f "${BASE_DIR}/parser.awk" \
@@ -88,7 +88,7 @@ function parser () {
     elif [[ ${output} == 'variable' ]]; then
         source /dev/stdin <<< "$(
             awk -v separator=${SEPARATOR} \
-                -v enclosure=${ENCLOSURE} \
+                -v between=${BETWEEN} \
                 -v output=${output} \
                 -v prefix=${prefix:-__CSV_} \
                 -f "${BASE_DIR}/parser.awk" \

@@ -1,20 +1,47 @@
-# Global Variables:
-#   RESULT
-#   CNR
-#   CNF
-#   FIELD
-#   QUOTED
-function parse (line, separator, enclosure,   pos, char) {
+#？Parse a line of csv file.
+#?
+#? Sample Usage:
+#?   BEGIN {parse($0, ",", """")} END {for (i=1;i<=CNR;i++) {for (j=i;j<=CNF;j++) {printf RESULT[i "," j] OFS}; printf "\n"}}
+#？
+#? Paramater:
+#?   line      [String]  A line of csv file.
+#?   separator [String]  The character that used as field delimiter.
+#?   between   [String]  The character that used to enclose field.
+#? 
+#? Variable:
+#?   RESULT [Array]  Store parsed csv field, use `m,n` as array index
+#?                    to simulate a two dimensional array.
+#?   CNR    [Int]    Number of record in csv.
+#?   CNF    [Int]    Number of field for each record in csv.
+#?
+#? Return:
+#?   None
+#?
+#? Output:
+#?   None
+#?
+function parse (line, separator, between,   pos, char) {
     pos = 1  # start at first char of line
+
+    if (!CNR) {
+        CNR = 0
+    }
+
+    if (!QUOTED) {  # unquoted begin of line means begin of record
+        FIELD = ""
+        CNR++  # increase record number
+        CNF=1  # re-initialize field number
+    }
 
     while (pos <= length(line)) {
         char = substr(line, pos, 1)
 
         if (QUOTED) {  # inside unclosed quotes
-            if (char == enclosure) {
-                if (substr(line, pos+1, 1) == enclosure) {  # quoted `""` means signle `"`
+            if (char == between) {
+                if (substr(line, pos+1, 1) == between) {
+                    # a pair of between characters were escaped
                     FIELD = FIELD char
-                    pos++  # skip to process second `"`
+                    pos++  # skip to process second between character
                 } else {
                     QUOTED = 0  # quotes closed
                 }
@@ -22,11 +49,11 @@ function parse (line, separator, enclosure,   pos, char) {
                 FIELD = FIELD char
             }
         } else {
-            if (char == enclosure) {
+            if (char == between) {
                 QUOTED = 1  # quotes opened
             } else if (char == separator) {
                 RESULT[CNR "," CNF] = FIELD
-                FIELD = ""  # re-initiate field
+                FIELD = ""  # re-initialize field
                 CNF++  # increase field number
             } else {
                 FIELD = FIELD char  # allow on demand quotes in csv
@@ -36,30 +63,52 @@ function parse (line, separator, enclosure,   pos, char) {
         pos++
     }
 
-    if (!QUOTED) {  # unquoted end of line means end of record
+    if (!QUOTED) {
+        # unquoted end of line means end of field as well as record
         RESULT[CNR "," CNF] = FIELD
-        FIELD = ""
-        CNR++  # increase record number
-        CNF=1  # re-initiate field number
     }
 }
 
+#? Output a simulated two dimensional array as table.
+#?
+#? Paramater:
+#?   array [Array]  Array to be output.
+#?   m     [Int]    Number of record.
+#?   n     [Int]    Number of field for each record.
+#?   ofs   [String] Field separator for output.
+#? 
+#? Return:
+#?   None
+#?
+#? Output:
+#?   Array as table.
+#?
 function output_table (array, m, n, ofs,   i, j) {
     for (i=1;i<=m;i++) {
         for (j=1;j<=n;j++) {
             if (j > 1) {
                 printf ofs
             }
-
             printf array[i "," j]
-
-            if (j == n) {
-                print ""
-            }
         }
+        printf "\n"
     }
 }
 
+#? Output a simulated two dimensional array as Shell variable declaration.
+#?
+#? Paramater:
+#?   array  [Array]  Array to be output.
+#?   m      [Int]    Number of record.
+#?   n      [Int]    Number of field for each record.
+#?   prefix [String] Prefix for variable name.
+#? 
+#? Return:
+#?   None
+#?
+#? Output:
+#?   Array as Shell variable declaration.
+#?
 function output_variable (array, m, n, prefix,   i, j, fn, fns, fv) {
     i = 1
     for (j=1;j<=n;j++) {
@@ -72,55 +121,85 @@ function output_variable (array, m, n, prefix,   i, j, fn, fns, fv) {
     print gen_array_variables(prefix "FIELDS", fns)
 }
 
-# Trim blankspaces of string.
-#
-# @param [string] str  String to trim.
-# @return [string]     The string that with blankspaces trimmed.
-#
+#? Trim blankspaces of string.
+#?
+#? Parameter:
+#?   str [String]  String to trim.
+#?
+#? Return:
+#?   [String]  The string that with blankspaces trimmed.
+#?
+#? Output:
+#?   None
+#?
 function trim (str) {
     gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
     return str
 }
 
-# Remove the square bracket enclosure from string.
-#
-# @param [string] str  String to process.
-# @return [string]     The string that with square bracket enclosure removed.
-#
+#? Remove the square bracket between from string.
+#?
+#? Parameter:
+#?   str [String]  String to process.
+#?
+#? Return:
+#?   [String]  The string that with square bracket between removed.
+#?
+#? Output:
+#?   None
+#?
 function remove_bracket (str) {
     gsub(/^\[|\]$/, "", str)
     return str
 }
 
-# Generate a valid variable name from string.
-#
-# @param [string] str  String to generate from.
-# @return [string]     The valid variable name generated from string.
-#
+#? Generate a valid variable name from string.
+#?
+#? Parameter:
+#?   str [String]  String to generate from.
+#?
+#? Return:
+#?   [String]  The valid variable name generated from string.
+#?
+#? Output:
+#?   None
+#?
 function get_var_name (str) {
     str = remove_bracket(trim(str))
     gsub(/[^[:alnum:]]/, "_", str)
     return str
 }
 
-# Generate variable assignment expression name="value".
-#
-# @param [string] name   Variable name.
-# @param [string] value  Value of variable.
-# @return [string]       The variable assignment expression.
-#
+#? Generate variable assignment expression name="value".
+#?
+#? Parameter:
+#?   name  [String]  Variable name.
+#?   value [String]  Value of variable.
+#?
+#? Return:
+#?   [String]  The variable assignment expression.
+#?
+#? Output:
+#?   None
+#?
 function gen_variables (name, value) {
     return name "=" "\047" value "\047"
 }
 
-# Generate Array variable assignment expression name=("value" "value" ...)
-#
-# @param [string] name    Variable name.
-# @param [array] value    Value of Array variable.
-# @param [int] idx        Function's private parameter.
-# @param [string] result  Function's private parameter.
-# @return [string]        The Array variable assignment expression.
-#
+#? Generate Array variable assignment expression name=("value" "value" ...)
+#?
+#? Parameter:
+#?   name   [String]  Variable name.
+#?   value  [Array]   Value of Array variable.
+#?   idx    [Int]     Function's private parameter.
+#?   result [String]  Function's private parameter.
+#?
+#? Return:
+#?   [String]  The Array variable assignment expression.
+#?
+#? Output:
+#?   None
+#?
 function gen_array_variables (name, array, i, j,   idx, a, result) {
     result = name "=("
     for (idx in array) {
@@ -143,19 +222,12 @@ function gen_array_variables (name, array, i, j,   idx, a, result) {
     return result
 }
 
-BEGIN {
-    CNR=1  # record number started at 1
-    CNF=1  # field number started at 1
-}
-
+# Main
 {
-    parse($0, separator, enclosure)
+    parse($0, separator, between)
 }
 
 END {
-    CNR--
-    CNF=length(RESULT)/CNR
-
     if (output == "table") {
         output_table(RESULT, CNR, CNF, table_separator)
     } else if (output == "variable") {
