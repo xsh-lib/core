@@ -45,12 +45,23 @@
 #?
 #?   @parser -e foo.csv
 #?   # Following variables were set:
+#?   # __CSV_FIELDS=([1]="Year" [2]="Make" [3]="Model" [4]="Description" [5]="Price")
+#?   # __CSV_FIELDS_Description=Description
+#?   # __CSV_FIELDS_Description_ROWS=([1]="Description" [2]="ac, abs, moon" [3]="" [4]="" [5]="MUST SELL!air, moon roof, loaded")
+#?   # __CSV_FIELDS_Make=Make
+#?   # __CSV_FIELDS_Make_ROWS=([1]="Make" [2]="Ford" [3]="Chevy" [4]="Chevy" [5]="Jeep")
+#?   # __CSV_FIELDS_Model=Model
+#?   # __CSV_FIELDS_Model_ROWS=([1]="Model" [2]="E350" [3]="Venture \"Extended Edition\"" [4]="Venture \"Extended Edition, Very Large\"" [5]="Grand Cherokee")
+#?   # __CSV_FIELDS_Price=Price
+#?   # __CSV_FIELDS_Price_ROWS=([1]="Price" [2]="3000.00" [3]="4900.00" [4]="5000.00" [5]="4799.00")
+#?   # __CSV_FIELDS_Year=Year
+#?   # __CSV_FIELDS_Year_ROWS=([1]="Year" [2]="1997" [3]="1999" [4]="1999" [5]="1996")
 #?
 function parser () {
     local opt OPTIND OPTARG
     local table_separator output prefix csv_file
     local SEPARATOR=',' BETWEEN='"'
-    local BASE_DIR="${XSH_HOME}/lib/x/functions/csv"
+    local BASE_DIR="${XSH_HOME}/lib/x/functions/csv"  # TODO: use varaible instead
 
     output='table'
 
