@@ -60,7 +60,7 @@ function parser () {
                 table_separator=${OPTARG}
                 ;;
             e)
-                output=setenv
+                output=variable
                 ;;
             p)
                 prefix=${OPTARG}
@@ -85,7 +85,7 @@ function parser () {
             -v table_separator=${table_separator:-|} \
             -f "${BASE_DIR}/parser.awk" \
             "${csv_file}"
-    elif [[ ${output} == 'setenv' ]]; then
+    elif [[ ${output} == 'variable' ]]; then
         source /dev/stdin <<< "$(
             awk -v separator=${SEPARATOR} \
                 -v enclosure=${ENCLOSURE} \
