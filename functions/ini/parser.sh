@@ -49,9 +49,8 @@
 #?
 function parser () {
     local opt OPTIND OPTARG
-    local base_dir prefix ini_file
-
-    base_dir=$(cd "$(dirname "$0")" && pwd)
+    local prefix ini_file
+    local BASE_DIR="${XSH_HOME}/lib/x/functions/ini"  # TODO: use varaible instead
 
     while getopts p: opt; do
         case ${opt} in
@@ -74,7 +73,7 @@ function parser () {
     source /dev/stdin <<< "$(
         awk -F '=' \
             -v prefix="${prefix:-__INI_}" \
-            -f "${base_dir}/parser.awk" \
+            -f "${BASE_DIR}/parser.awk" \
             "${ini_file}"
     )"
 }
