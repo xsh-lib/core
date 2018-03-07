@@ -1,52 +1,69 @@
-# Trim blankspaces of string.
-#
-# @param [string] str  String to trim.
-# @return [string]     The string that with blankspaces trimmed.
-#
-function trim (str) {
-    gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
+#? Trim blankspaces of string.
+#?
+#? Parameter:
+#?   str [String]  String to trim.
+#?
+#? Return:
+#?   [String]  The string that with blankspaces trimmed.
+#?
+#? Output:
+#?   None
+#?
+function trim (str, char,   regex) {
+    if (char == "") {
+        char = "[[:blank:]]"
+    }
+    regex = "^" char "|" char "$"
+    gsub(regex, "", str)
     return str
 }
 
-# Remove the square bracket enclosure from string.
-#
-# @param [string] str  String to process.
-# @return [string]     The string that with square bracket enclosure removed.
-#
-function remove_bracket (str) {
-    gsub(/^\[|\]$/, "", str)
-    return str
-}
-
-# Generate a valid variable name from string.
-#
-# @param [string] str  String to generate from.
-# @return [string]     The valid variable name generated from string.
-#
+#? Generate a valid variable name from string.
+#?
+#? Parameter:
+#?   str [String]  String to generate from.
+#?
+#? Return:
+#?   [String]  The valid variable name generated from string.
+#?
+#? Output:
+#?   None
+#?
 function get_var_name (str) {
-    str = remove_bracket(trim(str))
+    str = trim(str)
+    str = trim(str, "[\\[\\]]")
     gsub(/[^[:alnum:]]/, "_", str)
     return str
 }
 
-# Generate variable assignment expression name="value".
-#
-# @param [string] name   Variable name.
-# @param [string] value  Value of variable.
-# @return [string]       The variable assignment expression.
-#
+#? Generate variable assignment expression name="value".
+#?
+#? Parameter:
+#?   name  [String]  Variable name.
+#?   value [String]  Value of variable.
+#?
+#? Return:
+#?   [String]  The variable assignment expression.
+#?
+#? Output:
+#?   None
+#?
 function gen_variables (name, value) {
     return name "=" "\047" value "\047"
 }
 
-# Generate Array variable assignment expression name=("value" "value" ...)
-#
-# @param [string] name    Variable name.
-# @param [array] value    Value of Array variable.
-# @param [int] idx        Function's private parameter.
-# @param [string] result  Function's private parameter.
-# @return [string]        The Array variable assignment expression.
-#
+#? Generate Array variable assignment expression name=([0]='element1' [1]='element2' ...)
+#?
+#? Parameter:
+#?   name  [String]  Variable name.
+#?   value [Array]   Value of Array variable.
+#?
+#? Return:
+#?   [String]  The Array variable assignment expression.
+#?
+#? Output:
+#?   None
+#?
 function gen_array_variables (name, array,   idx, result) {
     result = name "=("
     for (idx in array) {
@@ -57,11 +74,14 @@ function gen_array_variables (name, array,   idx, result) {
     return result
 }
 
-# Main
-#
-# @param [string] prefix  Prefix to be used in variable name.
-# @output [string]        Generated shell variables for INI file.
-#
+#? Parse an ini file and output as shell variable declaration.
+#?
+#? Parameter:
+#?   prefix [String]  Prefix to be used in variable name.
+#?
+#? Output:
+#?   Generated shell variables for INI file.
+#?
 NF>0 && !/^;/ {  # filter out empty and commented lines
     if (match($0, /^\[.+\]$/) > 0) {  # sections
         if (sn) {
@@ -70,7 +90,7 @@ NF>0 && !/^;/ {  # filter out empty and commented lines
         delete kns
         sn = get_var_name($0)
         sns[length(sns)+1] = sn
-        sv = remove_bracket($0)
+        sv = trim($0, "[\\[\\]]")
         print gen_variables(prefix "SECTIONS_" sn, sv)
     } else {  # variables
         kn = get_var_name($1)

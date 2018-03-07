@@ -124,32 +124,21 @@ function output_variable (array, m, n, prefix,   i, j, fn, fns, fv) {
 #? Trim blankspaces of string.
 #?
 #? Parameter:
-#?   str [String]  String to trim.
+#?   str  [String]  String to trim.
+#?   char [String]  String to be trimmed, default is [[:blank:]]
 #?
 #? Return:
-#?   [String]  The string that with blankspaces trimmed.
+#?   [String]  The string that with `char` trimmed.
 #?
 #? Output:
 #?   None
 #?
-function trim (str) {
-    gsub(/^[[:blank:]]+|[[:blank:]]+$/, "", str)
-    return str
-}
-
-#? Remove the square bracket between from string.
-#?
-#? Parameter:
-#?   str [String]  String to process.
-#?
-#? Return:
-#?   [String]  The string that with square bracket between removed.
-#?
-#? Output:
-#?   None
-#?
-function remove_bracket (str) {
-    gsub(/^\[|\]$/, "", str)
+function trim (str, char,   regex) {
+    if (char == "") {
+        char = "[[:blank:]]"
+    }
+    regex = "^" char "|" char "$"
+    gsub(regex, "", str)
     return str
 }
 
@@ -165,7 +154,8 @@ function remove_bracket (str) {
 #?   None
 #?
 function get_var_name (str) {
-    str = remove_bracket(trim(str))
+    str = trim(str)
+    str = trim(str, "[\\[\\]]")
     gsub(/[^[:alnum:]]/, "_", str)
     return str
 }
@@ -186,13 +176,13 @@ function gen_variables (name, value) {
     return name "=" "\047" value "\047"
 }
 
-#? Generate Array variable assignment expression name=("value" "value" ...)
+#? Generate Array variable assignment expression name=([0]='element1' [1]='element2' ...)
 #?
 #? Parameter:
-#?   name   [String]  Variable name.
-#?   value  [Array]   Value of Array variable.
-#?   idx    [Int]     Function's private parameter.
-#?   result [String]  Function's private parameter.
+#?   name  [String]  Variable name.
+#?   value [Array]   Value of Array variable.
+#?   i     [Int]     Rows i only.
+#?   j     [Int]     Column j only.
 #?
 #? Return:
 #?   [String]  The Array variable assignment expression.
@@ -222,7 +212,21 @@ function gen_array_variables (name, array, i, j,   idx, a, result) {
     return result
 }
 
-# Main
+#？Parse a csv file and output as table or shell variable declaration.
+#?
+#? Sample Usage:
+#?   awk -v separator=',' -v between='"' -v output=table -f /path/to/parser.awk sample.csv
+#？
+#? Paramater:
+#?   separator       [String]  The character that used as field delimiter in csv file.
+#?   between         [String]  The character that used to enclose field in csv file.
+#?   output          [String]  Output type, could be one of `table` and `variable`.
+#?   table_separator [String]  The character that used as field delimiter in output.
+#?   prefix          [String]  Prefix for variable name.
+#? 
+#? Output:
+#?   The parsed result or shell variables.
+#?
 {
     parse($0, separator, between)
 }
