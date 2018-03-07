@@ -137,7 +137,7 @@ function trim (str, char,   regex) {
     if (char == "") {
         char = "[[:blank:]]"
     }
-    regex = "^" char "|" char "$"
+    regex = "^" char "+|" char "+$"
     gsub(regex, "", str)
     return str
 }
