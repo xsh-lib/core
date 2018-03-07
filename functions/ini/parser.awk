@@ -67,9 +67,9 @@ function gen_variables (name, value) {
 function gen_array_variables (name, array,   idx, result) {
     result = name "=("
     for (idx in array) {
-        result += "\047" array[idx] "\047" OFS
+        result = result "\047" array[idx] "\047" OFS
     }
-    result += ")"
+    result = result ")"
 
     return result
 }
