@@ -196,15 +196,15 @@ function gen_array_variables (name, array, i, j,   idx, a, result) {
         if (i) {
             split(idx, a, ",")
             if (i == a[1]) {
-                result = result "[" a[2] "]=\047" array[idx] "\047" OFS
+                result = result "[" a[2]-1 "]=\047" array[idx] "\047" OFS
             }
         } else if (j) {
             split(idx, a, ",")
             if (j == a[2]) {
-                result = result "[" a[1] "]=\047" array[idx] "\047" OFS
+                result = result "[" a[1]-1 "]=\047" array[idx] "\047" OFS
             }
         } else {
-            result = result "[" idx "]=\047" array[idx] "\047" OFS
+            result = result "[" idx-1 "]=\047" array[idx-1] "\047" OFS
         }
     }
     result = result ")"
