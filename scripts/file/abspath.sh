@@ -19,6 +19,6 @@ function abspath () {
     fi
 }
 
-@abspath "$@"
+abspath "$@"
 
 exit

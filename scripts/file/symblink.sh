@@ -6,7 +6,7 @@
 #?   [DIR]  In case of: `PWD` + DIR + LINK
 #?
 #? Output:
-#?   Absolute file path that the symbol link referred.
+#?   Absolute path of the file that the symbol link referred.
 #?
 #? Example:
 #?   mkdir -p /tmp/symblink/foo/bar/f4 \
@@ -32,12 +32,12 @@ function symblink () {
     file=$(readlink "${link}")
 
     if [[ -n ${file} ]]; then
-        xsh /file/symblink "${file}" "$(dirname "${link}")"
+        symblink "${file}" "$(dirname "${link}")"
     else
         abspath "${link}"
     fi
 }
 
-@symblink "$@"
+symblink "$@"
 
 exit
