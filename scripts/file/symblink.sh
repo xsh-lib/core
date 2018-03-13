@@ -32,7 +32,7 @@ function symblink () {
     file=$(readlink "${link}")
 
     if [[ -n ${file} ]]; then
-        symblink "${file}" "$(dirname "${link}")"
+        xsh /file/symblink "${file}" "$(dirname "${link}")"
     else
         abspath "${link}"
     fi
