@@ -34,7 +34,7 @@ function symblink () {
     if [[ -n ${file} ]]; then
         symblink "${file}" "$(dirname "${link}")"
     else
-        abspath "${link}"
+        xsh /file/abspath "${link}"
     fi
 }
 
