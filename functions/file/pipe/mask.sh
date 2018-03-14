@@ -1,5 +1,18 @@
 #? Usage:
-#?   @mask [-c LIST] [-f LIST] [-d DELIMITER] [-m MASK] [-x] < /dev/stdin
+#?   @mask [-d DELIMITER] [-f LIST] [-c LIST] [-m MASK] [-x] < /dev/stdin
+#?
+#? Option:
+#?   [-d DELIMITER]  Use DELIMITER as the field delimiter character instead
+#?                   of the tab character.
+#?
+#?   [-f LIST]      The list specifies fields.
+#?
+#?   [-c LIST]      The list specifies character positions.
+#?
+#?   [-m MASK]      Mask character.
+#?
+#?   [-x]           Use fixed length on masked string, as 6 characters.
+#?
 #?
 #? Output:
 #?   Masked string from standard input.
@@ -12,6 +25,8 @@ function mask () {
     local opt OPTIND OPTARG
     local delimiter flist clist mask fixed
     local BASE_DIR="${XSH_HOME}/lib/x/functions/file/pipe"  # TODO: use varaible instead
+
+    mask="*"  # set default mask char
 
     while getopts d:f:c:m:x: opt; do
         case ${opt} in
@@ -35,11 +50,19 @@ function mask () {
                 ;;
         esac
     done
-            
-    awk -F "${delimiter}" \
-        -v flist=${flist} \
-        -v clist=${clist} \
-        -v char=${mask} \
-        -v fixed=${fixed} \
-        -f "${BASE_DIR}/mask.awk" < /dev/stdin
+
+    if [[ -n ${delimiter} ]]; then
+        awk -F "${delimiter}" \
+            -v flist=${flist} \
+            -v clist=${clist} \
+            -v char=${mask} \
+            -v fixed=${fixed} \
+            -f "${BASE_DIR}/mask.awk" < /dev/stdin
+    else
+        awk -v flist=${flist} \
+            -v clist=${clist} \
+            -v char=${mask} \
+            -v fixed=${fixed} \
+            -f "${BASE_DIR}/mask.awk" < /dev/stdin
+    fi
 }
