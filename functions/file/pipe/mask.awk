@@ -1,4 +1,18 @@
-function mask (str, list, char, fixed,   pos, start, end, mstr, result, LEN_OF_FIXED_MASK) {
+#? Mask a string with mask character.
+#?
+#? Parameter:
+#?   str   [String]   String to mask.
+#?   list  [String]   The list specifies character positions.
+#?   char  [String]   Mask character.
+#?   fixed [Integer]  Use fixed length on masking string, 6 characters.
+#?
+#? Return:
+#?   [String]  Masked string.
+#?
+#? Output:
+#?   None
+#?
+function mask (str, list, char, fixed,   a, pos, start, end, mstr, result, LEN_OF_FIXED_MASK) {
     LEN_OF_FIXED_MASK = 6
 
     # resolve pos of start and end
@@ -30,7 +44,23 @@ function mask (str, list, char, fixed,   pos, start, end, mstr, result, LEN_OF_F
     return result
 }
 
+#? Repeat a string n times.
+#?
+#? Parameter:
+#?   str   [String]   String to repeat.
+#?   times [Integer]  Repeat n times, default is 1, means no repeat.
+#?
+#? Return:
+#?   [String]  Concatenation of n strings.
+#?
+#? Output:
+#?   None
+#?
 function repeat (str, times,   result) {
+    if (times == "") {
+        times = 1
+    }
+
     result = sprintf("%" times "s", "")
     gsub(/ /, str, result)
 
@@ -40,28 +70,39 @@ function repeat (str, times,   result) {
 {
     if (flist) {
         # resolve start and end field
-        pos = index(flist, "-")
-        if (pos) {
-            fstart = substr(flist, 1, pos - 1)
-            fstart = fstart ? fstart : 1
-            fend = substr(flist, pos + 1)
-            fend = fend ? fend : NF
-        } else {
-            fstart = fend = flist
+        split(flist, a, ",")
+
+        for (idx in a) {
+            pos = index(a[idx], "-")
+
+            if (pos) {
+                fstart = substr(a[idx], 1, pos - 1)
+                fstart = fstart ? fstart : 1
+                fend = substr(a[idx], pos + 1)
+                fend = fend ? fend : NF
+            } else {
+                fstart = fend = a[idx]
+            }
+
+            for (i=fstart;i<=fend;i++) {
+                farr[i] = ""
+            }
         }
 
         # mask by field
-        for (i=1;i<=NF;i++) {
-            if (i > 1) {
+        for (j=1;j<=NF;j++) {
+            if (j > 1) {
                 printf OFS
             }
 
-            if (i >= fstart && i <= fend) {
-                printf mask($i, clist, char, fixed)
+            if (j in farr) {
+                printf mask($j, clist, char, fixed)
             } else {
-                printf $i
+                printf $j
             }
         }
+
+        printf "\n"
     } else {
         # mask by line
         print mask($0, clist, char, fixed)

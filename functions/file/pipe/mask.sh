@@ -11,7 +11,7 @@
 #?
 #?   [-m MASK]      Mask character.
 #?
-#?   [-x]           Use fixed length on masked string, as 6 characters.
+#?   [-x]           Use fixed length on masking string, 6 characters.
 #?
 #?
 #? Output:
