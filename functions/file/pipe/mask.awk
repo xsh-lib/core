@@ -5,7 +5,7 @@ function mask (str, list, char, fixed,   pos, start, end, mstr) {
             start = substr(list, 1, pos - 1)
             start = start ? start : 1
             end = substr(list, pos + 1)
-            end = end ? start : length(str)
+            end = end ? end : length(str)
         } else {
             start = end = list
         }
@@ -42,7 +42,7 @@ function repeat (str, times,   result) {
             fstart = substr(flist, 1, p - 1)
             fstart = fstart ? fstart : 1
             fend = substr(flist, p + 1)
-            fend = fend ? fstart : NF
+            fend = fend ? fend : NF
         } else {
             fstart = fend = flist
         }
