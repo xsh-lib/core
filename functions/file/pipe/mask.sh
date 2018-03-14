@@ -5,13 +5,13 @@
 #?   [-d DELIMITER]  Use DELIMITER as the field delimiter character instead
 #?                   of the tab character.
 #?
-#?   [-f LIST]      The list specifies fields.
+#?   [-f LIST]       The list specifies fields.
 #?
-#?   [-c LIST]      The list specifies character positions.
+#?   [-c LIST]       The list specifies character positions.
 #?
-#?   [-m MASK]      Mask character.
+#?   [-m MASK]       Mask character.
 #?
-#?   [-x]           Use fixed length on masking string, 6 characters.
+#?   [-x]            Use fixed length on masking string, 6 characters.
 #?
 #?
 #? Output:
