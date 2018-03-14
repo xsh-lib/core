@@ -28,7 +28,7 @@ function mask () {
 
     mask="*"  # set default mask char
 
-    while getopts d:f:c:m:x: opt; do
+    while getopts d:f:c:m:x opt; do
         case ${opt} in
             d)
                 delimiter=${OPTARG}
