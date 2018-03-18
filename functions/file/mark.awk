@@ -1,9 +1,11 @@
-#? mark a string with style.
+#? Mark a string with SGR code in terminal.
 #?
 #? Parameter:
-#?   str    [String]   String to mark.
-#?   list   [String]   The list specifies character positions.
-#?   style  [String]   style name.
+#?   str  [String]  String to mark.
+#?   list [String]  The list specifies character positions.
+#?   code [String]  SGR Code, more than one can be separated with semicolon ";".
+#?                  Valid codes: 0~107.
+#?                  Wiki: https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
 #?
 #? Return:
 #?   [String]  Marked string.
@@ -11,48 +13,7 @@
 #? Output:
 #?   None
 #?
-function mark (str, list, style,   a, pos, start, end, mstr, result, STYLES) {
-    # https://en.wikipedia.org/wiki/ANSI_escape_code
-    STYLES["reset"] = 0
-    STYLES["bold"] = 1
-    STYLES["faint"] = 2
-    STYLES["italic"] = 3
-    STYLES["underline"] = 4
-    STYLES["reverse"] = 7
-    STYLES["strikethrough"] = 9
-    STYLES["black"] = 30
-    STYLES["red"] = 31
-    STYLES["green"] = 32
-    STYLES["yellow"] = 33
-    STYLES["blue"] = 34
-    STYLES["magenta"] = 35
-    STYLES["cyan"] = 36
-    STYLES["white"] = 37
-    STYLES["bg_black"] = 40
-    STYLES["bg_red"] = 41
-    STYLES["bg_green"] = 42
-    STYLES["bg_yellow"] = 43
-    STYLES["bg_blue"] = 44
-    STYLES["bg_magenta"] = 45
-    STYLES["bg_cyan"] = 46
-    STYLES["bg_white"] = 47
-    STYLES["bright_black"] = 90
-    STYLES["bright_red"] = 91
-    STYLES["bright_green"] = 92
-    STYLES["bright_yellow"] = 93
-    STYLES["bright_blue"] = 94
-    STYLES["bright_magenta"] = 95
-    STYLES["bright_cyan"] = 96
-    STYLES["bright_white"] = 97
-    STYLES["bg_bright_black"] = 100
-    STYLES["bg_bright_red"] = 101
-    STYLES["bg_bright_green"] = 102
-    STYLES["bg_bright_yellow"] = 103
-    STYLES["bg_bright_blue"] = 104
-    STYLES["bg_bright_magenta"] = 105
-    STYLES["bg_bright_cyan"] = 106
-    STYLES["bg_bright_white"] = 107
-
+function mark (str, list, code,   a, pos, start, end, mstr, result) {
     # resolve pos of start and end
     if (list) {
         pos = index(list, "-")
@@ -70,7 +31,7 @@ function mark (str, list, style,   a, pos, start, end, mstr, result, STYLES) {
     }
 
     # resolve mark
-    mstr = "\033[" STYLES[tolower(style)] "m" substr(str, begin, end) "\033[0m"
+    mstr = "\033[" code "m" substr(str, begin, end) "\033[0m"
 
     # apply the mark
     result = substr(str, 1, start - 1) mstr substr(str, end + 1)
@@ -79,43 +40,94 @@ function mark (str, list, style,   a, pos, start, end, mstr, result, STYLES) {
 }
 
 {
-    if (flist) {
-        # resolve start and end field
-        split(flist, a, ",")
+    # Wiki: https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
+    MARKER["bold"] = 1
+    MARKER["faint"] = 2
+    MARKER["italic"] = 3
+    MARKER["underline"] = 4
+    MARKER["reverse"] = 7
+    MARKER["strikethrough"] = 9
+    MARKER["black"] = 30
+    MARKER["red"] = 31
+    MARKER["green"] = 32
+    MARKER["yellow"] = 33
+    MARKER["blue"] = 34
+    MARKER["magenta"] = 35
+    MARKER["cyan"] = 36
+    MARKER["white"] = 37
+    MARKER["bg_black"] = 40
+    MARKER["bg_red"] = 41
+    MARKER["bg_green"] = 42
+    MARKER["bg_yellow"] = 43
+    MARKER["bg_blue"] = 44
+    MARKER["bg_magenta"] = 45
+    MARKER["bg_cyan"] = 46
+    MARKER["bg_white"] = 47
+    MARKER["bright_black"] = 90
+    MARKER["bright_red"] = 91
+    MARKER["bright_green"] = 92
+    MARKER["bright_yellow"] = 93
+    MARKER["bright_blue"] = 94
+    MARKER["bright_magenta"] = 95
+    MARKER["bright_cyan"] = 96
+    MARKER["bright_white"] = 97
+    MARKER["bg_bright_black"] = 100
+    MARKER["bg_bright_red"] = 101
+    MARKER["bg_bright_green"] = 102
+    MARKER["bg_bright_yellow"] = 103
+    MARKER["bg_bright_blue"] = 104
+    MARKER["bg_bright_magenta"] = 105
+    MARKER["bg_bright_cyan"] = 106
+    MARKER["bg_bright_white"] = 107
 
-        for (idx in a) {
-            pos = index(a[idx], "-")
+    split(marker, a)
+    code = sep = ""
+    for (i=1;i<=length(a);i++) {
+        code = code sep MARKER[a[i]]
+        sep = ";"
+    }
 
-            if (pos) {
-                fstart = substr(a[idx], 1, pos - 1)
-                fstart = fstart ? fstart : 1
-                fend = substr(a[idx], pos + 1)
-                fend = fend ? fend : NF
-            } else {
-                fstart = fend = a[idx]
+    if (pattern == "" || match($0, pattern) > 0) {
+        if (flist) {
+            # resolve start and end field
+            split(flist, a, ",")
+
+            for (idx in a) {
+                pos = index(a[idx], "-")
+
+                if (pos) {
+                    fstart = substr(a[idx], 1, pos - 1)
+                    fstart = fstart ? fstart : 1
+                    fend = substr(a[idx], pos + 1)
+                    fend = fend ? fend : NF
+                } else {
+                    fstart = fend = a[idx]
+                }
+
+                for (i=fstart;i<=fend;i++) {
+                    farr[i] = ""
+                }
             }
 
-            for (i=fstart;i<=fend;i++) {
-                farr[i] = ""
+            # mark by field
+            for (j=1;j<=NF;j++) {
+                if (j > 1) {
+                    printf OFS
+                }
+
+                if (j in farr) {
+                    printf mark($j, clist, code)
+                } else {
+                    printf $j
+                }
             }
+
+            printf "\n"
+        } else {
+            # mark by line
+            print mark($0, clist, code)
         }
-
-        # mark by field
-        for (j=1;j<=NF;j++) {
-            if (j > 1) {
-                printf OFS
-            }
-
-            if (j in farr) {
-                printf mark($j, clist, style)
-            } else {
-                printf $j
-            }
-        }
-
-        printf "\n"
     } else {
-        # mark by line
-        print mark($0, clist, style)
+        print
     }
 }
