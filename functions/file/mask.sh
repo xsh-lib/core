@@ -9,7 +9,7 @@
 #?
 #?   [-c LIST]       The list specifies character positions.
 #?
-#?   [-m MASK]       Mask character.
+#?   [-m MASK]       Mask character. Default is '*'.
 #?
 #?   [-x]            Use fixed length on masking string, 6 characters.
 #?
