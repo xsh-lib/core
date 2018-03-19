@@ -39,7 +39,7 @@ function mark (str, list, code,   a, pos, start, end, mstr, result) {
     return result
 }
 
-{
+OFS=FS {
     # Wiki: https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters
     MARKER["bold"] = 1
     MARKER["faint"] = 2
@@ -112,7 +112,7 @@ function mark (str, list, code,   a, pos, start, end, mstr, result) {
             # mark by field
             for (j=1;j<=NF;j++) {
                 if (j > 1) {
-                    printf FS
+                    printf OFS
                 }
 
                 if (j in farr) {

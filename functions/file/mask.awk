@@ -67,7 +67,7 @@ function repeat (str, times,   result) {
     return result
 }
 
-{
+OFS=FS {
     if (flist) {
         # resolve start and end field
         split(flist, a, ",")
@@ -92,7 +92,7 @@ function repeat (str, times,   result) {
         # mask by field
         for (j=1;j<=NF;j++) {
             if (j > 1) {
-                printf FS
+                printf OFS
             }
 
             if (j in farr) {
