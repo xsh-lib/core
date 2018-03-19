@@ -56,31 +56,31 @@ function mask () {
     if [[ -n ${file} ]]; then
         if [[ -n ${delimiter} ]]; then
             awk -F "${delimiter}" \
-                -v flist=${flist} \
-                -v clist=${clist} \
-                -v char=${mask} \
-                -v fixed=${fixed} \
+                -v flist="${flist}" \
+                -v clist="${clist}" \
+                -v char="${mask}" \
+                -v fixed="${fixed}" \
                 -f "${BASE_DIR}/mask.awk" "${file}"
         else
-            awk -v flist=${flist} \
-                -v clist=${clist} \
-                -v char=${mask} \
-                -v fixed=${fixed} \
+            awk -v flist="${flist}" \
+                -v clist="${clist}" \
+                -v char="${mask}" \
+                -v fixed="${fixed}" \
                 -f "${BASE_DIR}/mask.awk" "${file}"
         fi
     else
         if [[ -n ${delimiter} ]]; then
             awk -F "${delimiter}" \
-                -v flist=${flist} \
-                -v clist=${clist} \
-                -v char=${mask} \
-                -v fixed=${fixed} \
+                -v flist="${flist}" \
+                -v clist="${clist}" \
+                -v char="${mask}" \
+                -v fixed="${fixed}" \
                 -f "${BASE_DIR}/mask.awk" < /dev/stdin
         else
-            awk -v flist=${flist} \
-                -v clist=${clist} \
-                -v char=${mask} \
-                -v fixed=${fixed} \
+            awk -v flist="${flist}" \
+                -v clist="${clist}" \
+                -v char="${mask}" \
+                -v fixed="${fixed}" \
                 -f "${BASE_DIR}/mask.awk" < /dev/stdin
         fi
     fi

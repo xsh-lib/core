@@ -58,31 +58,31 @@ function mark () {
     if [[ -n ${file} ]]; then
         if [[ -n ${delimiter} ]]; then
             awk -F "${delimiter}" \
-                -v pattern=${pattern} \
-                -v flist=${flist} \
-                -v clist=${clist} \
-                -v marker=${marker[*]} \
+                -v pattern="${pattern}" \
+                -v flist="${flist}" \
+                -v clist="${clist}" \
+                -v marker="${marker[*]}" \
                 -f "${BASE_DIR}/mark.awk" "${file}"
         else
-            awk -v pattern=${pattern} \
-                -v flist=${flist} \
-                -v clist=${clist} \
-                -v marker=${marker[*]} \
+            awk -v pattern="${pattern}" \
+                -v flist="${flist}" \
+                -v clist="${clist}" \
+                -v marker="${marker[*]}" \
                 -f "${BASE_DIR}/mark.awk" "${file}"
         fi
     else
         if [[ -n ${delimiter} ]]; then
             awk -F "${delimiter}" \
-                -v pattern=${pattern} \
-                -v flist=${flist} \
-                -v clist=${clist} \
-                -v marker=${marker[*]} \
+                -v pattern="${pattern}" \
+                -v flist="${flist}" \
+                -v clist="${clist}" \
+                -v marker="${marker[*]}" \
                 -f "${BASE_DIR}/mark.awk" < /dev/stdin
         else
-            awk -v pattern=${pattern} \
-                -v flist=${flist} \
-                -v clist=${clist} \
-                -v marker=${marker[*]} \
+            awk -v pattern="${pattern}" \
+                -v flist="${flist}" \
+                -v clist="${clist}" \
+                -v marker="${marker[*]}" \
                 -f "${BASE_DIR}/mark.awk" < /dev/stdin
         fi
     fi
