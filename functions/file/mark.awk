@@ -112,7 +112,7 @@ function mark (str, list, code,   a, pos, start, end, mstr, result) {
             # mark by field
             for (j=1;j<=NF;j++) {
                 if (j > 1) {
-                    printf OFS
+                    printf FS
                 }
 
                 if (j in farr) {

@@ -92,7 +92,7 @@ function repeat (str, times,   result) {
         # mask by field
         for (j=1;j<=NF;j++) {
             if (j > 1) {
-                printf OFS
+                printf FS
             }
 
             if (j in farr) {
