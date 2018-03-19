@@ -17,7 +17,7 @@
 #?   Marked string from standard input.
 #?
 #? Example:
-#?   echo 'The word cat is inlcuded in word catalog.' | @mark -f8 -c1-3 -s red
+#?   echo 'The word cat is inlcuded in word catalog.' | @mark -f8 -c1-3 -m red
 #?   # The word cat is included in word \033[31mcat\033[0malog.
 #?
 function mark () {
