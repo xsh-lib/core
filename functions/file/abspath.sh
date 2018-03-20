@@ -12,9 +12,14 @@
 #?   # /etc/passwd
 #?
 function abspath () {
-    if [[ ${1:0:1} == '/' ]]; then
-        echo "$1";
+    if [[ ! -e $1 ]]; then
+        printf "ERROR: PATH does not exist or permission denied.\n" >&2
+        return 255
+    fi
+
+    if xsh /file/is_abspath "$1"; then
+        echo "$1"
     else
-        echo $(cd "$(dirname "$1")" && pwd)/$(basename "$1");
+        echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
     fi
 }
