@@ -13,6 +13,7 @@
 #?
 function abspath () {
     local dir file
+
     if [[ -z $1 ]]; then
         printf "ERROR: parameter PATH null or not set.\n" >&2
         return 255
