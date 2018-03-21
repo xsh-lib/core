@@ -1,5 +1,5 @@
 #? Usage:
-#?   @symblink LINK [DIR]
+#?   @lnkpath LINK [DIR]
 #?
 #? Options:
 #?   LINK   Symbol link path.
@@ -13,10 +13,10 @@
 #?       && ln -s f4 /tmp/symblink/foo/bar/f3 \
 #?       && ln -s bar/f3 /tmp/symblink/foo/f2 \
 #?       && ln -s foo/f2 /tmp/symblink/f1
-#?   @symblink /tmp/symblink/f1
+#?   @lnkpath /tmp/symblink/f1
 #?   # /tmp/symblink/foo/bar/f4
 #?
-function symblink () {
+function lnkpath () {
     local link=$1
     local dir=$2
     local file
@@ -32,7 +32,7 @@ function symblink () {
     file=$(readlink "${link}")
 
     if [[ -n ${file} ]]; then
-        xsh /file/symblink "${file}" "$(dirname "${link}")"
+        xsh /file/lnkpath "${file}" "$(dirname "${link}")"
     else
         xsh /file/abspath "${link}"
     fi
