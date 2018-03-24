@@ -64,10 +64,14 @@ function gen_variables (name, value) {
 #? Output:
 #?   None
 #?
-function gen_array_variables (name, array,   idx, result) {
+function gen_array_variables (name, array,   idx, i, sep, result) {
     result = name "=("
+    sep = ""
+    i = 0
     for (idx in array) {
-        result = result "\047" array[idx] "\047" OFS
+        result = result sep "[" i "]=" "\047" array[idx] "\047"
+        sep = OFS
+        i++
     }
     result = result ")"
 
