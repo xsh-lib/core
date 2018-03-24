@@ -72,7 +72,7 @@ function gen_variables (name, value, quote) {
 #? Output:
 #?   None
 #?
-function gen_array_variables (name, array, quote, single,   idx, i, sep, result) {
+function gen_array_variables (name, array, quote, single,   i, sep, result) {
     if (single) {
         result = name "=("
     } else {
@@ -80,16 +80,14 @@ function gen_array_variables (name, array, quote, single,   idx, i, sep, result)
     }
 
     sep = ""
-    i = 0
-    for (idx in array) {
+    for (i=1;i<=length(array);i++) {
         if (single) {
-            result = result sep gen_variables("[" i "]", array[idx], quote)
+            result = result sep gen_variables("[" i-1 "]", array[i], quote)
             sep = OFS
         } else {
-            result = result sep gen_variables(name "[" i "]", array[idx], quote)
+            result = result sep gen_variables(name "[" i-1 "]", array[i], quote)
             sep = RS
         }
-        i++
     }
 
     if (single) {
@@ -102,7 +100,9 @@ function gen_array_variables (name, array, quote, single,   idx, i, sep, result)
 #? Parse an ini file and output as shell variable declaration.
 #?
 #? Parameter:
-#?   prefix [String]  Prefix to be used in variable name.
+#?   prefix [String]   Prefix to be used in variable name.
+#?   quote  [Integer]  If set quote=1, value will be quoted.
+#?   single [Integer]  If set single=1, will generate single assignment expression.
 #?
 #? Output:
 #?   [String]  Generated shell variables for INI file.
