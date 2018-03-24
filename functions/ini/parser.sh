@@ -1,5 +1,5 @@
 #? Usage:
-#?   @parser [-a] [-p PREFIX] [-s] [-q] INI_FILE
+#?   @parser [-a] [-p PREFIX] [-q] [-s] INI_FILE
 #?
 #? Options:
 #?   [-a]         Apply the environment variables.
@@ -8,9 +8,9 @@
 #?   [-p PREFIX]  Prefix variable name with PREFIX.
 #?                Default is '__INI_'.
 #?
-#?   [-s]         Enable signle mode, generate single expression for array assignment.
-#?
 #?   [-q]         Enable quotes, value will be quoted.
+#?
+#?   [-s]         Enable signle mode, generate single expression for array assignment.
 #?
 #?   INI_FILE     Full path of INI file to parse.
 #?
@@ -58,11 +58,11 @@
 #?
 function parser () {
     local opt OPTIND OPTARG
-    local apply prefix single quote ini_file
+    local apply prefix quote single ini_file
     local ln
     local BASE_DIR="${XSH_HOME}/lib/x/functions/ini"  # TODO: use varaible instead
 
-    while getopts ap:sq opt; do
+    while getopts ap:qs opt; do
         case ${opt} in
             a)
                 apply=1
@@ -70,11 +70,11 @@ function parser () {
             p)
                 prefix=${OPTARG}
                 ;;
-            s)
-                single=1
-                ;;
             q)
                 quote=1
+                ;;
+            s)
+                single=1
                 ;;
             *)
                 return 255
@@ -101,8 +101,8 @@ function parser () {
              )"
     else
         awk -v prefix="${prefix}" \
-            -v single="${single}" \
             -v quote="${quote}" \
+            -v single="${single}" \
             -f "${BASE_DIR}/parser.awk" \
             "${ini_file}"
     fi
