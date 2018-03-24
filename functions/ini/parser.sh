@@ -71,8 +71,7 @@ function parser () {
     fi
 
     source /dev/stdin <<< "$(
-        awk -F '=' \
-            -v prefix="${prefix:-__INI_}" \
+        awk -v prefix="${prefix:-__INI_}" \
             -f "${BASE_DIR}/parser.awk" \
             "${ini_file}"
     )"

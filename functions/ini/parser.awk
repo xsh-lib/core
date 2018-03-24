@@ -83,6 +83,8 @@ function gen_array_variables (name, array,   idx, result) {
 #?   Generated shell variables for INI file.
 #?
 NF>0 && !/^;/ {  # filter out empty and commented lines
+    FS = "="
+
     if (match($0, /^\[.+\]$/) > 0) {  # sections
         if (sn) {
             print gen_array_variables(prefix "SECTIONS_" sn "_KEYS", kns)
