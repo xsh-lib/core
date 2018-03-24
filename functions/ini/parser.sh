@@ -39,22 +39,22 @@
 #?     key4=4
 #?
 #?   @parser foo.ini
-#?   # __INI_SECTIONS_section_a=section a
-#?   # __INI_SECTIONS_section_a_KEYS_key1=key1
-#?   # __INI_SECTIONS_section_a_VALUES_key1=1
-#?   # __INI_SECTIONS_section_a_KEYS_key2=key2
-#?   # __INI_SECTIONS_section_a_VALUES_key2=2
-#?   # __INI_SECTIONS_section_a_KEYS[0]=key2
-#?   # __INI_SECTIONS_section_a_KEYS[1]=key1
-#?   # __INI_SECTIONS_section_b=section b
-#?   # __INI_SECTIONS_section_b_KEYS_key3=key3
-#?   # __INI_SECTIONS_section_b_VALUES_key3=3
-#?   # __INI_SECTIONS_section_b_KEYS_key4=key4
-#?   # __INI_SECTIONS_section_b_VALUES_key4=4
-#?   # __INI_SECTIONS_section_b_KEYS[0]=key4
-#?   # __INI_SECTIONS_section_b_KEYS[1]=key3
-#?   # __INI_SECTIONS[0]=section_b
-#?   # __INI_SECTIONS[1]=section_a
+#?   # SECTIONS_section_a=section a
+#?   # SECTIONS_section_a_KEYS_key1=key1
+#?   # SECTIONS_section_a_VALUES_key1=1
+#?   # SECTIONS_section_a_KEYS_key2=key2
+#?   # SECTIONS_section_a_VALUES_key2=2
+#?   # SECTIONS_section_a_KEYS[0]=key1
+#?   # SECTIONS_section_a_KEYS[1]=key2
+#?   # SECTIONS_section_b=section b
+#?   # SECTIONS_section_b_KEYS_key3=key3
+#?   # SECTIONS_section_b_VALUES_key3=3
+#?   # SECTIONS_section_b_KEYS_key4=key4
+#?   # SECTIONS_section_b_VALUES_key4=4
+#?   # SECTIONS_section_b_KEYS[0]=key3
+#?   # SECTIONS_section_b_KEYS[1]=key4
+#?   # SECTIONS[0]=section_a
+#?   # SECTIONS[1]=section_b
 #?
 function parser () {
     local opt OPTIND OPTARG
