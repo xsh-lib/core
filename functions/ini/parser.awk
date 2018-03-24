@@ -36,11 +36,12 @@ function get_var_name (str) {
     return str
 }
 
-#? Generate variable assignment expression name="value".
+#? Generate variable assignment expression name=value.
 #?
 #? Parameter:
-#?   name  [String]  Variable name.
-#?   value [String]  Value of variable.
+#?   name  [String]   Variable name.
+#?   value [String]   Value of variable.
+#?   quote [Integer]  If set quote=1, value will be quoted.
 #?
 #? Return:
 #?   [String]  The variable assignment expression.
@@ -48,15 +49,22 @@ function get_var_name (str) {
 #? Output:
 #?   None
 #?
-function gen_variables (name, value) {
-    return name "=" "\047" value "\047"
+function gen_variables (name, value, quote) {
+    if (quote) {
+        return name "=" "\047" value "\047"
+    } else {
+        return name "=" value
+    }
 }
 
-#? Generate Array variable assignment expression name=([0]='element1' [1]='element2' ...)
+#? Generate Array variable assignment expression name[0]=element1 name[1]=element2 ...
 #?
 #? Parameter:
-#?   name  [String]  Variable name.
-#?   value [Array]   Value of Array variable.
+#?   name   [String]   Variable name.
+#?   value  [Array]    Value of Array variable.
+#?   quote  [Integer]  If set quote=1, value will be quoted.
+#?   single [Integer]  If set single=1, will generate single assignment expression.
+#?                     Looks like: name=([0]=element1 [1]=element2 ...)
 #?
 #? Return:
 #?   [String]  The Array variable assignment expression.
@@ -64,16 +72,29 @@ function gen_variables (name, value) {
 #? Output:
 #?   None
 #?
-function gen_array_variables (name, array,   idx, i, sep, result) {
-    result = name "=("
+function gen_array_variables (name, array, quote, single,   idx, i, sep, result) {
+    if (single) {
+        result = name "=("
+    } else {
+        result = ""
+    }
+
     sep = ""
     i = 0
     for (idx in array) {
-        result = result sep "[" i "]=" "\047" array[idx] "\047"
-        sep = OFS
+        if (single) {
+            result = result sep gen_variables("[" i "]", array[idx], quote)
+            sep = OFS
+        } else {
+            result = result sep gen_variables(name "[" i "]", array[idx], quote)
+            sep = RS
+        }
         i++
     }
-    result = result ")"
+
+    if (single) {
+        result = result ")"
+    }
 
     return result
 }
@@ -84,34 +105,34 @@ function gen_array_variables (name, array,   idx, i, sep, result) {
 #?   prefix [String]  Prefix to be used in variable name.
 #?
 #? Output:
-#?   Generated shell variables for INI file.
+#?   [String]  Generated shell variables for INI file.
 #?
 NF>0 && !/^;/ {  # filter out empty and commented lines
     FS = "="
 
     if (match($0, /^\[.+\]$/) > 0) {  # sections
         if (sn) {
-            print gen_array_variables(prefix "SECTIONS_" sn "_KEYS", kns)
+            print gen_array_variables(prefix "SECTIONS_" sn "_KEYS", kns, quote, single)
         }
         delete kns
         sn = get_var_name($0)
         sns[length(sns)+1] = sn
         sv = trim($0, "[\\[\\]]")
-        print gen_variables(prefix "SECTIONS_" sn, sv)
+        print gen_variables(prefix "SECTIONS_" sn, sv, quote)
     } else {  # variables
         kn = get_var_name($1)
         kns[length(kns)+1] = kn
         kv = trim($1)
         $1 = ""
         vv = trim($0)
-        print gen_variables(prefix "SECTIONS_" sn "_KEYS_" kn, kv)
-        print gen_variables(prefix "SECTIONS_" sn "_VALUES_" kn, vv)
+        print gen_variables(prefix "SECTIONS_" sn "_KEYS_" kn, kv, quote)
+        print gen_variables(prefix "SECTIONS_" sn "_VALUES_" kn, vv, quote)
     }
 }
 
 END {
     if (sn) {
-        print gen_array_variables(prefix "SECTIONS_" sn "_KEYS", kns)
+        print gen_array_variables(prefix "SECTIONS_" sn "_KEYS", kns, quote, single)
     }
-    print gen_array_variables(prefix "SECTIONS", sns)
+    print gen_array_variables(prefix "SECTIONS", sns, quote, single)
 }
