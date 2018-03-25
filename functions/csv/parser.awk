@@ -7,7 +7,7 @@
 #?   line      [String]  A line of csv file.
 #?   separator [String]  The character that used as field delimiter.
 #?   between   [String]  The character that used to enclose field.
-#? 
+#?
 #? Variable:
 #?   RESULT [Array]  Store parsed csv field, use `m,n` as array index
 #?                    to simulate a two dimensional array.
@@ -73,10 +73,10 @@ function parse (line, separator, between,   pos, char) {
 #?
 #? Paramater:
 #?   array [Array]  Array to be output.
-#?   m     [Int]    Number of record.
-#?   n     [Int]    Number of field for each record.
+#?   m     [Int]    Number of record in the array.
+#?   n     [Int]    Number of field for each record in the array.
 #?   ofs   [String] Field separator for output.
-#? 
+#?
 #? Return:
 #?   None
 #?
@@ -99,26 +99,26 @@ function output_table (array, m, n, ofs,   i, j) {
 #?
 #? Paramater:
 #?   array  [Array]  Array to be output.
-#?   m      [Int]    Number of record.
-#?   n      [Int]    Number of field for each record.
+#?   m      [Int]    Number of record in the array.
+#?   n      [Int]    Number of field for each record in the array.
 #?   prefix [String] Prefix for variable name.
-#? 
+#?
 #? Return:
 #?   None
 #?
 #? Output:
 #?   Array as Shell variable declaration.
 #?
-function output_variable (array, m, n, prefix,   i, j, fn, fns, fv) {
+function output_variable (array, m, n, prefix, quote, single,   i, j, fn, fns, fv) {
     i = 1
     for (j=1;j<=n;j++) {
         fv = array[i "," j]
         fn = get_var_name(fv)
         fns[length(fns)+1] = fn
-        print gen_variables(prefix "FIELDS_" fn, fv)
-        print gen_array_variables(prefix "FIELDS_" fn "_ROWS", RESULT, 0, j)
+        print gen_variables(prefix "FIELDS_" fn, fv, quote)
+        print gen_array_variables(prefix "FIELDS_" fn "_ROWS", RESULT, 0, j, quote, single)
     }
-    print gen_array_variables(prefix "FIELDS", fns)
+    print gen_array_variables(prefix "FIELDS", fns, 0, 0, quote, single)
 }
 
 #? Trim blankspaces of string.
@@ -160,11 +160,12 @@ function get_var_name (str) {
     return str
 }
 
-#? Generate variable assignment expression name="value".
+#? Generate variable assignment expression name=value.
 #?
 #? Parameter:
-#?   name  [String]  Variable name.
-#?   value [String]  Value of variable.
+#?   name  [String]   Variable name.
+#?   value [String]   Value of variable.
+#?   quote [Integer]  If set quote=1, value will be quoted.
 #?
 #? Return:
 #?   [String]  The variable assignment expression.
@@ -172,17 +173,24 @@ function get_var_name (str) {
 #? Output:
 #?   None
 #?
-function gen_variables (name, value) {
-    return name "=" "\047" value "\047"
+function gen_variables (name, value, quote) {
+    if (quote) {
+        return name "=" "\047" value "\047"
+    } else {
+        return name "=" value
+    }
 }
 
-#? Generate Array variable assignment expression name=([0]='element1' [1]='element2' ...)
+#? Generate Array variable assignment expression name=[0]=element1 name[1]=element2 ...
 #?
 #? Parameter:
-#?   name  [String]  Variable name.
-#?   value [Array]   Value of Array variable.
-#?   i     [Int]     Rows i only.
-#?   j     [Int]     Column j only.
+#?   name   [String]   Variable name.
+#?   value  [Array]    Value of Array variable.
+#?   i      [Int]      Rows i only, started at 1, 0 means all.
+#?   j      [Int]      Column j only, started at 1, 0 means all.
+#?   quote  [Integer]  If set quote=1, value will be quoted.
+#?   single [Integer]  If set single=1, will generate single assignment expression.
+#?                     Looks like: name=([0]=element1 [1]=element2 ...)
 #?
 #? Return:
 #?   [String]  The Array variable assignment expression.
@@ -190,24 +198,50 @@ function gen_variables (name, value) {
 #? Output:
 #?   None
 #?
-function gen_array_variables (name, array, i, j,   idx, a, result) {
-    result = name "=("
+function gen_array_variables (name, array, i, j, quote, single,   idx, sep, SEP, key, KEY, a, gen, result) {
+    if (single) {
+        KEY = ""
+        result = name "=("
+        sep = ""
+        SEP = OFS
+    } else {
+        KEY = name
+        result = ""
+        sep = ""
+        SEP = RS
+    }
+
     for (idx in array) {
+        gen = 0
+
         if (i) {
             split(idx, a, ",")
+
             if (i == a[1]) {
-                result = result "[" a[2]-1 "]=\047" array[idx] "\047" OFS
+                key =  KEY "[" a[2]-1 "]"
+                gen = 1
             }
         } else if (j) {
             split(idx, a, ",")
+
             if (j == a[2]) {
-                result = result "[" a[1]-1 "]=\047" array[idx] "\047" OFS
+                key = KEY "[" a[1]-1 "]"
+                gen = 1
             }
         } else {
-            result = result "[" idx-1 "]=\047" array[idx-1] "\047" OFS
+            key = KEY "[" idx-1 "]"
+            gen = 1
+        }
+
+        if (gen) {
+            result = result sep gen_variables(key, array[idx], quote)
+            sep = SEP
         }
     }
-    result = result ")"
+
+    if (single) {
+        result = result ")"
+    }
 
     return result
 }
@@ -218,12 +252,14 @@ function gen_array_variables (name, array, i, j,   idx, a, result) {
 #?   awk -v separator=',' -v between='"' -v output=table -f /path/to/parser.awk sample.csv
 #？
 #? Paramater:
-#?   separator       [String]  The character that used as field delimiter in csv file.
-#?   between         [String]  The character that used to enclose field in csv file.
-#?   output          [String]  Output type, could be one of `table` and `variable`.
-#?   table_separator [String]  The character that used as field delimiter in output.
-#?   prefix          [String]  Prefix for variable name.
-#? 
+#?   separator       [String]   The character that used as field delimiter in csv file.
+#?   between         [String]   The character that used to enclose field in csv file.
+#?   output          [String]   Output type, could be one of `table` and `variable`.
+#?   table_separator [String]   The character that used as field delimiter in output.
+#?   prefix          [String]   Prefix for variable name.
+#?   quote           [Integer]  If set quote=1, value will be quoted.
+#?   single          [Integer]  If set single=1, will generate single assignment expression.
+#?
 #? Output:
 #?   The parsed result or shell variables.
 #?
@@ -235,6 +271,6 @@ END {
     if (output == "table") {
         output_table(RESULT, CNR, CNF, table_separator)
     } else if (output == "variable") {
-        output_variable(RESULT, CNR, CNF, prefix)
+        output_variable(RESULT, CNR, CNF, prefix, quote, single)
     }
 }
