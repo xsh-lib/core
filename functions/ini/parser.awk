@@ -49,12 +49,14 @@ function get_var_name (str) {
 #? Output:
 #?   None
 #?
-function gen_variables (name, value, quote) {
+function gen_variables (name, value, quote,   Q) {
     if (quote) {
-        return name "=" "\047" value "\047"
+        Q = "\047"
     } else {
-        return name "=" value
+        Q = ""
     }
+
+    return name "=" Q value Q
 }
 
 #? Generate Array variable assignment expression name[0]=element1 name[1]=element2 ...
