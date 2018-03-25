@@ -1,15 +1,23 @@
 #? Usage:
-#?   @parser [-t DELIMITER | -e [-p PREFIX]] CSV_FILE
+#?   @parser [-t DELIMITER] CSV_FILE
+#?   @parser -e [-a] [-p PREFIX] [-q] [-s] CSV_FILE
 #?
 #? Options:
 #?   [-t DELIMITER]  Delimiter to be used as output field separator.
 #?                   Default is '|'.
 #?
 #?   [-e]            Output result in the syntax of shell environment
-#?                   variables.
+#?                   variables rather than the table.
+#?
+#?   [-a]            Apply the environment variables.
+#?                   With -a enabled, -s and -q are ignored.
 #?
 #?   [-p PREFIX]     Prefix variable name with PREFIX.
 #?                   Default is '__CSV_'.
+#?
+#?   [-q]            Enable quotes, value will be quoted.
+#?
+#?   [-s]            Enable signle mode, generate single expression for array assignment.
 #?
 #?   CSV_FILE        Full path of CSV file to parse.
 #?                   Separated by commas, quoted between double quotes,
@@ -43,7 +51,7 @@
 #?   # 1999|Chevy|Venture "Extended Edition, Very Large"||5000.00
 #?   # 1996|Jeep|Grand Cherokee|MUST SELL!air, moon roof, loaded|4799.00
 #?
-#?   @parser -e foo.csv
+#?   @parser -e -q -s foo.csv
 #?   # Following variables were set:
 #?   # __CSV_FIELDS=([1]="Year" [2]="Make" [3]="Model" [4]="Description" [5]="Price")
 #?   # __CSV_FIELDS_Description=Description
@@ -59,13 +67,14 @@
 #?
 function parser () {
     local opt OPTIND OPTARG
-    local table_separator output prefix csv_file
+    local table_separator output apply prefix quote single csv_file
+    local ln
     local SEPARATOR=',' BETWEEN='"'
     local BASE_DIR="${XSH_HOME}/lib/x/functions/csv"  # TODO: use varaible instead
 
     output='table'
 
-    while getopts t:ep: opt; do
+    while getopts t:eap:qs opt; do
         case ${opt} in
             t)
                 table_separator=${OPTARG}
@@ -73,8 +82,17 @@ function parser () {
             e)
                 output=variable
                 ;;
+            a)
+                apply=1
+                ;;
             p)
                 prefix=${OPTARG}
+                ;;
+            q)
+                quote=1
+                ;;
+            s)
+                single=1
                 ;;
             *)
                 return 255
@@ -89,22 +107,37 @@ function parser () {
         return 255
     fi
 
+    prefix=${prefix:-__CSV_}
+
     if [[ ${output} == 'table' ]]; then
         awk -v separator=${SEPARATOR} \
             -v between=${BETWEEN} \
             -v output=${output} \
-            -v table_separator=${table_separator:-|} \
+            -v table_separator="${table_separator:-|}" \
             -f "${BASE_DIR}/parser.awk" \
             "${csv_file}"
     elif [[ ${output} == 'variable' ]]; then
-        source /dev/stdin <<< "$(
+        if [[ ${apply} ]]; then
+            while read ln; do
+                xsh /string/global "${ln}"
+            done <<< "$(
+                 awk -v separator=${SEPARATOR} \
+                     -v between=${BETWEEN} \
+                     -v output=${output} \
+                     -v prefix="${prefix}" \
+                     -f "${BASE_DIR}/parser.awk" \
+                     "${csv_file}"
+                 )"
+        else
             awk -v separator=${SEPARATOR} \
                 -v between=${BETWEEN} \
                 -v output=${output} \
-                -v prefix=${prefix:-__CSV_} \
+                -v prefix="${prefix}" \
+                -v quote="${quote}" \
+                -v single="${single}" \
                 -f "${BASE_DIR}/parser.awk" \
                 "${csv_file}"
-        )"
+        fi
     else
         printf "ERROR: unsupported output '%s'.\n" "${output}" >&2
         return 255
