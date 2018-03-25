@@ -74,22 +74,21 @@ function gen_variables (name, value, quote,   Q) {
 #? Output:
 #?   None
 #?
-function gen_array_variables (name, array, quote, single,   i, sep, SEP, key, result) {
-    result = sep = ""
-    SEP = RS
-
+function gen_array_variables (name, array, quote, single,   i, sep, SEP, key, KEY, result) {
     if (single) {
+        KEY = ""
         result = name "=("
+        sep = ""
         SEP = OFS
+    } else {
+        KEY = name
+        result = ""
+        sep = ""
+        SEP = RS
     }
 
     for (i=1;i<=length(array);i++) {
-        key = "[" i-1 "]"
-
-        if (!single) {
-            key = name key
-        }
-
+        key = KEY "[" i-1 "]"
         result = result sep gen_variables(key, array[i], quote)
         sep = SEP
     }
