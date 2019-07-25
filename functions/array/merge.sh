@@ -1,9 +1,14 @@
+#? Description:
+#?   Merge the elements of array by value, the later index of element would
+#?   be used.
+#?
 #? Usage:
-#?   @merge ARRAY VALUE [SEPARATOR]
+#?   @merge ARRAY [SEPARATOR]
 #?
 #? Options:
 #?   ARRAY        Array name to merge.
-#?   [SEPARATOR]  Separator in the value.
+#?   [SEPARATOR]  Separator in the value, if sepcified, only the part before
+#?                the separator will be evaluated during the merge.
 #?
 #? Output:
 #?   Nothing.
