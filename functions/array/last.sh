@@ -14,5 +14,5 @@
 function last () {
     # try to declare nothing, new variable may override input variable.
     set -- "$1[$(xsh /array/ilast "$1")]"
-    printf "%s\n" "${!1}"
+    echo "${!1}"
 }

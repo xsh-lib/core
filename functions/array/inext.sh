@@ -15,10 +15,10 @@ function inext () {
     set -- $(xsh /array/ilast "$1")
     case "$1" in
         '')
-            printf "%s" 0
+            echo 0
             ;;
         *)
-            printf "%s" $(($1+1))
+            echo $(($1+1))
             ;;
     esac
 }
