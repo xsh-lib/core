@@ -13,5 +13,5 @@
 #?
 function index () {
     local -a __index=\(\${!$1[@]}\)  # magic indirect expansion
-    printf "%s\n" "${__index[*]}"
+    echo "${__index[@]}"
 }
