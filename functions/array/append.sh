@@ -5,8 +5,8 @@ function append () {
         return 255
     fi
 
-    IFS=  # clear IFS to avoid triming whitespace
     for __i in $(seq 2 $#); do
-        read -r "$1[$(xsh /array/inext "$1")]" <<< "${!__i}" || return $?
+        # clear IFS to avoid triming whitespace
+        IFS='' read -r "$1[$(xsh /array/inext "$1")]" <<< "${!__i}" || return $?
     done
 }
