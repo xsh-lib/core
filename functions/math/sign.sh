@@ -14,6 +14,6 @@ function sign () {
     elif test "$1" -lt 0; then
         echo -1
     else
-        printf "ERROR: unknown error" >&2
+        printf "ERROR: unknown error\n" >&2
     fi
 }
