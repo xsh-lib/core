@@ -1,20 +1,29 @@
+#? Description:
+#?   Follow all symbolic links to final target and output the absolute path
+#?   of target.
+#?
 #? Usage:
 #?   @lnkpath LINK [DIR]
 #?
 #? Options:
-#?   LINK   Symbol link path.
-#?   [DIR]  In case of: `PWD` + DIR + LINK
+#?   LINK   Absolute or relative path to the symbol link.
+#?   [DIR]  Absolute or relative path to the directory of symbol link.
 #?
 #? Output:
-#?   Absolute path of the file that the symbol link referred.
+#?   Absolute path of the final target that the LINK refers to.
 #?
 #? Example:
-#?   mkdir -p /tmp/symblink/foo/bar/f4 \
-#?       && ln -s f4 /tmp/symblink/foo/bar/f3 \
-#?       && ln -s bar/f3 /tmp/symblink/foo/f2 \
-#?       && ln -s foo/f2 /tmp/symblink/f1
-#?   @lnkpath /tmp/symblink/f1
-#?   # /tmp/symblink/foo/bar/f4
+#?   mkdir -p /tmp/symblink/foo \
+#?       && touch /tmp/symblink/foo/f1
+#?       && ln -s foo/f1 /tmp/symblink/f2 \
+#?       && ln -s f2 /tmp/symblink/f3
+#?
+#?   @lnkpath /tmp/symblink/f3
+#?   # /tmp/symblink/foo/f1
+#?
+#?   cd /tmp
+#?   @lnkpath f3 symblink
+#?   # /tmp/symblink/foo/f1
 #?
 function lnkpath () {
     local link=$1
