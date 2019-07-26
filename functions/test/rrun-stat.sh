@@ -6,6 +6,7 @@
 #?
 #? Options:
 #?   [-q]           Quiet mode, suppress the command's standard output.
+#?                  -q must be used before any other options if given.
 #?   [-s]           Shell mode, the command will be executed with eval.
 #?   [-n TIMES]     How many times the command will be run. Default is 1.
 #?   CMD            Command will be run by 'time'.
@@ -31,18 +32,15 @@ function rrun-stat () {
         case ${opt} in
             q)
                 quiet=1
-                unset $OPTIND
-                ;;
-            s|n)
-                ;;
-            *)
-                return 255
+                # all rest options should be passed to rrun
+                break
                 ;;
         esac
     done
 
     if [[ ${quiet} -eq 1 ]]; then
-        time xsh /test/rrun "$@" >/dev/null
+        # remove -q from $@
+        time xsh /test/rrun "${@:2}" >/dev/null
     else
         time xsh /test/rrun "$@"
     fi
