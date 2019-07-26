@@ -3,6 +3,7 @@
 #?
 #?   Author: markusfisch
 #?   Gist URL: https://gist.github.com/markusfisch/6110640
+#?   UUID: https://en.wikipedia.org/wiki/Universally_unique_identifier
 #?
 #? Usage:
 #?   @uuid
