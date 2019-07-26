@@ -38,7 +38,7 @@ function rrun () {
     done
     shift $((OPTIND - 1))
 
-    for ((i=0; i<$times; i++)); do
-        $shell "${@:2}"
+    for ((i=0; i<${times:-1}; i++)); do
+        $shell "$@"
     done
 }
