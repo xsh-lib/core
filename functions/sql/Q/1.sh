@@ -1,8 +1,9 @@
 #? Description:
 #?   A pseudo SQL interpreter for Bash.
 #?   Using UNIX text files instead of RDBMS tables as the data store.
-#?   By default, the field delimiter is '|', and the row delimiter is
-# ?  new line for the text files.
+#?   By default, the field delimiter for input is whitespace ' ',
+#?   the field delimiter for output is '\t'.
+#?   The row delimiter is new line for both input and output.
 #?
 #? Return:
 #?   0: succeed
@@ -33,7 +34,7 @@
 #?     [-I] FS
 #?
 #?     Specify the input FS, will be used to process table,
-#?     default is ' \t'.
+#?     default is whitespace ' '.
 #?
 #?     [-O] FS
 #?
