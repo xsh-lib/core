@@ -1,9 +1,12 @@
 #? Usage:
-#?   @parser [-t DELIMITER] CSV_FILE
-#?   @parser -e [-a] [-p PREFIX] [-q] [-s] CSV_FILE
+#?   @parser [-I DELIMITER] [-O DELIMITER] CSV_FILE
+#?   @parser -e [-I DELIMITER] [-a] [-p PREFIX] [-q] [-s] CSV_FILE
 #?
 #? Options:
-#?   [-t DELIMITER]  Delimiter to be used as output field separator.
+#?   [-I DELIMITER]  Delimiter to be used as input field separator.
+#?                   Default is ','.
+#?
+#?   [-O DELIMITER]  Delimiter to be used as output field separator.
 #?                   Default is '|'.
 #?
 #?   [-e]            Output result in the syntax of shell environment
@@ -20,7 +23,7 @@
 #?   [-s]            Enable signle mode, generate single expression for array assignment.
 #?
 #?   CSV_FILE        Full path of CSV file to parse.
-#?                   Separated by commas, quoted between double quotes,
+#?                   Separated by commas(overriding with -I), quoted between double quotes,
 #?                   and first line as header.
 #?
 #? Output:
@@ -74,9 +77,12 @@ function parser () {
 
     output='table'
 
-    while getopts t:eap:qs opt; do
+    while getopts I:O:eap:qs opt; do
         case ${opt} in
-            t)
+            I)
+                SEPARATOR=${OPTARG}
+                ;;
+            O)
                 table_separator=${OPTARG}
                 ;;
             e)
