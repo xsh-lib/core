@@ -21,8 +21,8 @@
 #?   @Q select f1 f2 f3 from A
 #?
 #? Usage:
-#?   @Q SELECT-CLAUSE FROM-CLAUSE \
-#?          [WHERE-CLAUSE] \
+#?   @Q [OPTIONS] SELECT-CLAUSE FROM-CLAUSE \
+#?       [WHERE-CLAUSE]
 #?
 #? Options:
 #?   [OPTIONS]
@@ -57,7 +57,6 @@
 #?
 #?   [ORDER-BY-CLAUSE]
 #?     order by FIELD [asc | desc]
-#?
 #?
 function Q () {
     xsh import /array/append /string/lower '/util/*' '/sql/*'
@@ -135,7 +134,6 @@ function Q () {
 
     awk NF "${Q_TABLE}" \
         | awk '!/^#/' \
-        | x-util-sed-regex \
         | x-util-sed-regex "s/([^\\])\\${Q_IFS}/\1${Q_FS}/g" \
         | sed "s/[\\]${Q_IFS}/${Q_IFS}/g" \
         | x-util-sed-regex 's/^[ \t]+|[ \t]+$//g' \
@@ -150,7 +148,7 @@ function Q () {
 
     local tab_field_var_prefix='rows_of_'
 
-    # Unset all table field variables
+    # Initiate all table field variables
     local tf_name
     for tf_name in ${tab_fields[@]}; do
         declare -a "$tab_field_var_prefix$tf_name"
@@ -170,7 +168,7 @@ function Q () {
 
     local query_field_var_prefix='q_rows_of_'
 
-    # initiate all query field variables
+    # Initiate all query field variables
     local qf_name
     for qf_name in "${Q_FIELDS[@]}"; do
         declare -a "$query_field_var_prefix$qf_name"
@@ -178,6 +176,7 @@ function Q () {
 
     # Process predcates
     local candidate_row_indeces
+
     # Select all rows
     if [[ $header -eq 0 ]]; then
         # Surprise table header
