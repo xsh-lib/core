@@ -25,6 +25,25 @@
 #?          [WHERE-CLAUSE] \
 #?
 #? Options:
+#?   [OPTIONS]
+#?     [-F] FS
+#?
+#?     Specify the FS used internally in Q, default is ''.
+#?
+#?     [-I] FS
+#?
+#?     Specify the input FS, will be used to process table,
+#?     default is ' \t'.
+#?
+#?     [-O] FS
+#?
+#?     Specify the output FS, will be used to output result,
+#?     default is '\t'.
+#?
+#?     [-H]
+#?
+#?     Show the table header in the reuslt output if specified.
+#?
 #?   SELECT-CLAUSE
 #?     [distinct] [*] [FIELDS]
 #?
@@ -43,16 +62,34 @@
 function Q () {
     xsh import /array/append /string/lower '/util/*' '/sql/*'
 
-    local Q_FS Q_IFS Q_OFS
+    # Set default Field Separator (FS)
+    local Q_FS=''     # Internal FS
+    local Q_IFS=$' '  # Input FS
+    local Q_OFS=$'\t'   # Output FS
 
-    # Q_FS: SQL Internal Field Separator
-    Q_FS=${Q_FS:-}
+    local OPTIND OPTARG opt
+    local header=0
 
-    # Q_IFS: SQL Input Field Separator
-    Q_IFS=${Q_IFS:- } # whitespace
-
-    # Q_OFS: SQL Output Field Separator
-    Q_OFS=${Q_OFS:- } # tab
+    while getopts F:I:O:H opt; do
+        case $opt in
+            F)
+                Q_FS=$OPTARG
+                ;;
+            I)
+                Q_IFS=$OPTARG
+                ;;
+            O)
+                Q_OFS=$OPTARG
+                ;;
+            H)
+                header=1
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
 
     local RESERVED_KEYWORDS OPERATORS
 
@@ -142,7 +179,12 @@ function Q () {
     # Process predcates
     local candidate_row_indeces
     # Select all rows
-    candidate_row_indeces=( $(seq 0 $row_count) )
+    if [[ $header -eq 0 ]]; then
+        # Surprise table header
+        candidate_row_indeces=( $(seq 1 $row_count) )
+    else
+        candidate_row_indeces=( $(seq 0 $row_count) )
+    fi
 
     Q_ROW_COUNT=${#candidate_row_indeces[@]}
 
