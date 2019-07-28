@@ -18,10 +18,10 @@
 #?   Query result.
 #?
 #? Examples:
-#?   @select select f1 f2 f3 from A
+#?   @Q select f1 f2 f3 from A
 #?
 #? Usage:
-#?   @select SELECT-CLAUSE FROM-CLAUSE \
+#?   @Q SELECT-CLAUSE FROM-CLAUSE \
 #?          [WHERE-CLAUSE] \
 #?
 #? Options:
@@ -40,7 +40,7 @@
 #?     order by FIELD [asc | desc]
 #?
 #?
-function select () {
+function Q () {
     xsh import /array/append /string/lower '/util/*' '/sql/*'
 
     local Q_FS Q_IFS Q_OFS
