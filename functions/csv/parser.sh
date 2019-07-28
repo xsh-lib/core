@@ -1,3 +1,12 @@
+#? Desription:
+#?   Parse a CSV file.
+#?   Link: https://en.wikipedia.org/wiki/Comma-separated_values
+#?
+#?   If -e, Below variables are set after CSV file is parsed.
+#?     __CSV_FIELDS: Array, variable name suffix for all fields.
+#?     __CSV_FIELDS_<field>: Field name for <field>.
+#?     __CSV_FIELDS_<field>_ROWS: Array, each row of <fields>.
+#?
 #? Usage:
 #?   @parser [-I DELIMITER] [-O DELIMITER] CSV_FILE
 #?   @parser -e [-I DELIMITER] [-a] [-p PREFIX] [-q] [-s] CSV_FILE
@@ -28,15 +37,6 @@
 #?
 #? Output:
 #?   The parsed result or shell variables.
-#?
-#? Desription:
-#?   Parse a CSV file.
-#?   Link: https://en.wikipedia.org/wiki/Comma-separated_values
-#?
-#?   If -e, Below variables are set after CSV file is parsed.
-#?     __CSV_FIELDS: Array, variable name suffix for all fields.
-#?     __CSV_FIELDS_<field>: Field name for <field>.
-#?     __CSV_FIELDS_<field>_ROWS: Array, each row of <fields>.
 #?
 #? Example:
 #?   foo.csv
