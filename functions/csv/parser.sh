@@ -116,7 +116,7 @@ function parser () {
     prefix=${prefix:-__CSV_}
 
     if [[ ${output} == 'table' ]]; then
-        awk -v separator=${SEPARATOR} \
+        awk -v separator="${SEPARATOR}" \
             -v between=${BETWEEN} \
             -v output=${output} \
             -v table_separator="${table_separator:-|}" \
@@ -127,7 +127,7 @@ function parser () {
             while read ln; do
                 xsh /string/global "${ln}"
             done <<< "$(
-                 awk -v separator=${SEPARATOR} \
+                 awk -v separator="${SEPARATOR}" \
                      -v between=${BETWEEN} \
                      -v output=${output} \
                      -v prefix="${prefix}" \
