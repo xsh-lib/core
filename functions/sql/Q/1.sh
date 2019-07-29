@@ -118,7 +118,7 @@ function Q () {
 
     # main begin
 
-    x-sql-parse "$@" || return
+    x-sql-parser "$@" || return
 
     if [[ ! -f $Q_TABLE ]]; then
         return 255
