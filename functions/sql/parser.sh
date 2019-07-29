@@ -2,7 +2,7 @@
 #?   Parse SQL expression and export the parsed into variables.
 #?
 #? Usage:
-#?   @parse SQL
+#?   @parser SQL
 #?
 #? Return:
 #?   0: succeed
@@ -16,9 +16,9 @@
 #?   Nothing.
 #?
 #? Example:
-#?   @parse select f1,f2 from A
+#?   @parser select f1,f2 from A
 #?
-function parse () {
+function parser () {
     local clause
 
     Q_SELECTED_FIELDS=()
