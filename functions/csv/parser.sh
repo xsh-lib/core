@@ -6,6 +6,7 @@
 #?     __CSV_FIELDS: Array, variable name suffix for all fields.
 #?     __CSV_FIELDS_<field>: Field name for <field>.
 #?     __CSV_FIELDS_<field>_ROWS: Array, each row of <fields>.
+#?     __CSV_NR: Number of rows in CSV.
 #?
 #? Usage:
 #?   @parser [-I DELIMITER] [-O DELIMITER] CSV_FILE
@@ -67,6 +68,7 @@
 #?   # __CSV_FIELDS_Price_ROWS=([1]="Price" [2]="3000.00" [3]="4900.00" [4]="5000.00" [5]="4799.00")
 #?   # __CSV_FIELDS_Year=Year
 #?   # __CSV_FIELDS_Year_ROWS=([1]="Year" [2]="1997" [3]="1999" [4]="1999" [5]="1996")
+#?   # __CSV_NR=5
 #?
 function parser () {
     local opt OPTIND OPTARG

@@ -119,6 +119,7 @@ function output_variable (array, m, n, prefix, quote, single,   i, j, fn, fns, f
         print gen_array_variables(prefix "FIELDS_" fn "_ROWS", RESULT, 0, j, quote, single)
     }
     print gen_array_variables(prefix "FIELDS", fns, 0, 0, quote, single)
+    print gen_variables(prefix "NR", m, quote)
 }
 
 #? Trim blankspaces of string.
