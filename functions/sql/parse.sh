@@ -9,7 +9,7 @@
 #?   255: error
 #?
 #? Export:
-#?   Q_FIELDS
+#?   Q_SELECTED_FIELDS
 #?   Q_TABLE
 #?
 #? Output:
@@ -21,7 +21,7 @@
 function parse () {
     local clause
 
-    Q_FIELDS=()
+    Q_SELECTED_FIELDS=()
     Q_TABLE=
 
     while [[ $# -gt 0 ]]; do
@@ -36,7 +36,7 @@ function parse () {
                 case $clause in
                     'SELECT')
                         # parse the field list into array
-                        IFS=',' read -r -a Q_FIELDS <<< "$1"
+                        IFS=',' read -r -a Q_SELECTED_FIELDS <<< "$1"
                         ;;
                     'FROM')
                         Q_TABLE=$1
@@ -50,9 +50,9 @@ function parse () {
         shift
     done
 
-    if [[ -z ${Q_FIELDS[@]} || -z $Q_TABLE ]]; then
+    if [[ -z ${Q_SELECTED_FIELDS[@]} || -z $Q_TABLE ]]; then
         return 255
     else
-        export Q_FIELDS Q_TABLE
+        export Q_SELECTED_FIELDS Q_TABLE
     fi
 }
