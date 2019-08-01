@@ -185,7 +185,7 @@ function infix2rpn () {
                 operator="$operator$char"
                 ;;
         esac
-    done <<< "$*"
+    done <<< "${*//$'\n'/ }"  # Replace newline as whitespace
 
     while [[ ${#STACK[@]} -gt 0 ]]; do
         OUTPUT[${#OUTPUT[@]}]="${STACK[@]:(-1)}"
