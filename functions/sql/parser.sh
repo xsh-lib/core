@@ -58,10 +58,6 @@ function parser () {
         shift
     done
 
-    if [[ -n ${Q_WHERE[@]} ]]; then
-        xsh-sql-where-parser "${Q_WHERE[@]}"
-    fi
-
     if [[ -z ${Q_SELECTED_FIELDS[@]} || -z $Q_TABLE ]]; then
         return 255
     else
