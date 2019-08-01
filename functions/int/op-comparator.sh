@@ -64,5 +64,5 @@ function op-comparator () {
     fi
 
     unset priority
-    echo ${ret:?}
+    echo "${ret:?}"
 }
