@@ -21,7 +21,7 @@
 #?     = 0: The two have equal priority.
 #?     > 0: The former is higher than the later.
 #?     < 0: The former is lower than the later.
-#?   
+#?
 #?   Give no any parameter, the function should output a list of operators this
 #?   comparator supported. It would also be used to check the vailability of the
 #?   comparator.
@@ -56,7 +56,7 @@
 #?         [0]='|'
 #?         [1]='&'
 #?     )
-#? 
+#?
 #?     function priority () {
 #?       case $1 in
 #?         '|')
@@ -75,7 +75,7 @@
 #?     else
 #?         echo "${OPERATORS[@]}"
 #?     fi
-#? 
+#?
 #?     unset priority
 #?   }
 #?   #########
@@ -109,7 +109,7 @@ function infix2rpn () {
 
     function process_operand () {
         if [[ -n $operand ]]; then
-            OUTPUT[${#OUTPUT[@]}]=$operand
+            OUTPUT[${#OUTPUT[@]}]="${operand%"${operand##*[![:space:]]}"}"
         fi
         unset operand
     }
@@ -128,7 +128,7 @@ function infix2rpn () {
                     unset STACK[$((${#STACK[@]} - 1))]
                 fi
             done
-            STACK[${#STACK[@]}]=${operator/
+            STACK[${#STACK[@]}]=$operator
         fi
         unset operator
     }
