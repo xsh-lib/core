@@ -95,7 +95,7 @@ function mxn () {
 
         if [[ $# -gt 1 ]]; then
             # 2 or more SETs left
-            next_output_mark="${output_mark}${OUTPUT_DELIMITER}${SIGNATURE//<N>/$((level + 1))}"
+            local next_output_mark="${output_mark}${OUTPUT_DELIMITER}${SIGNATURE//<N>/$((level + 1))}"
 
             # Try not to quote the process substitution: $(__mxn -l ... -o ... ...).
             # Because xargs has a limitation of 255 bytes long for each argument of utility.
@@ -113,4 +113,5 @@ function mxn () {
     }
 
     __mxn -P "$@"
+    unset __mxn
 }
