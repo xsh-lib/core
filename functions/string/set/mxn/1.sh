@@ -18,7 +18,30 @@
 #?                           a different SIGNATURE with one literal '<N>' included.
 #?
 #? Example:
-#?   @mxn <(seq 1 3) <(seq 4 6)
+#?   @mxn -I ' ' -O '-' 'Hello World' 'Foo Bar'
+#?   # Hello-Foo Hello-Bar
+#?   # World-Foo World-Bar
+#?
+#? Alternation:
+#?   1. Bash's Brace Expansion
+#?
+#?      echo {a..c}-{1..3}
+#?
+#?      This method:
+#?      * Is very handy for the character set like [a-zA-Z0-9].
+#?      * Can not use variables.
+#?
+#?   2. Utility: join
+#?
+#?      join -j 999999 -o 1.1,2.1 file1 file2
+#?
+#?      https://stackoverflow.com/questions/23363003/how-to-produce-cartesian-product-in-bash
+#?
+#? Developer:
+#?   I failed trying to make the input parameter SET as files.
+#?   Because when pass SET files with process substitution <( ), the later file
+#?   descriptors will become unvailable in the subprocess made by command substitution
+#?   when doing recurvive call.
 #?
 
 function mxn () {
@@ -52,8 +75,23 @@ function mxn () {
     #?   __mxn [-l LEVEL] [-o output_mark] [-P] SET ...
     #?
     #? Options:
-    #?   [-l LEVEL]         Default is 1.
-    #?   [-o OUTPUT_MARK]   Default is
+    #?   [-l LEVEL]         Used internally during recursive call. Default is 1.
+    #?   [-o OUTPUT_MARK]   Used internally during recursive call.
+    #?   [-P]               Enable parallel mode.
+    #?
+    #? Depends:
+    #?   This function depends on following environment variables:
+    #?
+    #?   INPUT_DELIMITER
+    #?   OUTPUT_DELIMITER
+    #?   SIGNATURE
+    #?
+    #? Example:
+    #?   INPUT_DELIMITER=' ' OUTPUT_DELIMITER='-' SIGNATURE='{<N>}' \
+    #?   __mxn 'Hello World' 'Foo Bar'
+    #?   # Hello-Foo Hello-Bar
+    #?   # World-Foo World-Bar
+    #?
     function __mxn () {
         local OPTIND OPTARG opt
 
@@ -97,7 +135,7 @@ function mxn () {
             # 2 or more SETs left
             local next_output_mark="${output_mark}${OUTPUT_DELIMITER}${SIGNATURE//<N>/$((level + 1))}"
 
-            # Try not to quote the process substitution: $(__mxn -l ... -o ... ...).
+            # Try not to quote the command substitution: $(__mxn -l ... -o ... ...).
             # Because xargs has a limitation of 255 bytes long for each argument of utility.
             xargs "${maximum_replace_options[@]}" "${parallel_option[@]}" \
                   -I "${SIGNATURE//<N>/$level}" \
