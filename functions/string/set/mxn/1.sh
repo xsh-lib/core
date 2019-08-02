@@ -1,11 +1,11 @@
 #? Description:
-#?   Generate Cartesian Product of sets.
+#?   Generate Cartesian Product by the items of sets.
 #?
 #? Usage:
 #?   @mxn [-I INPUT_DELIMITER] [-O OUTPUT_DELIMITER] [-s SIGNATURE] <SET> [...]
 #?
 #? Options
-#?   SET                     A string contains items delimited with INPUT_DELIMITER.
+#?   SET [...]               A string contains items delimited with INPUT_DELIMITER.
 #?
 #?   [-I INPUT_DELIMITER]    Used to separate items of input SET. Default is '\n'.
 #?   [-O OUTPUT_DELIMITER]   Used to separate output items. Default is a whitespacc.
@@ -33,7 +33,7 @@
 #?
 #?   2. Utility: join
 #?
-#?      join -j 999999 -o 1.1,2.1 file1 file2
+#?      join -j -1 -o 1.1,2.1 file1 file2
 #?
 #?      https://stackoverflow.com/questions/23363003/how-to-produce-cartesian-product-in-bash
 #?
@@ -43,7 +43,6 @@
 #?   descriptors will become unvailable in the subprocess made by command substitution
 #?   when doing recurvive call.
 #?
-
 function mxn () {
     local OPTIND OPTARG opt
 
@@ -72,7 +71,7 @@ function mxn () {
 
 
     #? Usage:
-    #?   __mxn [-l LEVEL] [-o output_mark] [-P] SET ...
+    #?   __mxn [-l LEVEL] [-o output_mark] [-P] <SET> [...]
     #?
     #? Options:
     #?   [-l LEVEL]         Used internally during recursive call. Default is 1.
