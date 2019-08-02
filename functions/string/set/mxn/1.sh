@@ -1,6 +1,9 @@
 #? Description:
 #?   Generate Cartesian Product by the items of sets.
 #?
+#? Edition:
+#?   Based on 'xargs' utility.
+#?
 #? Usage:
 #?   @mxn [-I INPUT_DELIMITER] [-O OUTPUT_DELIMITER] [-s SIGNATURE] <SET> [...]
 #?

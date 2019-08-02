@@ -1,6 +1,9 @@
 #? Description:
 #?   Generate Cartesian Product by the lines of files.
 #?
+#? Edition:
+#?   Based on 'join' utility.
+#?
 #? Usage:
 #?   @mxn [-t CHAR] <FILE1> <FILE2> [...]
 #?
