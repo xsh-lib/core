@@ -107,14 +107,14 @@ function infix2rpn () {
     done
     shift $((OPTIND - 1))
 
-    function process_operand () {
+    function __process_operand () {
         if [[ -n $operand ]]; then
             OUTPUT[${#OUTPUT[@]}]="${operand%"${operand##*[![:space:]]}"}"
         fi
         unset operand
     }
 
-    function process_operator () {
+    function __process_operator () {
         if [[ -n $operator ]]; then
             while [[ ${#STACK[@]} -gt 0 && ${STACK[@]:(-1)} != '(' ]]; do
                 priority=$($COMPARATOR "$operator" "${STACK[@]:(-1)}")
@@ -153,12 +153,12 @@ function infix2rpn () {
                 fi
                 ;;
             '(')
-                process_operator || return $?
+                __process_operator || return $?
 
                 STACK[${#STACK[@]}]=$char
                 ;;
             ')')
-                process_operand || return $?
+                __process_operand || return $?
 
                 while [[ ${STACK[@]:(-1)} != '(' ]]; do
                     OUTPUT[${#OUTPUT[@]}]="${STACK[@]:(-1)}"
@@ -174,13 +174,13 @@ function infix2rpn () {
                 ;;
             # OPERANDS
             [0-9])
-                process_operator || return $?
+                __process_operator || return $?
 
                 operand="$operand$char"
                 ;;
             # OPERATORS
             *)
-                process_operand || return $?
+                __process_operand || return $?
 
                 operator="$operator$char"
                 ;;
@@ -192,5 +192,6 @@ function infix2rpn () {
         unset STACK[$((${#STACK[@]} - 1))]
     done
 
+    unset -f __process_operand __process_operator
     printf "%s$DELIMITER" "${OUTPUT[@]}"
 }

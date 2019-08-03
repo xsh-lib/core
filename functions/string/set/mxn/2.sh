@@ -107,5 +107,5 @@ function mxn () {
     }
 
     __mxn "$@"
-    unset __mxn
+    unset -f __mxn
 }

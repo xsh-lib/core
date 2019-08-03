@@ -21,7 +21,7 @@ function rpncalc () {
 
     xsh import /int/set/op-comparator /int/set/set
 
-    function is_comparator () {
+    function __is_comparator () {
         while read -r ln; do
             test "$1" == "$ln" && return 0 || :
         done < <(x-int-set-op-comparator | xargs -n1)
@@ -30,7 +30,7 @@ function rpncalc () {
 
     local o1 o2
     while [[ $# -gt 0 ]]; do
-        if is_comparator "$1"; then
+        if __is_comparator "$1"; then
             # IS OPERATORS
             o1="${STACK[@]:(-1)}"
             unset STACK[$((${#STACK[@]} - 1))]
@@ -45,5 +45,6 @@ function rpncalc () {
         shift
     done
 
+    unset -f __is_comparator
     echo "$STACK"
 }

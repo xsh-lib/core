@@ -153,5 +153,5 @@ function mxn () {
     }
 
     __mxn -P "$@"
-    unset __mxn
+    unset -f __mxn
 }

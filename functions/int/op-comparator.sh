@@ -24,7 +24,7 @@ function op-comparator () {
         [5]='^'
     )
 
-    function priority () {
+    function __priority () {
         case $1 in
             '+')
                 echo 1
@@ -52,8 +52,8 @@ function op-comparator () {
 
     local p1 p2 ret
     if [[ -n $1 && -n $2 ]]; then
-        p1=$(priority "$1")
-        p2=$(priority "$2")
+        p1=$(__priority "$1")
+        p2=$(__priority "$2")
         if [[ -n $p1 && -n $p2 ]]; then
             ret="$((p1 - p2))"
         else
@@ -63,6 +63,6 @@ function op-comparator () {
         ret="${OPERATORS[*]}"
     fi
 
-    unset priority
+    unset -f __priority
     echo "${ret:?}"
 }
