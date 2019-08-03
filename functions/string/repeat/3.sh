@@ -1,4 +1,4 @@
-#? Version:
+#? Edition:
 #?   Way of jot - macOS only.
 #?
 #? Usage:

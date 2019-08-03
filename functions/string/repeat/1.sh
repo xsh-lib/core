@@ -1,4 +1,4 @@
-#? Version:
+#? Edition:
 #?   Way of recursion with awk.
 #?
 #? Usage:

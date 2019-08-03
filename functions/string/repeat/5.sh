@@ -1,4 +1,4 @@
-#? Version:
+#? Edition:
 #?   Way of printf %Ns and sed.
 #?
 #? Usage:

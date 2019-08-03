@@ -1,4 +1,4 @@
-#? Version:
+#? Edition:
 #?   Way of yes, head -N, and tr.
 #?
 #? Usage:

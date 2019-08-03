@@ -1,4 +1,4 @@
-#? Version:
+#? Edition:
 #?   Way of awk printf in while.
 #?
 #? Usage:

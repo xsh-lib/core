@@ -1,4 +1,4 @@
-#? Version:
+#? Edition:
 #?   Way of BSD seq - macOS only.
 #?
 #? Usage:

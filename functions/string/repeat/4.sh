@@ -1,4 +1,4 @@
-#? Version:
+#? Edition:
 #?   Way of head -c N /dev/zero and sed.
 #?
 #? Usage:
