@@ -16,7 +16,7 @@
 #?   @padding '1010' '10' 9
 #?   # ERROR
 #?
-padding () {
+function padding () {
     local str=$1 padding=$2 len=$3
     local gap
 
