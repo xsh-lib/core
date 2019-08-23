@@ -1,8 +1,10 @@
 #? Description:
-#?   A compatible wrapper for sed with extended (modern) regular expressions
-#?   enabled.
-#?   If unable to enable any extended regular expressions for current
-#?   environment, a failure will be returned.
+#?   A compatible wrapper of sed to enable:
+#?
+#?     * extended (modern) regular expressions
+#?
+#?   If unable to enable the feature for current environment, failure will be
+#?   returned.
 #?
 #? Usage:
 #?   @sed-regex [SED_OPTIONS]
@@ -13,6 +15,6 @@ function sed-regex () {
     elif x-util-is-compatible-sed-E; then
         sed -E "$@"
     else
-        return 1
+        return 255
     fi
 }
