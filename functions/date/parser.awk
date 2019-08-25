@@ -72,8 +72,8 @@ function is_hour(expr) {
     if (match(expr, "^[0-9]+$") == 0) return
     if (length(expr) != 2) return
     if (expr < 0 && expr > 23) return
-    if ( (last_sep(expr) && last_sep(expr) != " ")
-         || (next_sep(expr) && next_sep(expr) != ":") ) return
+    if ( (last_sep(expr) && last_sep(expr) != " ") ||
+         (next_sep(expr) && next_sep(expr) != ":") ) return
     return "%H"
 }
 
@@ -82,8 +82,8 @@ function is_minute(expr) {
     if (match(expr, "^[0-9]+$") == 0) return
     if (length(expr) != 2) return
     if (expr < 0 && expr > 59) return
-    if ( (last_sep(expr) && last_sep(expr) != ":")
-         || (next_sep(expr) && next_sep(expr) != ":") ) return
+    if ( (last_sep(expr) && last_sep(expr) != ":") ||
+         (next_sep(expr) && next_sep(expr) != ":") ) return
     if (last_fmt(expr) && last_expr != "%H") return
     return "%M"
 }
