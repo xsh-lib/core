@@ -1,11 +1,11 @@
 #? Description:
-#?   Test whether date command support Microsecond format: +%N.
+#?   Test whether date command support Nanosecond format: +%N.
 #?
 #? Usage:
-#?   @is-compatible-datetime-N
+#?   @is-compatible-date-N
 #?
 #? Example:
-#?   @is-compatible-datetime-N; echo $?
+#?   @is-compatible-date-N; echo $?
 #?
 #? Return:
 #?   0:     Yes
@@ -14,6 +14,6 @@
 #? Output:
 #?   Nothing.
 #?
-function is-compatible-datetime-N () {
+function is-compatible-date-N () {
     date +%N | grep [0-9] >/dev/null 2>&1
 }
