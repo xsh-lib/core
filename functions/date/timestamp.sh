@@ -37,7 +37,7 @@ function timestamp () {
     local fmt=${1:-${XSH_X_DATE__DATETIME_FMT:?}}
 
     if [[ -n $suffix ]]; then
-        if xsh /date/is-compitable-date-N; then
+        if xsh /date/is-compatible-date-N; then
             fmt=${fmt}.%N
         else
             printf "$FUNCNAME: ERROR: Command 'date' doesn't support format: %s.\n" "+%N" >&2
