@@ -14,7 +14,7 @@ function timestamp () {
     local OPTIND OPTARG opt
 
     local suffix nano_delta
-    while getopts imn; do
+    while getopts imn opt; do
         case $opt in
             i)
                 suffix=1
