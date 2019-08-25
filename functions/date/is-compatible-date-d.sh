@@ -1,5 +1,5 @@
 #? Description:
-#?   Test whether date command support the option for adjusting datetime: -d.
+#?   Test whether date command support the option for adjusting date: -d.
 #?
 #? Usage:
 #?   @is-compatible-date-d
