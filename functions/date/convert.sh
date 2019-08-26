@@ -40,10 +40,10 @@ function convert () {
     local ts=${1:?}
     local output_fmt=${2:?}
 
-    if xsh /date/is-compitable-date-d; then
+    if xsh /date/is-compatible-date-d; then
         # for GNU date
         date -d "$ts" "$output_fmt"
-    elif xsh /date/is-compitable-date-j; then
+    elif xsh /date/is-compatible-date-j; then
         # for BSD data (macOS default)
         if [[ -z $input_fmt ]]; then
             input_fmt=$(xsh /date/parser "$ts")
