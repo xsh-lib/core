@@ -222,7 +222,7 @@ function adjust-d () {
         local result
 
         case ${adjust%% *} in
-            last|next);
+            last|next)
                 local current=$(date -d "${ts}" +%u)  # 1 ~ 7
                 local target=$(date -d "${adjust##* }" +%u)  # -7 ~ 7
 
