@@ -204,7 +204,7 @@ function adjust-d () {
             date -d "${adjusts[*]}" "${XSH_X_DATE__DATETIME_FMT:?}"
         else
             local fmt=$(xsh /date/parser "${ts}")
-            date -d "${ts:?} ${adjusts[*]}" "${fmt:?}"
+            date -d "${ts:?} ${adjusts[*]}" "+${fmt:?}"
         fi
     }
 
@@ -232,7 +232,7 @@ function adjust-d () {
                 ;;
             *)
                 local fmt=$(xsh /date/parser "${ts}")
-                result="$(date -d "${ts} $adjust" "${fmt}")"
+                result="$(date -d "${ts} $adjust" "+${fmt}")"
                 ;;
         esac
 
