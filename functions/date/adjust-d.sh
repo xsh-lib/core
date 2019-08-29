@@ -162,17 +162,20 @@ function adjust-d () {
     #? Options:
     #?   $1   Base weekday: 1 ~ 7
     #?
-    #?   $2   Target weekday: -7 ~ [+]7
+    #?   $2   Target weekday: -7 ~ +7
     #?        The number must be started with plus or minus sign.
     #?
     #? Output:
     #?   -7 ~ +7
     function __calc_delta_weekday__ () {
-        # get the plus or minus sign
-        local sign=${2//[0-9]/}
+        local base=${1:?}
+        local target=${2:?}
 
-        # calculate delta days
-        local delta=$(( ( ${2:?} ${sign:-+} 7 ) - ${1:?} ))
+        local sign_of_target=${target:0:1}      # get the plus or minus sign
+        local abs_of_target=${target//[+-]/}    # get absolute value
+
+        # calculate delta days by formula
+        local delta=$(( ( $abs_of_target $sign_of_target 7 ) - $base ))
 
         if [[ ${delta:0:1} != '-' ]]; then
             delta="+$delta"
