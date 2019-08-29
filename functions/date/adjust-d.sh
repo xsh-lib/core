@@ -197,6 +197,7 @@ function adjust-d () {
         # translate `BSD date` style options to `GNU date` style.
         while [[ $# -gt 0 ]]; do
             adjusts[${#adjusts[@]}]=$(__bsd_to_gnu__ "$1")
+            shift
         done
 
         if [[ -z $ts ]]; then
