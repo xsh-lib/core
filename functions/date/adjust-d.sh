@@ -138,12 +138,12 @@ function adjust-d () {
         case $sign in
             +)
                 if [[ -n $weekday ]]; then
-                    prefix='next '
+                    prefix='next'
                 fi
                 ;;
             -)
                 if [[ -n $weekday ]]; then
-                    prefix='last '
+                    prefix='last'
                 else
                     prefix=' ago'
                 fi
@@ -154,7 +154,7 @@ function adjust-d () {
                 ;;
         esac
 
-        local option="${prefix}${digi}${name}${weekday}${suffix}"
+        local option="${prefix}${digi} ${name}${weekday}${suffix}"
     }
 
     #? Calculate the delta number between the base weekday and the target weekday.
@@ -204,7 +204,7 @@ function adjust-d () {
             date -d "${adjusts[*]}" "${XSH_X_DATE__DATETIME_FMT:?}"
         else
             local fmt=$(xsh /date/parser "${ts}")
-            date -d "${ts:?} ${adjusts[*]}" "+${fmt:?}"
+            date -d "${ts:?} ${adjusts[*]}" "${fmt:?}"
         fi
     }
 
@@ -232,7 +232,7 @@ function adjust-d () {
                 ;;
             *)
                 local fmt=$(xsh /date/parser "${ts}")
-                result="$(date -d "${ts} $adjust" "+${fmt}")"
+                result="$(date -d "${ts} $adjust" "${fmt}")"
                 ;;
         esac
 
