@@ -189,7 +189,7 @@ function adjust-d () {
             ts=${@:(-1)}
 
             # remove last argument from the argument list
-            set -- "${@:0:$#}"
+            set -- "${@:1:$(($# - 1))}"
         fi
 
         declare -a adjusts
@@ -216,7 +216,7 @@ function adjust-d () {
             ts=${@:(-1)}
 
             # remove last argument from the argument list
-            set -- "${@:0:$#}"
+            set -- "${@:1:$(($# - 1))}"
         fi
 
         local adjust=$(__bsd_to_gnu__ "$1")
