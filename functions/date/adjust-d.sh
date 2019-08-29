@@ -154,7 +154,7 @@ function adjust-d () {
                 ;;
         esac
 
-        local option="${prefix}${digi} ${name}${weekday}${suffix}"
+        echo "${prefix}${digi} ${name}${weekday}${suffix}"
     }
 
     #? Calculate the delta number between the base weekday and the target weekday.
