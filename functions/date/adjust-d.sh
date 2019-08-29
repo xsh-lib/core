@@ -145,7 +145,7 @@ function adjust-d () {
                 if [[ -n $weekday ]]; then
                     prefix='last'
                 else
-                    prefix=' ago'
+                    suffix=' ago'
                 fi
                 ;;
             *)
@@ -166,7 +166,7 @@ function adjust-d () {
     #?        The number must be started with plus or minus sign.
     #?
     #? Output:
-    #?   -7 ~ +7
+    #?   -13 ~ +13
     function __calc_delta_weekday__ () {
         local base=${1:?}
         local target=${2:?}
