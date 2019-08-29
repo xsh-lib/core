@@ -225,7 +225,7 @@ function adjust-d () {
         case ${adjust%% *} in
             last|next)
                 local current=$(date -d "${ts}" +%u)  # 1 ~ 7
-                local target=$(date -d "${adjust##* }" +%u)  # -7 ~ 7
+                local target=${1:0:1}$(date -d "${1:1}" +%u)  # -7 ~ +7
 
                 local delta=$(__calc_delta_weekday__ "${current:?}" "${target:?}")
                 result=$(__adjust-d__ "${delta}d" "${ts}")
