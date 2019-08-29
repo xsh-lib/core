@@ -201,7 +201,7 @@ function adjust-d () {
         done
 
         if [[ -z $ts ]]; then
-            date "${adjusts[*]}" "${XSH_X_DATE__DATETIME_FMT:?}"
+            date -d "${adjusts[*]}" "${XSH_X_DATE__DATETIME_FMT:?}"
         else
             local fmt=$(xsh /date/parser "${ts}")
             date -d "${ts:?} ${adjusts[*]}" "+${fmt:?}"
