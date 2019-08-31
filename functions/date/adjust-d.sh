@@ -69,6 +69,11 @@ function adjust-d () {
     #? 2. `date -d [DATE] [last | next] <WEEKDAY>`
     #?
     #?    * Without DATE, it works as expected.
+    #?        * last <WEEKDAY>   get next coming <WEEKDAY>.
+    #?                           If <WEEKDAY> is today, get <WEEKDAY> of next week.
+    #?        * next <WEEKDAY>   get last <WEEKDAY> in the past.
+    #?                           If <WEEKDAY> is today, get <WEEKDAY> of last week.
+    #?        * <WEEKDAY>        get <WEEKDAY> in this week.
     #?    * With DATE, it always return the input DATE.
     #?
     #?    SOLUTION:
@@ -157,13 +162,19 @@ function adjust-d () {
         echo "${prefix}${digi} ${name}${weekday}${suffix}"
     }
 
-    #? Calculate the delta number between the base weekday and the target weekday.
+    #? Calculate the delta days between the base weekday and the target weekday.
+    #?
+    #? Usage:
+    #?   __calc_delta_weekday__ <BASE> <TARGET>
     #?
     #? Options:
-    #?   $1   Base weekday: 1 ~ 7
+    #?   <BASE>    Base weekday: [1-7]
     #?
-    #?   $2   Target weekday: -7 ~ +7
-    #?        The number must be started with plus or minus sign.
+    #?   <TARGET>  Target weekday: [+-][1-7]
+    #?             With leading [+-], the target weekday is the next coming
+    #?             weekday or the weekday in the past.
+    #?             Without leading [+-], the target weekday is the weekday
+    #?             of this week.
     #?
     #? Output:
     #?   -13 ~ +13
@@ -171,15 +182,27 @@ function adjust-d () {
         local base=${1:?}
         local target=${2:?}
 
-        local sign_of_target=${target:0:1}      # get the plus or minus sign
-        local abs_of_target=${target//[+-]/}    # get absolute value
+        local sign_of_target=${target:0:1}   # get the plus or minus sign
 
-        # calculate delta days by formula
-        local delta=$(( ( $abs_of_target $sign_of_target 7 ) - $base ))
-
-        if [[ ${delta:0:1} != '-' ]]; then
-            delta="+$delta"
-        fi
+        local delta
+        case $sign_of_target in
+            [+-])
+                delta=$(( (target - ${sign_of_target}base + 7) % 7 ))
+                if [[ $delta -eq 0 ]]; then
+                    delta=7
+                fi
+                delta=${sign_of_target}${delta}
+                ;;
+            [0-9])
+                delta=$(( target - base ))
+                if [[ $delta -ge 0 ]]; thne
+                   delta=+$delta
+                fi
+                ;;
+            *)
+                return 255
+                ;;
+        esac
 
         echo "$delta"
     }
