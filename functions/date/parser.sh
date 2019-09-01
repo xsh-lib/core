@@ -17,8 +17,8 @@
 function parser () {
     local base_dir="${XSH_HOME}/lib/x/functions/date"  # TODO: use varaible instead
 
+    # --re-interval: Enable interval regular expressions for GNU awk.
+    #                This option is no harm for original UNIX awk.
     awk -f "${base_dir}/parser.awk" <<< "$(echo "$*")" \
-        # --re-interval: Enable interval regular expressions for GNU awk.
-        #                This option is no harm for original UNIX awk.
         --re-interval
 }
