@@ -1,28 +1,67 @@
 #? Description:
-#?   Adjust the second, minute, hour, month day, week day, month or year
-#?   according to value.
+#?   A wrapper on BSD date and GNU date, provide uniform input syntax, try best to give
+#?   the same result with the same input.
 #?
-#?   If value is preceded with a plus or minus sign, the date is adjusted
-#?   forwards or backwards according to the remaining string, otherwise
-#?   the relevant part of the date is set.
+#?   Adjust datetime by second, minute, hour, day, month, year, week
+#?   number and weekday.
 #?
-#?   The date can be adjusted as many times as required using these flags.
+#?   The output format will be the same as the input. The default output
+#?   format is `%Y-%m-%d %H:%M:%S`.
 #?
-#?   Works with with "date -v" from Mac OS X and "data -d" from Linux.
+#?   The adjustment can be done as many times as requiried.
+#?
+#? Based:
+#?   BSD date and GNU date.
+#?
+#? Tested:
+#?   BSD date (May 7, 2015) under macOS.
+#?   GNU date (GNU coreutils) 8.22 under Linux.
 #?
 #? Usage:
-#?   @adjust [+-][<VALUE>[ymwdHMS] | monday | tuesday | ...] [...]
-#?           <TIMESTAMP>
+#?   @adjust-d
+#?     [+-]<VALUE><y | m | w | d | H | M | S> [...]
+#?     [+-]<Mon | Tue | Wed | Thu | Fri | Sat | Sun> [...]
+#?     [TIMESTAMP]
+#?
+#? Options:
+#?   [+-]         Adjust forward or backword.
+#?
+#?   <VALUE>      If value is preceded by a plus or minus sign, the date is adjusted
+#?                forwards or backwards according to the remaining string, otherwise
+#?                the relevant part of the date is set to the VALUE.
+#?
+#?   y            Year.
+#?   m            Month.
+#?   w            Week.
+#?   d            Day.
+#?   H            Hour.
+#?   M            Minute.
+#?   S            Second.
+#?
+#?   <Mon | ...>  Weeks.
+#?
+#?   [TIMESTAMP]  Base timestamp. If omitted current datetime is used.
+#?
+#? Bugs with BSD date:
+#?
+#?   See: xsh help /date/adjust-v
+#?
+#? Bugs with GNU date:
+#?
+#?   See: xsh help /date/adjust-d
 #?
 #? Example:
-#?   @adjust +21d 2008-10-10
+#?   @adjust-v +21d 2008-10-10
 #?   2008-10-31
 #?
-#?   @adjust -1y 2008-10-10
-#?   2007-10-10
-#?
-#?   @adjust +30M +30S "2008-10-10 00:00:00"
+#?   @adjust-v +30M +30S "2008-10-10 00:00:00"
 #?   2008-10-10 00:30:30
+#?
+#?   @adjust-v 21d 2008-10-10
+#?   2008-10-21
+#?
+#?   @adjust-v +Mon 2008-10-10
+#?   2008-10-13
 #?
 function adjust () {
     local adjusts datetime
