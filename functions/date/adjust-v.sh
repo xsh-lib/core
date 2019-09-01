@@ -57,6 +57,18 @@
 #?   2008-10-13
 #?
 function adjust-v () {
+
+    #? Highlight for BSD date (May 7, 2015) under macOS.
+    #?
+    #? 1. `date -v [+-]<WEEKDAY>`
+    #?
+    #?    * +<WEEKDAY>   get next coming <WEEKDAY>.
+    #?                   If <WEEKDAY> is today, get today.
+    #?    * -<WEEKDAY>   get last <WEEKDAY> in the past.
+    #?                   If <WEEKDAY> is today, get today.
+    #?    * <WEEKDAY>    get <WEEKDAY> in this week.
+    #?
+
     # get the last argument
     local ts=${@:(-1)}
 
