@@ -64,63 +64,12 @@
 #?   2008-10-13
 #?
 function adjust () {
-    local adjusts datetime
-
-    declare -a adjusts
-    while [[ $# -gt 0 ]]; do
-        case ${1:0:1} in
-            +|-)
-                adjusts[${#adjusts[@]}]=$1
-                ;;
-            [0-9])
-                datetime=$1
-                ;;
-        esac
-        shift
-    done
-
-    [[ -z ${datetime} ]] && datetime=$(xsh /date/timestamp)
-
-    local i
     if xsh /date/is-compatible-date-v; then
-        # prepend "-v "
-        for i in "${!adjusts[@]}"; do
-            adjusts[$i]="-v ${adjusts[$i]}"
-        done
-        xsh /date/adjust-v "${datetime}" ${adjusts[@]}
-
+        xsh /date/adjust-v "$@"
     elif xsh /date/is-compatible-date-d; then
-        for i in "${!adjusts[@]}"; do
-            case ${adjusts[$i]:1:1} in
-                [0-9])
-                    # traslate [+-]<N>[ymwdHMS]
-                    adjusts[$i]=$(
-                        echo "${adjusts[$i]}" \
-                            | sed -e 's/y$/ year/' \
-                                  -e 's/m$/ month/' \
-                                  -e 's/w$/ week/' \
-                                  -e 's/d$/ day/' \
-                                  -e 's/H$/ hour/' \
-                                  -e 's/M$/ minute/' \
-                                  -e 's/S$/ second/'
-                           )
-                    ;;
-                [a-zA-Z])
-                    # traslate [+-][monday ...]
-                    adjusts[$i]=$(
-                        echo "${adjusts[$i]}" \
-                            | sed -e 's/^-/last-/' \
-                                  -e 's/^+/next-/'
-                           )
-                    ;;
-                *)
-                    return 255
-                    ;;
-            esac
-        done
-
-        xsh /date/adjust-d "${datetime}" "${adjusts[@]}"
+        xsh /date/adjust-d "$@"
     else
-        xsh /date/adjust-z "{datetime}" "${adjusts[@]}"
+        printf "$FUNCNAME: ERROR: Not found the capable date util.\n" >&2
+        return 255
     fi
 }
