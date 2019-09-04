@@ -86,15 +86,15 @@ function parser () {
     #?                                   3 //…
 
     #? Patryk Obara's solution:
-    
+
     #? # This solution in principle works the same as Adam Ryczkowski's, in this thread
     #? # - but has improved regular expression based on RFC3986, (with some changes) and
     #? # fixes some errors (e.g. userinfo can contain '_' character). This can also
     #? # understand relative URIs (e.g. to extract query or fragment).
-    #? # 
+    #? #
     #? # Following regex is based on https://tools.ietf.org/html/rfc3986#appendix-B with
     #? # additional sub-expressions to split authority into userinfo, host and port
-    #? # 
+    #? #
     #? readonly URI_REGEX='^(([^:/?#]+):)?(//((([^:/?#]+)@)?([^:/?#]+)(:([0-9]+))?))?(/([^?#]*))(\?([^#]*))?(#(.*))?'
     #? #                    ↑↑            ↑  ↑↑↑            ↑         ↑ ↑            ↑ ↑        ↑  ↑        ↑ ↑
     #? #                    |2 scheme     |  ||6 userinfo   7 host    | 9 port       | 11 rpath |  13 query | 15 fragment
