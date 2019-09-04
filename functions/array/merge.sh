@@ -7,7 +7,7 @@
 #?
 #? Options:
 #?   ARRAY        Array name to merge.
-#?   [SEPARATOR]  Separator in the value, if sepcified, only the part before
+#?   [SEPARATOR]  Separator in the value, if specified, only the part before
 #?                the separator will be evaluated during the merge.
 #?
 #? Output:
