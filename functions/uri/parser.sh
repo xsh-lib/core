@@ -14,6 +14,7 @@
 #?   -h    Output host.
 #?   -o    Output port.
 #?   -p    Output path.
+#?   -r    Output relative path.
 #?   -q    Output query.
 #?   -f    Output fragment.
 #?   URI   The Uniform Resource Identifier (URI).
@@ -109,7 +110,7 @@ function parser () {
 
     local OPTIND OPTARG opt
 
-    while getopts sauhopqf opt; do
+    while getopts sauhoprqf opt; do
         case $opt in
             s)
                 echo "${BASH_REMATCH[2]}"
@@ -128,6 +129,9 @@ function parser () {
                 ;;
             p)
                 echo "${BASH_REMATCH[10]}"
+                ;;
+            r)
+                echo "${BASH_REMATCH[12]}"
                 ;;
             q)
                 echo "${BASH_REMATCH[14]}"
