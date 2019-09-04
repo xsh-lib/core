@@ -2,7 +2,7 @@
 #?   Parse the format of given timestamp.
 #?
 #? Usage:
-#?   @parser [yyyy-mm-dd] [HH:MM:SS]
+#?   @parser <TIMESTAMP>
 #?
 #? Example:
 #?   @parser "2008-10-10 00:00:00"
