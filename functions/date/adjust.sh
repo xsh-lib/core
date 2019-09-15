@@ -18,7 +18,7 @@
 #?   GNU date (GNU coreutils) 8.22 under Linux.
 #?
 #? Usage:
-#?   @adjust-d
+#?   @adjust
 #?     [+-]<VALUE><y | m | w | d | H | M | S> [...]
 #?     [+-]<Mon | Tue | Wed | Thu | Fri | Sat | Sun> [...]
 #?     [TIMESTAMP]
@@ -51,16 +51,16 @@
 #?   See: xsh help /date/adjust-d
 #?
 #? Example:
-#?   @adjust-v +21d 2008-10-10
+#?   @adjust +21d 2008-10-10
 #?   2008-10-31
 #?
-#?   @adjust-v +30M +30S "2008-10-10 00:00:00"
+#?   @adjust +30M +30S "2008-10-10 00:00:00"
 #?   2008-10-10 00:30:30
 #?
-#?   @adjust-v 21d 2008-10-10
+#?   @adjust 21d 2008-10-10
 #?   2008-10-21
 #?
-#?   @adjust-v +Mon 2008-10-10
+#?   @adjust +Mon 2008-10-10
 #?   2008-10-13
 #?
 function adjust () {
