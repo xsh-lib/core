@@ -14,14 +14,14 @@
 #?   # 2
 #?   # 3
 #?   # 4
-#？
+#?
 function eval () {
     declare -a RPN
 
     local ln
     while read -r ln; do
-    done < <(xsh /math/infix2rpn -c 'xsh /int/set/op-comparator' -d '\n' "$*")
         RPN+=( "$ln" )
+    done <<< "$(xsh /math/infix2rpn -c 'xsh /int/set/op-comparator' -d '\n' "$*")"
 
     xsh /int/set/rpncalc "${RPN[@]}"
 }

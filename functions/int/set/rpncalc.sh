@@ -24,7 +24,7 @@ function rpncalc () {
     function __is_comparator () {
         while read -r ln; do
             test "$1" == "$ln" && return 0 || :
-        done < <(x-int-set-op-comparator | xargs -n1)
+        done <<< "$(x-int-set-op-comparator | xargs -n1)"
         return 255
     }
 
