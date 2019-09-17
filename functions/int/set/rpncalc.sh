@@ -37,10 +37,10 @@ function rpncalc () {
             o2="${STACK[@]:(-1)}"
             unset STACK[$((${#STACK[@]} - 1))]
 
-            STACK[${#STACK[@]}]="$(x-int-set-set "$o1" "$1" "$o2")"
+            STACK+=( "$(x-int-set-set "$o1" "$1" "$o2")" )
         else
             # IS OPERANDS
-            STACK[${#STACK[@]}]=$1
+            STACK+=( "$1" )
         fi
         shift
     done

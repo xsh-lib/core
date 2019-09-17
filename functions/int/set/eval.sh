@@ -20,8 +20,8 @@ function eval () {
 
     local ln
     while read -r ln; do
-        RPN[${#RPN[@]}]=$ln
     done < <(xsh /math/infix2rpn -c 'xsh /int/set/op-comparator' -d '\n' "$*")
+        RPN+=( "$ln" )
 
     xsh /int/set/rpncalc "${RPN[@]}"
 }

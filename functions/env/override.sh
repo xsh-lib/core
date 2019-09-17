@@ -78,7 +78,7 @@ function override () {
 
         if xsh /array/is_array "$__name"; then
             # save array name
-            xsh /array/append __arrays "$__name"
+            __arrays+=( "$__name" )
         fi
 
     done

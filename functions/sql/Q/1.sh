@@ -53,7 +53,7 @@
 #?   # 2	5	8
 #?
 function Q () {
-    xsh import /array/append /string/lower '/util/*' '/sql/*' /csv/parser
+    xsh import /string/lower '/util/*' '/sql/*' /csv/parser
 
     # Set default Field Separator (FS)
     local Q_FS=''     # Internal FS
@@ -142,7 +142,7 @@ function Q () {
         for expr in "${Q_WHERE[@]}"; do
             case $expr in
                 '('|')')
-                    candidate_set[${#candidate_set[@]}]=$expr
+                    candidate_set+=( "$expr" )
                     ;;
                 *)
                     case $((i % 4)) in
@@ -153,16 +153,17 @@ function Q () {
                             s_operator=$expr
                             ;;
                         3)  # value
-                            candidate_set[${#candidate_set[@]}]="$(
-                                xsh /array/search -o "$s_operator" "Q_FIELDS_${s_field}_ROWS" "$expr")"
+                            candidate_set+=(
+                                "$(xsh /array/search -o "$s_operator" "Q_FIELDS_${s_field}_ROWS" "$expr")"
+                            )
                             ;;
                         0)  # and/or
                             case $expr in
                                 and)
-                                    candidate_set[${#candidate_set[@]}]='&'
+                                    candidate_set+=( '&' )
                                     ;;
                                 or)
-                                    candidate_set[${#candidate_set[@]}]='|'
+                                    candidate_set+=( '|' )
                                     ;;
                             esac
                             ;;

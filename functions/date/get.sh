@@ -23,7 +23,7 @@ function get () {
         while getopts ${OPTION:?} opt; do
             case $opt in
                 $CONDITION)
-                    fmts[${#fmts[@]}]=%$opt
+                    fmts+=( "%$opt" )
                     ;;
                 *)
                     return 255

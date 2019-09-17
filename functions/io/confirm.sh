@@ -10,20 +10,14 @@
 #?
 #?   [-t TIMEOUT]   Timeout in seconds, default no timeout.
 #?
-#? Output:
-#?   None.
-#?
 #? Example:
-#?   
-#?   
+#?   $ if @confirm -m "are you sure?"; then echo Answer is yes; else echo Answer is no; fi
 #?
 function confirm () {
     local OPTIND OPTARG opt
-    local message verbose positive negative timeout
-    local options REPLY
+    local message timeout
 
-    positive=yes
-    negative=no
+    local positive=yes negative=no
 
     while getopts m:p:n:t: opt; do
         case $opt in
@@ -55,13 +49,13 @@ function confirm () {
         return 255
     fi
 
-    options=()
-    xsh /array/append options "-p" "${message} [${positive}/${negative}]: "
+    local options=( "-p" "${message} [${positive}/${negative}]: " )
 
     if [[ -n ${timeout} ]]; then
-        xsh /array/append options "-t" "${timeout}"
+        options+=( "-t" "${timeout}" )
     fi
 
+    local REPLY
     while read "${options[@]}" REPLY && [[ ${REPLY} != ${positive} && ${REPLY} != ${negative} ]]; do
         :
     done

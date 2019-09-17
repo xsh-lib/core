@@ -41,7 +41,7 @@ function mark () {
                 clist=${OPTARG}
                 ;;
             m)
-                marker[${#marker[@]}]=${OPTARG}
+                marker+=( "${OPTARG}" )
                 ;;
             *)
                 return 255

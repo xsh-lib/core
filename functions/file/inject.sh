@@ -97,7 +97,7 @@ tmp_file=/tmp/${0##*/}-${file##*/}-$$
 tmp_inj_file=/tmp/${0##*/}-$$
 /bin/cp -a "${file:?}" "${tmp_file:?}"
 
-CLEANERS[${#CLEANERS[@]}]="rm -f ${tmp_file:?};"
+CLEANERS+=( "rm -f ${tmp_file:?};" )
 
 if [[ -n $mark_begin && -n $mark_end ]]; then
     cat > "${tmp_inj_file:?}" << EOF
@@ -111,7 +111,7 @@ ${content:?}
 EOF
 fi
 
-CLEANERS[${#CLEANERS[@]}]="rm -f ${tmp_inj_file:?};"
+CLEANERS+=( "rm -f ${tmp_inj_file:?};" )
 
 # Remove early injection if exists
 if [[ -n $regex_mark_begin && -n $regex_mark_end ]]; then

@@ -72,12 +72,10 @@ match () {
     while getopts n:N:s:h opt; do
         case $opt in
             n)
-                fields[${#fields[@]}]=-n
-                fields[${#fields[@]}]=$OPTARG
+                fields+=( -n "$OPTARG" )
                 ;;
             N)
-                fields[${#fields[@]}]=-N
-                fields[${#fields[@]}]=$OPTARG
+                fields+=( -N "$OPTARG" )
                 ;;
             s)
                 string=$OPTARG

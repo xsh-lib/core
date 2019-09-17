@@ -109,7 +109,7 @@ function infix2rpn () {
 
     function __process_operand () {
         if [[ -n $operand ]]; then
-            OUTPUT[${#OUTPUT[@]}]="${operand%"${operand##*[![:space:]]}"}"
+            OUTPUT+=( "${operand%"${operand##*[![:space:]]}"}" )
         fi
         unset operand
     }
@@ -124,11 +124,11 @@ function infix2rpn () {
                 elif [[ $priority -gt 0 ]]; then
                     break
                 else
-                    OUTPUT[${#OUTPUT[@]}]="${STACK[@]:(-1)}"
+                    OUTPUT+=( "${STACK[@]:(-1)}" )
                     unset STACK[$((${#STACK[@]} - 1))]
                 fi
             done
-            STACK[${#STACK[@]}]=$operator
+            STACK+=( "$operator" )
         fi
         unset operator
     }
@@ -155,13 +155,13 @@ function infix2rpn () {
             '(')
                 __process_operator || return $?
 
-                STACK[${#STACK[@]}]=$char
+                STACK+=( "$char" )
                 ;;
             ')')
                 __process_operand || return $?
 
                 while [[ ${STACK[@]:(-1)} != '(' ]]; do
-                    OUTPUT[${#OUTPUT[@]}]="${STACK[@]:(-1)}"
+                    OUTPUT+=( "${STACK[@]:(-1)}" )
                     unset STACK[$((${#STACK[@]} - 1))]
                 done
 
@@ -188,7 +188,7 @@ function infix2rpn () {
     done <<< "${*//$'\n'/ }"  # Replace newline as whitespace
 
     while [[ ${#STACK[@]} -gt 0 ]]; do
-        OUTPUT[${#OUTPUT[@]}]="${STACK[@]:(-1)}"
+        OUTPUT+=( "${STACK[@]:(-1)}" )
         unset STACK[$((${#STACK[@]} - 1))]
     done
 

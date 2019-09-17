@@ -72,8 +72,8 @@ function mxn () {
         while getopts t:l: opt; do
             case $opt in
                 t)
-                    options[${#options[@]}]="-$opt"
-                    options[${#options[@]}]=$OPTARG
+                    options+=( "-$opt" )
+                    options+=( "$OPTARG" )
                     ;;
                 l)
                     level=$OPTARG
@@ -88,8 +88,8 @@ function mxn () {
         declare -a output_options
         local i=2
         while [[ $i -lt $# ]]; do
-            output_options[${#output_options[@]}]='-o'
-            output_options[${#output_options[@]}]="2.$i"
+            output_options+=( '-o' )
+            output_options+=( "2.$i" )
             i=$((i + 1))
         done
 
