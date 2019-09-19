@@ -135,14 +135,14 @@ function return () {
         source /dev/stdin <<< "$(echo "$code_on_return")"
 
         if [[ $? -ne 0 ]]; then
-            xsh error "failed source function: $code_on_return"
+            xsh log error "failed source function: $code_on_return"
             return 255
         fi
 
         # set trap RETURN
         trap 'ret=$?; __xsh_trap_return_on_return__ $ret 1>&2; [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]] && trap - RETURN || :; __xsh_trap_return_bypass__ $ret' RETURN
     else
-        xsh error "parameter COMMAND null or not set."
+        xsh log error "parameter COMMAND null or not set."
         return 255
     fi
 }
