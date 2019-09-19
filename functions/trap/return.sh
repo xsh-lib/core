@@ -4,7 +4,7 @@
 #?
 #? Usage:
 #?   xsh import /trap/return
-#?   x-trap-return [-1] [-fF NAME] <COMMAND>
+#?   x-trap-return [-1] [-fF NAME] [-a] <COMMAND>
 #?
 #?   This util can't be called in the `xsh` leading syntax: `@return`, because
 #?   `xsh` defines its own `RETURN trap`, that will break the trap chain.
@@ -15,6 +15,7 @@
 #?                -f: Fire on each return of function with NAME.
 #?                -F: Fire on the last return of function with NAME.
 #?                    Usually necessary with loop calls or nested calls.
+#?   [-a]         Append command to existing RETURN trap commands.
 #?   <COMMAND>    Command to fire.
 #?                For current returned function, following info is available inside
 #?                the COMMAND:
@@ -51,9 +52,9 @@
 #?
 function return () {
     local OPTIND OPTARG opt
-    local fire_once=0 fire_on_last=0 fire_on_name
+    local fire_once=0 fire_on_last=0 fire_on_name append=0
 
-    while getopts 1f:F: opt; do
+    while getopts 1f:F:a opt; do
         case $opt in
             1)
                 fire_once=1
@@ -65,6 +66,9 @@ function return () {
                 fire_on_last=1
                 fire_on_name=$OPTARG
                 ;;
+            a)
+                append=1
+                ;;
             *)
                 return 255
                 ;;
@@ -72,70 +76,88 @@ function return () {
     done
     shift $((OPTIND - 1))
 
-    # generate code of function __on_return__ ()
+    # generate function code
 
-    local code_on_return='
-    function __xsh_trap_return_bypass__ () {
-        if [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]]; then
-            # clean env: unset flag variable
-            unset __XSH_TRAP_RETURN_CLEAN_FLAG;
+    local funcode
 
-            # clean env: unset self
-            unset -f $FUNCNAME
-        fi
-        return $1
-    }
-
-    function __xsh_trap_return_on_return__ () {
-        # skip the RETURN signal of registering function
-        if [[ ${FUNCNAME[1]} == x-trap-return ]]; then
-            return $1
-        fi
-
-        # global flag for cleaning RETURN trap
-        __XSH_TRAP_RETURN_CLEAN_FLAG=0
-
-        local fire_on_name="'$fire_on_name'"
-        local fire_on_last="'$fire_on_last'"
-        local fire_once="'$fire_once'"
-
-        # fire command logic
-        if [[ -z $fire_on_name \
-                  || ( -n $fire_on_name \
-                           && (( $fire_on_last -eq 0 && ${FUNCNAME[1]} == $fire_on_name ) \
-                                    || ( $fire_on_last -eq 1 \
-                                             && ${FUNCNAME[1]} == $fire_on_name \
-                                             && $(xsh count_in_funcstack "$fire_on_name") == 1 )) )
-            ]]; then
-
-            # clean RETURN trap logic
-            if  [[ $fire_once -eq 1 \
-                       || ${#FUNCNAME[@]} -eq 2 \
-                       || ( -n $fire_on_name && ${FUNCNAME[1]} == $fire_on_name \
-                                && $(xsh count_in_funcstack "$fire_on_name") == 1 ) \
-                 ]]; then
+    if [[ $append -eq 1 ]] && \
+           declare -f __xsh_trap_return_on_return__ >/dev/null; then
+        funcode=$(
+            local ln
+            while IFS=$'' read -r ln; do
+                if [[ $ln == '        };' ]]; then
+                    # append new command
+                    printf '%s\n' "$1"
+                fi
+                printf '%s\n' "$ln"
+            done <<< "$(declare -f __xsh_trap_return_on_return__)"
+               )
+    else
+        funcode='
+        function __xsh_trap_return_bypass__ () {
+            if [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]]; then
+                # clean env: unset flag variable
+                unset __XSH_TRAP_RETURN_CLEAN_FLAG;
 
                 # clean env: unset self
-                unset -f __xsh_trap_return_on_return__
+                unset -f $FUNCNAME
+            fi
+            return $1
+        }
 
-                # set flag for cleaning RETURN trap
-                __XSH_TRAP_RETURN_CLEAN_FLAG=1
+        function __xsh_trap_return_on_return__ () {
+            # skip the RETURN signal of registering function
+            if [[ ${FUNCNAME[1]} == x-trap-return ]]; then
+                return $1
             fi
 
-            # fire command
-            '$1'
-        fi
+            # global flag for cleaning RETURN trap
+            __XSH_TRAP_RETURN_CLEAN_FLAG=0
 
-        # return the former return code
-        return $1
-    }'
+            local fire_on_name="'$fire_on_name'"
+            local fire_on_last="'$fire_on_last'"
+            local fire_once="'$fire_once'"
+
+            # firing logic
+            if [[ -z $fire_on_name \
+                      || ( -n $fire_on_name \
+                               && (( $fire_on_last -eq 0 && ${FUNCNAME[1]} == $fire_on_name ) \
+                                        || ( $fire_on_last -eq 1 \
+                                                 && ${FUNCNAME[1]} == $fire_on_name \
+                                                 && $(xsh count_in_funcstack "$fire_on_name") == 1 )) )
+                ]]; then
+
+                # clean RETURN trap logic
+                if  [[ $fire_once -eq 1 \
+                           || ${#FUNCNAME[@]} -eq 2 \
+                           || ( -n $fire_on_name && ${FUNCNAME[1]} == $fire_on_name \
+                                    && $(xsh count_in_funcstack "$fire_on_name") == 1 ) \
+                     ]]; then
+
+                    # clean env: unset self
+                    unset -f __xsh_trap_return_on_return__
+
+                    # set flag for cleaning RETURN trap
+                    __XSH_TRAP_RETURN_CLEAN_FLAG=1
+                fi
+
+                { # command begins
+                '$1'
+                } # command ends
+
+            fi
+
+            # return the former return code
+            return $1
+        }'
+    fi
 
     if [[ -n $1 ]]; then
         # source the generated function
-        source /dev/stdin <<< "$code_on_return"
+        source /dev/stdin <<< "$funcode"
 
         if [[ $? -ne 0 ]]; then
-            xsh log error "failed source function: $code_on_return"
+            xsh log error "failed source function: $funcode"
             return 255
         fi
 
