@@ -19,6 +19,5 @@ function parser () {
 
     # --re-interval: Enable interval regular expressions for GNU awk.
     #                This option is no harm for original UNIX awk.
-    awk -f "${base_dir}/parser.awk" <<< "$(echo "$*")" \
-        --re-interval
+    awk -f "${base_dir}/parser.awk" <<< "$*" --re-interval
 }

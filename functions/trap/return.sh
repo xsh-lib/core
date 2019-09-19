@@ -132,7 +132,7 @@ function return () {
 
     if [[ -n $1 ]]; then
         # source the generated function
-        source /dev/stdin <<< "$(echo "$code_on_return")"
+        source /dev/stdin <<< "$code_on_return"
 
         if [[ $? -ne 0 ]]; then
             xsh log error "failed source function: $code_on_return"

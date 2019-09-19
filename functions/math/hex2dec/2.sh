@@ -22,20 +22,20 @@ function hex2dec () {
         -)
             case ${hex:1:2} in
                 0x|0X)
-                    bc <<<$(echo "obase=10; ibase=16; -${hex:3}")
+                    bc <<< "obase=10; ibase=16; -${hex:3}"
                     ;;
                 *)
-                    bc <<<$(echo "obase=10; ibase=16; ${hex}")
+                    bc <<< "obase=10; ibase=16; ${hex}"
                     ;;
             esac
             ;;
         *)
             case ${hex:0:2} in
                 0x|0X)
-                    bc <<<$(echo "obase=10; ibase=16; ${hex:2}")
+                    bc <<< "obase=10; ibase=16; ${hex:2}"
                     ;;
                 *)
-                    bc <<<$(echo "obase=10; ibase=16; ${hex}")
+                    bc <<< "obase=10; ibase=16; ${hex}"
                     ;;
             esac
             ;;

@@ -15,5 +15,5 @@
 #?   # FF
 #?
 function dec2hex () {
-    bc <<<$(echo "obase=16; ibase=10; $1")
+    bc <<< "obase=16; ibase=10; $1"
 }

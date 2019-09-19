@@ -105,17 +105,17 @@ function adjust-d () {
 
     #? test whether the argument is for adjustment
     function __is_adjust_opt__ () {
-        egrep -q '^[+-]?[0-9]{1,}[ymdwHMS]$|^[+-]?[a-zA-Z]{3,}$' <<< "$(echo "$1")"
+        egrep -q '^[+-]?[0-9]{1,}[ymdwHMS]$|^[+-]?[a-zA-Z]{3,}$' <<< "$1"
     }
 
     #? test whether it's running into the highlight point 2
     function __has_weekday_opt__ () {
-        egrep -q '[+-]?[a-zA-Z]{3,}' <<< "$(echo "$*")"
+        egrep -q '[+-]?[a-zA-Z]{3,}' <<< "$*"
     }
 
     #? test whether it's running into the highlight point 3
     function __has_unsigned_opt__ () {
-        egrep -q '(^| )[0-9]{1,}[a-zA-Z]' <<< "$(echo "$*")"
+        egrep -q '(^| )[0-9]{1,}[a-zA-Z]' <<< "$*"
     }
 
     # translate BSD date style `-v` options to GNU date style `-d` options
