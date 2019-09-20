@@ -45,6 +45,6 @@
 #?   ["BAR", BAZ"]
 #?
 function parser () {
-    local BASE_DIR="${XSH_HOME}/x/functions/json"  # TODO: use varaible instead
+    local BASE_DIR="${XSH_HOME}/lib/x/functions/json"  # TODO: use varaible instead
     python "$BASE_DIR"/parser.py "$@"
 }
