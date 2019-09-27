@@ -8,6 +8,10 @@
 #?     __CSV_FIELDS_<field>_ROWS: Array, each row of <fields>.
 #?     __CSV_NR: Number of rows in CSV.
 #?
+#?   This util is inspired by the repo:
+#?     https://github.com/geoffroy-aubry/awk-csv-parser
+#?     which is written by: Geoffroy Aubry, geoffroy.aubry.pro@gmail.com
+#?
 #? Usage:
 #?   @parser [-I DELIMITER] [-O DELIMITER] CSV_FILE
 #?   @parser -e [-I DELIMITER] [-a] [-p PREFIX] [-q] [-s] CSV_FILE

@@ -1,4 +1,9 @@
-#？Parse a line of csv file.
+#? Desription:
+#?   Parse a line of csv file.
+#?
+#?   This util is inspired by the repo:
+#?     https://github.com/geoffroy-aubry/awk-csv-parser
+#?     which is written by: Geoffroy Aubry, geoffroy.aubry.pro@gmail.com
 #?
 #? Sample Usage:
 #?   BEGIN {parse($0, ",", """")} END {for (i=1;i<=CNR;i++) {for (j=i;j<=CNF;j++) {printf RESULT[i "," j] OFS}; printf "\n"}}
