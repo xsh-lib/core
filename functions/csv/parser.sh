@@ -1,8 +1,7 @@
 #? Desription:
 #?   Parse a CSV file.
-#?   Link: https://en.wikipedia.org/wiki/Comma-separated_values
 #?
-#?   If -e, Below variables are set after CSV file is parsed.
+#?   If set -a, Below variables are set after CSV file is parsed.
 #?     __CSV_FIELDS: Array, variable name suffix for all fields.
 #?     __CSV_FIELDS_<field>: Field name for <field>.
 #?     __CSV_FIELDS_<field>_ROWS: Array, each row of <fields>.
@@ -27,52 +26,68 @@
 #?                   variables rather than the table.
 #?
 #?   [-a]            Apply the environment variables.
-#?                   With -a enabled, -s and -q are ignored.
+#?                   With -a enabled, output is turned off, and -s and -q are ignored.
 #?
 #?   [-p PREFIX]     Prefix variable name with PREFIX.
 #?                   Default is '__CSV_'.
 #?
-#?   [-q]            Enable quotes, value will be quoted.
+#?   [-q]            Enable quotes in output, value will be quoted.
 #?
-#?   [-s]            Enable signle mode, generate single expression for array assignment.
+#?   [-s]            Enable signle mode in output, generate single expression for array
+#?                   assignment.
 #?
 #?   CSV_FILE        Full path of CSV file to parse.
 #?                   Separated by commas(overriding with -I), quoted between double quotes,
 #?                   and first line as header.
 #?
 #? Output:
-#?   The parsed result or shell variables.
+#?   The parsed result or shell variables expression.
+#?
+#? Standard:
+#?   https://en.wikipedia.org/wiki/Comma-separated_values
 #?
 #? Example:
-#?   foo.csv
-#?     Year,Make,Model,Description,Price
-#?     1997,Ford,E350,"ac, abs, moon",3000.00
-#?     1999,Chevy,"Venture ""Extended Edition""","",4900.00
-#?     1999,Chevy,"Venture ""Extended Edition, Very Large""",,5000.00
-#?     1996,Jeep,Grand Cherokee,"MUST SELL!
-#?     air, moon roof, loaded",4799.00
+#?   $ cat foo.csv
+#?   Year,Make,Model,Description,Price
+#?   1997,Ford,E350,"ac, abs, moon",3000.00
+#?   1999,Chevy,"Venture ""Extended Edition""","",4900.00
+#?   1999,Chevy,"Venture ""Extended Edition, Very Large""",,5000.00
+#?   1996,Jeep,Grand Cherokee,"MUST SELL!
+#?   air, moon roof, loaded",4799.00
 #?
-#?   @parser foo.csv
-#?   # Year|Make|Model|Description|Price
-#?   # 1997|Ford|E350|ac, abs, moon|3000.00
-#?   # 1999|Chevy|Venture "Extended Edition"||4900.00
-#?   # 1999|Chevy|Venture "Extended Edition, Very Large"||5000.00
-#?   # 1996|Jeep|Grand Cherokee|MUST SELL!air, moon roof, loaded|4799.00
+#?   $ @parser foo.csv
+#?   Year|Make|Model|Description|Price
+#?   1997|Ford|E350|ac, abs, moon|3000.00
+#?   1999|Chevy|Venture "Extended Edition"||4900.00
+#?   1999|Chevy|Venture "Extended Edition, Very Large"||5000.00
+#?   1996|Jeep|Grand Cherokee|MUST SELL!air, moon roof, loaded|4799.00
 #?
-#?   @parser -e -q -s foo.csv
-#?   # Following variables were set:
-#?   # __CSV_FIELDS=([1]="Year" [2]="Make" [3]="Model" [4]="Description" [5]="Price")
-#?   # __CSV_FIELDS_Description=Description
-#?   # __CSV_FIELDS_Description_ROWS=([1]="Description" [2]="ac, abs, moon" [3]="" [4]="" [5]="MUST SELL!air, moon roof, loaded")
-#?   # __CSV_FIELDS_Make=Make
-#?   # __CSV_FIELDS_Make_ROWS=([1]="Make" [2]="Ford" [3]="Chevy" [4]="Chevy" [5]="Jeep")
-#?   # __CSV_FIELDS_Model=Model
-#?   # __CSV_FIELDS_Model_ROWS=([1]="Model" [2]="E350" [3]="Venture \"Extended Edition\"" [4]="Venture \"Extended Edition, Very Large\"" [5]="Grand Cherokee")
-#?   # __CSV_FIELDS_Price=Price
-#?   # __CSV_FIELDS_Price_ROWS=([1]="Price" [2]="3000.00" [3]="4900.00" [4]="5000.00" [5]="4799.00")
-#?   # __CSV_FIELDS_Year=Year
-#?   # __CSV_FIELDS_Year_ROWS=([1]="Year" [2]="1997" [3]="1999" [4]="1999" [5]="1996")
-#?   # __CSV_NR=5
+#?   $ @parser -e foo.csv
+#?   __CSV_FIELDS=([0]="Year" [1]="Make" [2]="Model" [3]="Description" [4]="Price")
+#?   __CSV_FIELDS_Description=Description
+#?   __CSV_FIELDS_Description_ROWS=([0]="Description" [1]="ac, abs, moon" [2]="" [3]="" [4]="MUST SELL!air, moon roof, loaded")
+#?   __CSV_FIELDS_Make=Make
+#?   __CSV_FIELDS_Make_ROWS=([0]="Make" [1]="Ford" [2]="Chevy" [3]="Chevy" [4]="Jeep")
+#?   __CSV_FIELDS_Model=Model
+#?   __CSV_FIELDS_Model_ROWS=([0]="Model" [1]="E350" [2]="Venture \"Extended Edition\"" [3]="Venture \"Extended Edition, Very Large\"" [4]="Grand Cherokee")
+#?   __CSV_FIELDS_Price=Price
+#?   __CSV_FIELDS_Price_ROWS=([0]="Price" [1]="3000.00" [2]="4900.00" [3]="5000.00" [4]="4799.00")
+#?   __CSV_FIELDS_Year=Year
+#?   __CSV_FIELDS_Year_ROWS=([0]="Year" [1]="1997" [2]="1999" [3]="1999" [4]="1996")
+#?
+#?   $ @parser -a foo.csv; set | grep ^__CSV_
+#?   __CSV_FIELDS=([0]="Year" [1]="Make" [2]="Model" [3]="Description" [4]="Price")
+#?   __CSV_FIELDS_Description=Description
+#?   __CSV_FIELDS_Description_ROWS=([0]="Description" [1]="ac, abs, moon" [2]="" [3]="" [4]="MUST SELL!air, moon roof, loaded")
+#?   __CSV_FIELDS_Make=Make
+#?   __CSV_FIELDS_Make_ROWS=([0]="Make" [1]="Ford" [2]="Chevy" [3]="Chevy" [4]="Jeep")
+#?   __CSV_FIELDS_Model=Model
+#?   __CSV_FIELDS_Model_ROWS=([0]="Model" [1]="E350" [2]="Venture \"Extended Edition\"" [3]="Venture \"Extended Edition, Very Large\"" [4]="Grand Cherokee")
+#?   __CSV_FIELDS_Price=Price
+#?   __CSV_FIELDS_Price_ROWS=([0]="Price" [1]="3000.00" [2]="4900.00" [3]="5000.00" [4]="4799.00")
+#?   __CSV_FIELDS_Year=Year
+#?   __CSV_FIELDS_Year_ROWS=([0]="Year" [1]="1997" [2]="1999" [3]="1999" [4]="1996")
+#?   __CSV_NR=5
 #?
 function parser () {
     local opt OPTIND OPTARG
@@ -121,7 +136,18 @@ function parser () {
 
     prefix=${prefix:-__CSV_}
 
-    if [[ ${output} == 'table' ]]; then
+    if [[ ${apply} ]]; then
+        while read ln; do
+            xsh /string/global "${ln}"
+        done <<< "$(
+             awk -v separator="${SEPARATOR}" \
+                 -v between=${BETWEEN} \
+                 -v output=variable \
+                 -v prefix="${prefix}" \
+                 -f "${BASE_DIR}/parser.awk" \
+                 "${csv_file}"
+             )"
+    elif [[ ${output} == 'table' ]]; then
         awk -v separator="${SEPARATOR}" \
             -v between=${BETWEEN} \
             -v output=${output} \
@@ -129,27 +155,14 @@ function parser () {
             -f "${BASE_DIR}/parser.awk" \
             "${csv_file}"
     elif [[ ${output} == 'variable' ]]; then
-        if [[ ${apply} ]]; then
-            while read ln; do
-                xsh /string/global "${ln}"
-            done <<< "$(
-                 awk -v separator="${SEPARATOR}" \
-                     -v between=${BETWEEN} \
-                     -v output=${output} \
-                     -v prefix="${prefix}" \
-                     -f "${BASE_DIR}/parser.awk" \
-                     "${csv_file}"
-                 )"
-        else
-            awk -v separator=${SEPARATOR} \
-                -v between=${BETWEEN} \
-                -v output=${output} \
-                -v prefix="${prefix}" \
-                -v quote="${quote}" \
-                -v single="${single}" \
-                -f "${BASE_DIR}/parser.awk" \
-                "${csv_file}"
-        fi
+        awk -v separator=${SEPARATOR} \
+            -v between=${BETWEEN} \
+            -v output=${output} \
+            -v prefix="${prefix}" \
+            -v quote="${quote}" \
+            -v single="${single}" \
+            -f "${BASE_DIR}/parser.awk" \
+            "${csv_file}"
     else
         printf "ERROR: unsupported output '%s'.\n" "${output}" >&2
         return 255
