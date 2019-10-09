@@ -1,156 +1,147 @@
-#!/bin/bash -e -o pipefail
-
 #? Description:
 #?   Inject content into file.
 #?
 #? Usage:
 #?   @inject
 #?     -c CONTENT
-#?     -f FILE
-#?     -p <begin|end|after|before>
+#?     -p <begin | end | after | before>
 #?     [-e REGEX]
 #?     [-m MARK_BEGIN]
 #?     [-n MARK_END]
 #?     [-x REGEX_MARK_BEGIN]
 #?     [-y REGEX_MARK_END]
+#?     FILE
 #?
 #? Options:
 #?   -c CONTENT
+#?
 #?   Content to inject.
 #?
-#?   -f FILE
-#?   File to inject to.
+#?   -p <begin | end | after | before>
 #?
-#?   -p <begin|end|after|before>
-#?   Where to inject in the FILE.
+#?   Position to inject in the FILE.
+#?   The position `after` and `before` need to be used with `-e REGEX` together.
 #?
 #?   [-e REGEX]
-#?   Use together with -p.
 #?
-#?   [-m MARK_BEGIN]
-#?   Use together with -n.
-#?   With begin and end mark, injection can be run repeatly and safety.
+#?   Must set with `-p <after | before>`.
+#?   Only the first occurrence of REGEX is injected.
 #?
-#?   [-n MARK_END]
-#?   Use together with -m.
-#?   With begin and end mark, injection can be run repeatly and safety.
+#?   [-m MARK_BEGIN] and [-n MARK_END]
 #?
-#?   [-x REGEX_MARK_BEGIN]
-#?   Use together with -y.
-#?   With begin and end mark, injection can be run repeatly and safety.
+#?   The CONTENT is wrapped within the marks.
+#?   With begin and end mark, it is safe to repeat the injection.
 #?
-#?   [-y REGEX_MARK_END]
-#?   Use together with -x.
-#?   With begin and end mark, injection can be run repeatly and safety.
+#?   [-x REGEX_MARK_BEGIN] and [-y REGEX_MARK_END]
 #?
+#?   Remove any content within the regex marks before the injection.
+#?
+#?   FILE
+#?
+#?   File to inject to.
+#?   The /dev/stdin is not allowed.
+#?
+#? Bug:
+#?   1. Doesn't work with empty file.
+#?
+function inject () {
+    # return on error
+    xsh /trap/err -r
 
-# Clean on any exit
-trap 'clean_exit $?' 0 SIGHUP SIGINT SIGTERM
+    local OPTIND OPTARG opt
 
+    local content file position regex mark_begin mark_end \
+          regex_mark_begin regex_mark_end
 
-clean_exit () {
-    if [[ -n ${CLEANERS[@]} ]]; then
-        eval "${CLEANERS[@]}"
+    while getopts c:p:e:m:n:x:y: opt; do
+        case $opt in
+            c)
+                content=$OPTARG
+                ;;
+            p)
+                # begin, end, after, before
+                position=$OPTARG
+                ;;
+            e)
+                regex=$OPTARG
+                ;;
+            m)
+                mark_begin=$OPTARG
+                ;;
+            n)
+                mark_end=$OPTARG
+                ;;
+            x)
+                regex_mark_begin=$OPTARG
+                ;;
+            y)
+                regex_mark_end=$OPTARG
+                ;;
+            *)
+                exit 255
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    file=${1:?}
+
+    # backup file
+    local bak_file
+    bak_file="${file:?}-$(date '+%Y%m%d%H%M%S')"
+    /bin/cp -a "${file:?}" "${bak_file:?}"
+
+    # tmp file
+    local tmp_file=/tmp/${file##*/}-inject-$$
+    /bin/cp -a "${file:?}" "${tmp_file:?}"
+
+    # set to clean tmp file
+    xsh import /trap/return
+    x-trap-return -F $FUNCNAME "rm -f ${tmp_file:?}"
+
+    # add marks
+    if [[ -n $mark_begin && -n $mark_end ]]; then
+        content=$(printf '%s\n%s\n%s' "${mark_begin:?}" "${content:?}" "${mark_end:?}")
     fi
-    return $1
-}
 
-while getopts c:f:p:e:m:n:x:y: opt; do
-    case $opt in
-        c)
-            content=$OPTARG
+    # remove early injection if exists
+    if [[ -n $regex_mark_begin && -n $regex_mark_end ]]; then
+        xsh /util/sed-regex-inplace "/${regex_mark_begin:?}/,/${regex_mark_end:?}/d" \
+            "${tmp_file:?}"
+    fi
+
+    # injecting into tmp file
+    # TODO: doesn't work with empty file.
+    case ${position:?} in
+        begin)
+            xsh /util/sed-inplace \
+                "1 {
+                h
+                r /dev/stdin
+                g
+                N
+                }" "${tmp_file:?}" <<< "${content:?}"
             ;;
-        f)
-            file=$OPTARG
+        end)
+            xsh /util/sed-inplace "$ r /dev/stdin" "${tmp_file:?}" <<< "${content:?}"
             ;;
-        p)
-            # begin, end, after, before
-            position=$OPTARG
+        after)
+            xsh /util/sed-regex-inplace "/${regex:?}/ r /dev/stdin" "${tmp_file:?}" \
+                <<< "${content:?}"
             ;;
-        e)
-            regex=$OPTARG
-            ;;
-        m)
-            mark_begin=$OPTARG
-            ;;
-        n)
-            mark_end=$OPTARG
-            ;;
-        x)
-            regex_mark_begin=$OPTARG
-            ;;
-        y)
-            regex_mark_end=$OPTARG
+        before)
+            xsh /util/sed-regex-inplace \
+                "/${regex:?}/ {
+                h
+                r /dev/stdin
+                g
+                N
+                }" "${tmp_file:?}" <<< "${content:?}"
             ;;
         *)
             exit 255
             ;;
     esac
-done
 
-# Backup
-bak_file="${file:?}-$(date '+%Y%m%d%H%M%S')"
-/bin/cp -a "${file:?}" "${bak_file:?}"
-
-# Temporary file
-tmp_file=/tmp/${0##*/}-${file##*/}-$$
-tmp_inj_file=/tmp/${0##*/}-$$
-/bin/cp -a "${file:?}" "${tmp_file:?}"
-
-CLEANERS+=( "rm -f ${tmp_file:?};" )
-
-if [[ -n $mark_begin && -n $mark_end ]]; then
-    cat > "${tmp_inj_file:?}" << EOF
-${mark_begin:?}
-${content:?}
-${mark_end:?}
-EOF
-else
-    cat > "${tmp_inj_file:?}" << EOF
-${content:?}
-EOF
-fi
-
-CLEANERS+=( "rm -f ${tmp_inj_file:?};" )
-
-# Remove early injection if exists
-if [[ -n $regex_mark_begin && -n $regex_mark_end ]]; then
-    xsh /util/sed-regex-inplace "/${regex_mark_begin:?}/,/${regex_mark_end:?}/d" "${tmp_file:?}"
-fi
-
-# Injecting
-# TODO: sed command 'r' won't work with an empty file.
-
-case ${position:?} in
-    begin)
-        xsh /util/sed-inplace \
-            "1 {
-            h
-            r ${tmp_inj_file:?}
-            g
-            N
-            }" "${tmp_file:?}"
-        ;;
-    end)
-        xsh /util/sed-inplace "$ r ${tmp_inj_file:?}" "${tmp_file:?}"
-        ;;
-    after)
-        xsh /util/sed-regx-inplace "/${regex:?}/ r ${tmp_inj_file:?}" "${tmp_file:?}"
-        ;;
-    before)
-        xsh /util/sed-regx-inplace \
-            "/${regex:?}/ {
-            h
-            r ${tmp_inj_file:?}
-            g
-            N
-            }" "${tmp_file:?}"
-        ;;
-    *)
-        exit 255
-        ;;
-esac
-
-/bin/cp -a "${tmp_file:?}" "${file:?}"
-
-exit
+    # apply injection
+    /bin/cp -a "${tmp_file:?}" "${file:?}"
+}
