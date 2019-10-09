@@ -15,8 +15,8 @@
 #?   Max: FFFFFFFFFFFFFFFF
 #?
 #? Example:
-#?   @dec2hex 255
-#?   # FF
+#?   $ @dec2hex 255
+#?   FF
 #?
 function dec2hex () {
     if [[ $1 -gt 0 ]]; then

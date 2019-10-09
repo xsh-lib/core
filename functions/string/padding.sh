@@ -2,19 +2,19 @@
 #?   @padding STRING PADDING LENGTH
 #?
 #? Options:
-#?   STRING
-#?   PADDING
-#?   LENGTH
+#?   STRING    Original string to pad.
+#?   PADDING   Padding string.
+#?   LENGTH    Target length.
+#?             The length must be reasonable to the STRING and PADDING.
 #?
 #? Output:
+#?   Padded string.
 #?
 #? Example:
-#?   @padding '1010' '0' 8
-#?   # 00001010
-#?   @padding '1010' '10' 8
-#?   # 10101010
-#?   @padding '1010' '10' 9
-#?   # ERROR
+#?   $ @padding '1010' '0' 8
+#?   00001010
+#?   $ @padding '1010' '10' 8
+#?   10101010
 #?
 function padding () {
     local str=$1 padding=$2 len=$3

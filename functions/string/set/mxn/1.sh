@@ -21,9 +21,9 @@
 #?                           a different SIGNATURE with one literal '<N>' included.
 #?
 #? Example:
-#?   @mxn -I ' ' -O '-' 'Hello World' 'Foo Bar'
-#?   # Hello-Foo Hello-Bar
-#?   # World-Foo World-Bar
+#?   $ @mxn -I ' ' -O '-' 'Hello World' 'Foo Bar'
+#?   Hello-Foo Hello-Bar
+#?   World-Foo World-Bar
 #?
 #? Alternation:
 #?   1. Bash's Brace Expansion

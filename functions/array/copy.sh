@@ -9,8 +9,8 @@
 #?   Nothing.
 #?
 #? Example:
-#?   src=([3]="III" [4]="IV"); @copy src new; declare -p new
-#?   # declare -a new='([3]="III" [4]="IV")'
+#?   $ src=([3]="III" [4]="IV"); @copy src new; declare -p new
+#?   declare -a new='([3]="III" [4]="IV")'
 #?
 function copy () {
     local __i

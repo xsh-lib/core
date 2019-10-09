@@ -9,10 +9,10 @@
 #?
 #? Example:
 #?   var=0; @push var 10; @push var 20
-#?   @pop var; @pop var; echo $var
-#?   # 20
-#?   # 10
-#?   # 0
+#?   $ @pop var; @pop var; echo $var
+#?   20
+#?   10
+#?   0
 #?
 function pop () {
     local var

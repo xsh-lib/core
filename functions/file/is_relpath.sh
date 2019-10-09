@@ -8,8 +8,8 @@
 #?   Nothing.
 #?
 #? Example:
-#?   @is_relpath /tmp; echo $?
-#?   # 1
+#?   $ @is_relpath /tmp; echo $?
+#?   1
 #?
 function is_relpath () {
     [[ "${1:0:1}" != '/' ]]

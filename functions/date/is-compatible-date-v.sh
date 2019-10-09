@@ -5,7 +5,8 @@
 #?   @is-compatible-date-v
 #?
 #? Example:
-#?   @is-compatible-date-v; echo $?
+#?   $ @is-compatible-date-v; echo $?
+#?   0
 #?
 #? Return:
 #?   0:     Yes

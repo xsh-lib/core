@@ -5,13 +5,13 @@
 #?   @parser <TIMESTAMP>
 #?
 #? Example:
-#?   @parser "2008-10-10 00:00:00"
+#?   $ @parser "2008-10-10 00:00:00"
 #?   %Y-%m-%d HH:MM:SS
 #?
-#?   @parser "2008-10-10"
+#?   $ @parser "2008-10-10"
 #?   %Y-%m-%d
 #?
-#?   @parser "00:00:00"
+#?   $ @parser "00:00:00"
 #?   HH:MM:SS
 #?
 function parser () {

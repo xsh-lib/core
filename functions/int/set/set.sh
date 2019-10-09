@@ -1,23 +1,18 @@
 #? Description:
-#?   Apply operand on 2 sorted sets.
+#?   Apply operator on 2 sorted sets.
 #?
 #? Usage:
-#?   @set SET OPERAND SET
+#?   @set SET OPERATOR SET
 #?
 #? Options:
-#?   SET
-#?
-#?   The set is a string contains sorted elements delimited by whitespace or newline.
-#?
-#?   OPERAND
-#?
-#?   &
-#?   |
+#?   SET        The set is a string contains sorted elements delimited by whitespace or newline.
+#?   OPERATOR   Supported operators are `&` and `|`.
+#?              The operators should be quoted.
 #?
 #? Exmaple:
-#?   @set '1 2 3 4' \& '3 4 5 6'
-#?   # 3
-#?   # 4
+#?   $ @set '1 2 3 4' \& '3 4 5 6'
+#?   3
+#?   4
 #?
 function set () {
 

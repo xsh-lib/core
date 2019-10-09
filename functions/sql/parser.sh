@@ -17,7 +17,10 @@
 #?   Nothing.
 #?
 #? Example:
-#?   @parser select f1,f2 from A where f1 = x
+#?   $ @parser select f1,f2 from A where f1 = x; set | grep ^Q_
+#?   Q_SELECTED_FIELDS=([0]="f1" [1]="f2")
+#?   Q_TABLE=A
+#?   Q_WHERE=([0]="f1" [1]="=" [2]="x")
 #?
 function parser () {
     local clause

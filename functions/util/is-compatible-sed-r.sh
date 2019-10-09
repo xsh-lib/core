@@ -5,7 +5,8 @@
 #?   @is-compatible-sed-r
 #?
 #? Example:
-#?   @is-compatible-sed-r; echo $?
+#?   $ @is-compatible-sed-r; echo $?
+#?   0
 #?
 #? Return:
 #?   0:     Yes

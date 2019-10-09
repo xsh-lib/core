@@ -41,7 +41,7 @@
 #?   File to inject to.
 #?   The /dev/stdin is not allowed.
 #?
-#? Bug:
+#? Bugs:
 #?   1. Doesn't work with empty file.
 #?
 function inject () {

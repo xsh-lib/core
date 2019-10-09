@@ -8,8 +8,8 @@
 #?   The last element in the array.
 #?
 #? Example:
-#?   arr=([3]="III" [4]="IV"); @last arr
-#?   # IV
+#?   $ arr=([3]="III" [4]="IV"); @last arr
+#?   IV
 #?
 function last () {
     # try to declare nothing, new variable may override input variable.

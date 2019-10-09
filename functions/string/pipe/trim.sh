@@ -5,8 +5,8 @@
 #?   String from standard input, removed leading and tailing blankspaces.
 #?
 #? Example:
-#?   echo '  Foo  ' | @trim
-#?   # 'Foo'
+#?   $ echo '  Foo  ' | @trim
+#?   Foo
 #?
 function trim () {
     sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' < /dev/stdin

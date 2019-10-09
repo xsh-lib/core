@@ -9,10 +9,10 @@
 #?   !=0:  No
 #?
 #? Example:
-#?   @is-leapyear 2012; echo $?
+#?   $ @is-leapyear 2012; echo $?
 #?   0
 #?
-#?   @is-leapyear 2011; echo $?
+#?   $ @is-leapyear 2011; echo $?
 #?   1
 #?
 function is-leapyear () {

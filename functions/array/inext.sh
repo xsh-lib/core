@@ -8,8 +8,8 @@
 #?   The index of next element in the array.
 #?
 #? Example:
-#?   arr=([3]="III" [4]="IV"); @inext arr
-#?   # 5
+#?   $ arr=([3]="III" [4]="IV"); @inext arr
+#?   5
 #?
 function inext () {
     set -- $(xsh /array/ilast "$1")

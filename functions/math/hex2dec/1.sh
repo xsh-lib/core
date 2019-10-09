@@ -15,8 +15,8 @@
 #?   Max: 9223372036854775807 (2^63-1)
 #?
 #? Example:
-#?   @hex2dec FF
-#?   # 255
+#?   $ @hex2dec FF
+#?   255
 #?
 function hex2dec () {
     case ${1:0:1} in

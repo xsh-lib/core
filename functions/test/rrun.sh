@@ -14,7 +14,7 @@
 #?   Depends on the CMD.
 #?
 #? Example:
-#?   @rrun -n 3 echo 'Hello World'
+#?   $ @rrun -n 3 echo 'Hello World'
 #?   Hello World
 #?   Hello World
 #?   Hello World

@@ -14,8 +14,8 @@
 #?   Nothing.
 #?
 #? Example:
-#?   arr=([3]="x=III" [4]="y=IV" [5]="y=V"); @merge arr =; declare -p arr
-#?   # declare -a arr='([3]="x=III" [5]="y=V")'
+#?   $ arr=([3]="x=III" [4]="y=IV" [5]="y=V"); @merge arr =; declare -p arr
+#?   declare -a arr='([3]="x=III" [5]="y=V")'
 #?
 function merge () {
     local __i __j

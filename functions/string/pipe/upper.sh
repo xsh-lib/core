@@ -5,8 +5,8 @@
 #?   Uppercase presentation of standard input.
 #?
 #? Example:
-#?   echo Foo | @upper
-#?   # FOO
+#?   $ echo Foo | @upper
+#?   FOO
 #?
 function upper () {
     tr [:lower:] [:upper:] < /dev/stdin

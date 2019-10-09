@@ -5,8 +5,8 @@
 #?   Uppercase presentation of STRING.
 #?
 #? Example:
-#?   @upper Foo
-#?   # FOO
+#?   $ @upper Foo
+#?   FOO
 #?
 function upper () {
     echo "$@" | xsh /string/pipe/upper

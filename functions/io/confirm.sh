@@ -1,7 +1,7 @@
 #? Usage:
 #?   @confirm -m MESSAGE [-p POSITIIVE] [-n NEGATIVE] [-t TIMEOUT]
 #?
-#? Option:
+#? Options:
 #?   -m MESSAGE     Message prompted on screen.
 #?
 #?   [-p POSITIVE]  Positive token. Default is 'yes'.

@@ -38,9 +38,9 @@
 #?   The index of all matching elements in the array.
 #?
 #? Example:
-#?   arr=([3]="III" [4]="IV" [5]="V"); @search -o '!=' arr 'V'
-#?   # 3
-#?   # 4
+#?   $ arr=([3]="III" [4]="IV" [5]="V"); @search -o '!=' arr 'V'
+#?   3
+#?   4
 #?
 function search () {
     local OPTIND OPTARG

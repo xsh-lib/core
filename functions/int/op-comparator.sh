@@ -15,8 +15,8 @@
 #?   < 0: The former is lower than the later.
 #?
 #? Example:
-#?   @op-comparator '*' '+'
-#?   # 1
+#?   $ @op-comparator '*' +
+#?   1
 #?
 function op-comparator () {
 

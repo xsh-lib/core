@@ -5,10 +5,10 @@
 #?   @eofeb <TIMESTAMP>
 #?
 #? Example:
-#?   @eofeb 2012
+#?   $ @eofeb 2012
 #?   29
 #?
-#?   @eofeb 2011
+#?   $ @eofeb 2011
 #?   28
 #?
 function eofeb () {

@@ -8,8 +8,8 @@
 #?   The first element in the array.
 #?
 #? Example:
-#?   arr=([3]="III" [4]="IV"); @first arr
-#?   # III
+#?   $ arr=([3]="III" [4]="IV"); @first arr
+#?   III
 #?
 function first () {
     # try to declare nothing, new variable may override input variable.

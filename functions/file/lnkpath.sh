@@ -13,17 +13,16 @@
 #?   Absolute path of the final target that the LINK refers to.
 #?
 #? Example:
-#?   mkdir -p /tmp/symblink/foo \
+#?   $ mkdir -p /tmp/symblink/foo \
 #?       && touch /tmp/symblink/foo/f1
 #?       && ln -s foo/f1 /tmp/symblink/f2 \
 #?       && ln -s f2 /tmp/symblink/f3
 #?
-#?   @lnkpath /tmp/symblink/f3
-#?   # /tmp/symblink/foo/f1
+#?   $ @lnkpath /tmp/symblink/f3
+#?   /tmp/symblink/foo/f1
 #?
-#?   cd /tmp
-#?   @lnkpath f3 symblink
-#?   # /tmp/symblink/foo/f1
+#?   $ cd /tmp; @lnkpath f3 symblink
+#?   /tmp/symblink/foo/f1
 #?
 function lnkpath () {
     local link=$1

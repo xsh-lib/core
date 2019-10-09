@@ -8,8 +8,8 @@
 #?   Nothing.
 #?
 #? Example:
-#?   @is_abspath /tmp; echo $?
-#?   # 0
+#?   $ @is_abspath /tmp; echo $?
+#?   0
 #?
 function is_abspath () {
     [[ "${1:0:1}" == '/' ]]

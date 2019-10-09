@@ -8,8 +8,8 @@
 #?   The index of last element in the array.
 #?
 #? Example:
-#?   arr=([3]="III" [4]="IV"); @ilast arr
-#?   # 4
+#?   $ arr=([3]="III" [4]="IV"); @ilast arr
+#?   4
 #?
 function ilast () {
     # try to declare nothing, new variable may override input variable.

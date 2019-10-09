@@ -5,8 +5,8 @@
 #?   @is-compatible CMD [OPTIONS]
 #?
 #? Example:
-#?   @is-compatible sed -r '' /dev/zero; echo $?
-#?   # 1
+#?   $ @is-compatible sed -r '' /dev/zero; echo $?
+#?   0
 #?
 #? Return:
 #?   0:     Compitable

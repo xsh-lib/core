@@ -27,15 +27,11 @@
 #?
 #? Example:
 #?   $ a=(foo bar); x=24; y=25; z=0
-#?   $ @override 'a[0]=Foo' 'a[1]=Bar' 'z=26'
-#?   $ echo ${a[@]},$x,$y,$z
-#?
+#?   $ @override 'a[0]=Foo' 'a[1]=Bar' 'z=26'; echo ${a[@]},$x,$y,$z
 #?   Foo Bar,24,25,26
 #?
 #?   $ a=(foo=foo bar=bar); x=24; y=25; z=0
-#?   $ @override -a -m -s = 'a=foo=Foo' 'a=bar=Bar' 'z=26'
-#?   $ echo ${a[@]},$x,$y,$z
-#?
+#?   $ @override -a -m -s = 'a=foo=Foo' 'a=bar=Bar' 'z=26'; echo ${a[@]},$x,$y,$z
 #?   foo=Foo bar=Bar,24,25,26
 #?
 function override () {

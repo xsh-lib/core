@@ -10,10 +10,10 @@
 #?   The expression to evaluate.
 #?
 #? Exmaple:
-#?   @eval '1 2 3 4 & (2 3 4 5 | 3 4 5 6)'
-#?   # 2
-#?   # 3
-#?   # 4
+#?   $ @eval '1 2 3 4 & (2 3 4 5 | 3 4 5 6)'
+#?   2
+#?   3
+#?   4
 #?
 function eval () {
     declare -a RPN

@@ -8,8 +8,8 @@
 #?   The number n，n满足k1*(k2^n)最大程度逼近m，但不大于m。
 #?
 #? Example:
-#?   @lim 28 3 2
-#?   # 3
+#?   $ @lim 28 3 2
+#?   3
 #? 
 #? WolframAlpha:
 #?   Solve[k1 k2^n == m, n]

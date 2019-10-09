@@ -1,7 +1,7 @@
 #? Usage:
 #?   @mask [-d DELIMITER] [-f LIST] [-c LIST] [-m MASK] [-x] FILE
 #?
-#? Option:
+#? Options:
 #?   [-d DELIMITER]  Use DELIMITER as the field delimiter character instead
 #?                   of the tab character.
 #?
@@ -18,8 +18,8 @@
 #?   Masked string from standard input.
 #?
 #? Example:
-#?   echo 'username password' | @mask -f2 -c1-4
-#?   # username ****word
+#?   $ @mask -f2 -c1-4 <<< 'username password'
+#?   username ****word
 #?
 function mask () {
     local opt OPTIND OPTARG

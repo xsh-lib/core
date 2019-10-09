@@ -44,16 +44,16 @@
 #?      This is decided by `BSD date` itself. Use `[+-]<N>w` for this situation.
 #?
 #? Example:
-#?   @adjust-v +21d 2008-10-10
+#?   $ @adjust-v +21d 2008-10-10
 #?   2008-10-31
 #?
-#?   @adjust-v +30M +30S "2008-10-10 00:00:00"
+#?   $ @adjust-v +30M +30S "2008-10-10 00:00:00"
 #?   2008-10-10 00:30:30
 #?
-#?   @adjust-v 21d 2008-10-10
+#?   $ @adjust-v 21d 2008-10-10
 #?   2008-10-21
 #?
-#?   @adjust-v +Mon 2008-10-10
+#?   $ @adjust-v +Mon 2008-10-10
 #?   2008-10-13
 #?
 function adjust-v () {

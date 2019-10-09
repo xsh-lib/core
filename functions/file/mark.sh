@@ -1,7 +1,7 @@
 #? Usage:
 #?   @mark [-p PATTERN] [-d DELIMITER] [-f LIST] [-c LIST] [-m MARKER] FILE
 #?
-#? Option:
+#? Options:
 #?   [-p PATTERN]    Mark the lines matching the PATTERN.
 #?
 #?   [-d DELIMITER]  Use DELIMITER as the field delimiter character instead
@@ -17,8 +17,8 @@
 #?   Marked string from standard input.
 #?
 #? Example:
-#?   echo 'The word cat is inlcuded in word catalog.' | @mark -f8 -c1-3 -m red
-#?   # The word cat is included in word \033[31mcat\033[0malog.
+#?   $ @mark -f8 -c1-3 -m red <<< 'The word cat is inlcuded in word catalog.'
+#?   The word cat is included in word \033[31mcat\033[0malog.
 #?
 function mark () {
     local opt OPTIND OPTARG

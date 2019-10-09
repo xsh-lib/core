@@ -3,7 +3,10 @@
 #?
 #? Usage:
 #?   @cores
-#?   # 4
+#?
+#? Example:
+#?   $ @cores
+#?   4
 #?
 function cores () {
     sysctl -n hw.ncpu

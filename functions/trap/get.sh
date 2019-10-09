@@ -7,7 +7,7 @@
 #? Usage:
 #?   @get [-e] <SIGNAL>
 #?
-#? Option:
+#? Options:
 #?   [-e]      Output the entire trap expression rather than the command.
 #?
 function get () {

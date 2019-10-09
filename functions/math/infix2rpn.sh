@@ -9,11 +9,6 @@
 #?   @infix2rpn [-c COMPARATOR] [-d DELIMITER] EXPR
 #?
 #? Options:
-#?   EXPR
-#?
-#?   The Infix Expression to convert.
-#?   The operands in the EXPR can contain [0-9] and [[:blank:]].
-#?
 #?   [-c COMPARATOR]
 #?
 #?   The operator comparator callable, used to calculate the priority of 2 operators.
@@ -36,16 +31,21 @@
 #?   Set a delimiter other than whitespace, such as '\n', if your operands contains
 #?   whitespaces itself.
 #?
-#? Example:
-#?   @infix2rpn '2*3+(4-5)'
-#?   # 2 3 * 4 5 - +
+#?   EXPR
 #?
-#?   @infix2rpn -c 'xsh /int/set/op-comparator' -d '\n' '2 3&(3 4|4 5)'
-#?   # 2 3
-#?   # 3 4
-#?   # 4 5
-#?   # |
-#?   # &
+#?   The Infix Expression to convert.
+#?   The operands in the EXPR can contain [0-9] and [[:blank:]].
+#?
+#? Example:
+#?   $ @infix2rpn '2*3+(4-5)'
+#?   2 3 * 4 5 - +
+#?
+#?   $ @infix2rpn -c 'xsh /int/set/op-comparator' -d '\n' '2 3&(3 4|4 5)'
+#?   2 3
+#?   3 4
+#?   4 5
+#?   |
+#?   &
 #?
 #? A sample implementation for the operator comparator function.
 #?

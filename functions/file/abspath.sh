@@ -2,14 +2,14 @@
 #?   @abspath PATH
 #?
 #? Options:
-#?   PATH  File or directory path.
+#?   PATH   File or directory path.
 #?
 #? Output:
 #?   Absolute path of input PATH.
 #?
 #? Example:
-#?   cd && @abspath ../../etc/passwd
-#?   # /etc/passwd
+#?   $ cd && @abspath ../../etc/passwd
+#?   /etc/passwd
 #?
 function abspath () {
     local dir file

@@ -15,7 +15,7 @@
 #? Output:
 #?
 #? Example:
-#?   @rrun-stat -n 3 echo 'Hello World'
+#?   $ @rrun-stat -n 3 echo 'Hello World'
 #?   Hello World
 #?   Hello World
 #?   Hello World

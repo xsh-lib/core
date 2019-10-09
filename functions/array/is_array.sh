@@ -8,7 +8,7 @@
 #?   Nothing.
 #?
 #? Example:
-#?   @is_array BASH_ARGV; echo $?
+#?   $ @is_array BASH_ARGV; echo $?
 #?   0
 #?
 function is_array () {

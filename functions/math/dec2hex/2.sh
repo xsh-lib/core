@@ -11,8 +11,8 @@
 #?   Signed hexadecimal.
 #?
 #? Example:
-#?   @dec2hex 255
-#?   # FF
+#?   $ @dec2hex 255
+#?   FF
 #?
 function dec2hex () {
     bc <<< "obase=16; ibase=10; $1"

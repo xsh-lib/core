@@ -5,7 +5,8 @@
 #?   @is-compatible-sed-i-bsd
 #?
 #? Example:
-#?   @is-compatible-sed-i-bsd; echo $?
+#?   $ @is-compatible-sed-i-bsd; echo $?
+#?   0
 #?
 #? Return:
 #?   0:     Yes

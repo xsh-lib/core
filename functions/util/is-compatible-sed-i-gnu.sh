@@ -5,7 +5,8 @@
 #?   @is-compatible-sed-i-gnu
 #?
 #? Example:
-#?   @is-compatible-sed-i-gnu; echo $?
+#?   $ @is-compatible-sed-i-gnu; echo $?
+#?   0
 #?
 #? Return:
 #?   0:     Yes

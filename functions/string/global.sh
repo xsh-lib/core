@@ -16,8 +16,8 @@
 #?   Nothing.
 #?
 #? Example:
-#?   vname=foo; @global $vname=bar; echo $foo
-#?   # bar
+#?   $ vname=foo; @global $vname=bar; echo $foo
+#?   bar
 #?
 function global () {
     read -r "${1%%=*}" <<< "${1#*=}"

@@ -8,9 +8,9 @@
 #?   Nothing.
 #?
 #? Example:
-#?   arr=([3]="III" [4]="IV"); @echo arr
-#?   # III
-#?   # IV
+#?   $ arr=([3]="III" [4]="IV"); @echo arr
+#?   III
+#?   IV
 #?
 function echo () {
     # try to declare nothing, new variable may override input variable.
