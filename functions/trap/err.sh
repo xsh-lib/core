@@ -13,6 +13,20 @@
 #? Output:
 #?   The stdout of COMMAND is redirected to stderr, to avoid to mess the original output.
 #?
+#? Highlight:
+#?   About `trap <command> ERR`, from `man bash`.
+#?
+#?   If a sigspec is ERR, the command arg is executed whenever a simple command
+#?   has a non-zero exit status, subject to the following conditions.
+#?
+#?   The ERR trap is not executed ...
+#?     * if the failed command is part of the command list immediately following
+#?       a while or until keyword,
+#?     * part of the test in an if statement,
+#?     * part of a && or || list,
+#?     * or if the command's return value is being inverted via !.
+#?   These are the same conditions obeyed by the errexit option.
+#?
 function err () {
     local OPTIND OPTARG opt
     local on_error
