@@ -4,10 +4,16 @@ XSH Core Library.
 
 ## Usage
 
-Assume [xsh](https://github.com/alexzhangs/xsh) is already installed at you local.
+Assume [xsh](https://github.com/alexzhangs/xsh) is already installed at your local.
 
-To load this library into `xsh` and give a short lib name `x`, issue below command:
+To load this library into `xsh` issue below command:
 
+```bash
+xsh load alexzhangs/xsh-lib-core
 ```
-xsh load -n x alexzhangs/xsh-lib-core
+
+List available utilities for this library:
+
+```bash
+xsh list x
 ```
