@@ -47,7 +47,7 @@ function parser () {
                         Q_TABLE=$1
                         ;;
                     'WHERE')
-                        x-array-append Q_WHERE "$1"
+                        Q_WHERE+=( "$1" )
                         ;;
                     *)
                         return 255
