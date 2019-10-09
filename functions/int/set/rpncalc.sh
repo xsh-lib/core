@@ -1,25 +1,20 @@
 #? Description:
 #?   An RPN expression calculator work with sets.
 #?
+#?   RPN: https://en.wikipedia.org/wiki/Reverse_Polish_notation
+#?
 #? Usage:
-#?   @rpncalc SET OPERATOR SET [OPERATOR SET] ...
+#?   @rpncalc EXPR ...
 #?
 #? Options:
-#?   SET
-#?
-#?   The set is a string contains sorted elements delimited by whitespace or newline.
-#?
-#?   OPERAND
-#?
-#?   &
-#?   |
+#?   EXPR   The RPN expression.
 #?
 #? Example:
+#?   $ @rpncalc '1 2 3' '2 3 4' \&
+#?   2
+#?   3
 #?
 function rpncalc () {
-    declare -a STACK
-
-    xsh import /int/set/op-comparator /int/set/set
 
     function __is_comparator () {
         while read -r ln; do
@@ -27,6 +22,10 @@ function rpncalc () {
         done <<< "$(x-int-set-op-comparator | xargs -n1)"
         return 255
     }
+
+    declare -a STACK
+
+    xsh import /int/set/op-comparator /int/set/set
 
     local o1 o2
     while [[ $# -gt 0 ]]; do

@@ -4,6 +4,11 @@
 #? Usage:
 #?   @op-comparator [OPERATOR] [OPERATOR]
 #?
+#? Options:
+#?   [OPERATOR]   Supported operators are `+ - * / % ^`.
+#?                The operators `*` should be quoted.
+#?                If unset, will print all supported operators.
+#?
 #? Output:
 #?   = 0: The two have equal priority.
 #?   > 0: The former is higher than the later.
@@ -14,15 +19,6 @@
 #?   # 1
 #?
 function op-comparator () {
-
-    local OPERATORS=(
-        [0]='+'
-        [1]='-'
-        [2]='*'
-        [3]='/'
-        [4]='%'
-        [5]='^'
-    )
 
     function __priority () {
         case $1 in
@@ -49,6 +45,15 @@ function op-comparator () {
                 ;;
         esac
     }
+
+    local -r OPERATORS=(
+        [0]='+'
+        [1]='-'
+        [2]='*'
+        [3]='/'
+        [4]='%'
+        [5]='^'
+    )
 
     local p1 p2 ret
     if [[ -n $1 && -n $2 ]]; then
