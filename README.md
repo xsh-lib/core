@@ -1,6 +1,6 @@
 # core
 
-xsh Library - Core.
+xsh Library - core.
 
 This repo is the core library of xsh.
 
