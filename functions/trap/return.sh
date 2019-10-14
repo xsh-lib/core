@@ -135,7 +135,7 @@ function return () {
                      ]]; then
 
                     # clean env: unset self
-                    unset -f __xsh_trap_return_on_return__
+                    unset -f $FUNCNAME
 
                     # set flag for cleaning RETURN trap
                     __XSH_TRAP_RETURN_CLEAN_FLAG=1
