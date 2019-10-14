@@ -27,6 +27,13 @@
 #?     * or if the command's return value is being inverted via !.
 #?   These are the same conditions obeyed by the errexit option.
 #?
+#? Clean:
+#?   The ERR trap is NOT cleaned by any means, your should handle this in your code.
+#?
+#? Self Clean:
+#?   This util have to left a resource remain uncleaned:
+#?     * function __xsh_trap_err_on_err__ ()
+#?
 function err () {
     local OPTIND OPTARG opt
     local on_error
