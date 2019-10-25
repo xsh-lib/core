@@ -43,10 +43,12 @@
 #?
 #? Bugs:
 #?   1. Doesn't work with empty file.
+#?   2. `/` can't be appearing in the regex of -e -x -y.
+#?
+#? @xsh /trap/err -e
+#? @subshell
 #?
 function inject () {
-    # return on error
-    xsh /trap/err -r
 
     local OPTIND OPTARG opt
 
