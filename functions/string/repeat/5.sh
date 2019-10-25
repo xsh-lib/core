@@ -15,6 +15,10 @@
 #?   @repeat Foo 3
 #?   # FooFooFoo
 #?
+#? Bug:
+#?   1. losing `\`
+#?      @repeat 'Foo\nBar' 3
+#?
 function repeat () {
     local str=$1 times=${2:-1}
 

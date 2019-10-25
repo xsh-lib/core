@@ -5,7 +5,7 @@
 #?   @repeat STRING [N]
 #?
 #? Options:
-#?   STRING  String to repeat.
+#?   STRING  String to repeat. `\n` safe.
 #?   [N]     Repeat N times, default is 1, means no repeat.
 #?
 #? Output:
