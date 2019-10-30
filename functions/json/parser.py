@@ -80,7 +80,7 @@ class DataParser:
 
     def _eval(self, cmd):
         cmd = cmd.replace('{JSON}', 'self.object')
-        return eval(cmd)
+        return eval(cmd, locals())
 
 
 if __name__ == '__main__':
