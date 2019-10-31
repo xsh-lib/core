@@ -89,7 +89,8 @@ function adjust-v () {
     if [[ -z $ts ]]; then
         date "${adjusts[@]}" "${XSH_X_DATE__DATETIME_FMT:?}"
     else
-        declare fmt=$(xsh /date/parser "${ts}")
+        declare fmt
+        fmt=$(xsh /date/parser "${ts}")
         date "${adjusts[@]}" -j -f "${fmt:?}" "${ts}" "+${fmt:?}"
     fi
 }

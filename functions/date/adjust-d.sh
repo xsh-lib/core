@@ -215,7 +215,8 @@ function adjust-d () {
         if [[ -z $ts ]]; then
             date -d "${adjusts[*]}" "${XSH_X_DATE__DATETIME_FMT:?}"
         else
-            declare fmt=$(xsh /date/parser "${ts}")
+            declare fmt
+            fmt=$(xsh /date/parser "${ts}")
             date -d "${ts:?} ${adjusts[*]}" "+${fmt:?}"
         fi
     }
@@ -276,22 +277,23 @@ function adjust-d () {
             set -- "${@:1:$(($# - 1))}"
         fi
 
-        declare result
+        declare result current target delta
 
         declare sign=${1//[^+-]/}  # remove none [+-]
         declare unit=${1//[^a-zA-Z]/}  # remove non-letter
 
         if __has_weekday_opt__ "$1"; then
-            declare current=$(date -d "$ts" +%u)  # 1 ~ 7
-            declare target=$(date -d "$unit" +%u)  # 1 ~ 7
+            current=$(date -d "$ts" +%u)  # 1 ~ 7
+            target=$(date -d "$unit" +%u)  # 1 ~ 7
 
-            declare delta=$(__calc_delta_weekday__ "${current:?}" "$sign${target:?}")
+            delta=$(__calc_delta_weekday__ "${current:?}" "$sign${target:?}")
             result=$(__adjust-d__ "${delta}d" "$ts")
         else
             case $sign in
                 [+-])
-                    declare adjust=$(__bsd_to_gnu__ "$1")
-                    declare fmt=$(xsh /date/parser "$ts")
+                    declare adjust fmt
+                    adjust=$(__bsd_to_gnu__ "$1")
+                    fmt=$(xsh /date/parser "$ts")
                     result="$(date -d "$ts $adjust" "+${fmt}")"
                     ;;
                 *)
@@ -299,9 +301,9 @@ function adjust-d () {
 
                     # hyphen `-`: don't pad the field
                     # lower `y` to upper `Y`: get year with Century
-                    declare current=$(date -d "$ts" +%-${unit/y/Y})
+                    current=$(date -d "$ts" +%-${unit/y/Y})
 
-                    declare delta=$((digi - current))
+                    delta=$((digi - current))
                     if [[ $delta -ge 0 ]]; then
                         delta=+$delta
                     fi

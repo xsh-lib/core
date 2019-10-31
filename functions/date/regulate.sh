@@ -12,8 +12,9 @@
 #?   2012-01-01
 #?
 function regulate () {
-    declare ts=$(xsh /string/trim "${1:?}")
-    declare fmt=$(xsh /date/parser "$ts")
+    declare ts fmt
+    ts=$(xsh /string/trim "${1:?}")
+    fmt=$(xsh /date/parser "$ts")
 
     xsh /date/convert "$ts" "+$fmt"
 }

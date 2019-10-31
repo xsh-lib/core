@@ -69,8 +69,9 @@
 #?     }
 #?
 #?     if [[ -n $1 && -n $2 ]]; then
-#?         declare p1=$(priority "$1")
-#?         declare p2=$(priority "$2")
+#?         declare p1 p2
+#?         p1=$(priority "$1")
+#?         p2=$(priority "$2")
 #?         echo "$((p1 - p2))"
 #?     else
 #?         echo "${OPERATORS[@]}"

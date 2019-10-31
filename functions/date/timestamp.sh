@@ -44,7 +44,8 @@ function timestamp () {
             return 255
         fi
 
-        declare ts=$(date "${fmt}")
+        declare ts
+        ts=$(date "${fmt}")
 
         # remove the surplus precision from the end
         echo "${ts%${nano_delta}}"
