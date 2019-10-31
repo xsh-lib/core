@@ -64,7 +64,7 @@ function override () {
         __name=${__item%%=*}
         __value=${__item#*=}
 
-        if  test $__append -eq 1 && xsh /array/is_array "$__name"; then
+        if  test $__append -eq 1 && xsh /array/is-array "$__name"; then
             # append array with value
             xsh /array/append "$__name" "$__value"
         else
@@ -72,7 +72,7 @@ function override () {
             xsh /string/copy __value $__name
         fi
 
-        if xsh /array/is_array "$__name"; then
+        if xsh /array/is-array "$__name"; then
             # save array name
             __arrays+=( "$__name" )
         fi

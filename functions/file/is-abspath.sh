@@ -1,5 +1,5 @@
 #? Usage:
-#?   @is_abspath PATH
+#?   @is-abspath PATH
 #?
 #? Options:
 #?   PATH   File path.
@@ -8,9 +8,9 @@
 #?   Nothing.
 #?
 #? Example:
-#?   $ @is_abspath /tmp; echo $?
+#?   $ @is-abspath /tmp; echo $?
 #?   0
 #?
-function is_abspath () {
+function is-abspath () {
     [[ "${1:0:1}" == '/' ]]
 }

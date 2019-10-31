@@ -28,7 +28,7 @@ function smartpath () {
     declare file=${1:?}
     declare dir=$2
 
-    if xsh /file/is_abspath "${file:?}"; then
+    if xsh /file/is-abspath "${file:?}"; then
         echo "$file"
     elif [[ -n $dir && -f $dir/$file ]]; then
         xsh /file/abspath "$dir/$file"

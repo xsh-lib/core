@@ -24,7 +24,7 @@ function abspath () {
         return 255
     fi
 
-    if xsh /file/is_abspath "$1"; then
+    if xsh /file/is-abspath "$1"; then
         echo "$1"
     elif [[ -d $1 ]]; then
         echo "$(cd "$1" && pwd)"

@@ -1,5 +1,5 @@
 #? Usage:
-#?   @is_array VAR
+#?   @is-array VAR
 #?
 #? Options:
 #?   VAR  Variable name.
@@ -8,9 +8,9 @@
 #?   Nothing.
 #?
 #? Example:
-#?   $ @is_array BASH_ARGV; echo $?
+#?   $ @is-array BASH_ARGV; echo $?
 #?   0
 #?
-function is_array () {
+function is-array () {
     [[ "$(declare -p "$1" 2>/dev/null || :)" =~ "declare -a" ]]
 }

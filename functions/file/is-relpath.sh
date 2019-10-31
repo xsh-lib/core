@@ -1,5 +1,5 @@
 #? Usage:
-#?   @is_relpath PATH
+#?   @is-relpath PATH
 #?
 #? Options:
 #?   PATH   File path.
@@ -8,9 +8,9 @@
 #?   Nothing.
 #?
 #? Example:
-#?   $ @is_relpath /tmp; echo $?
+#?   $ @is-relpath /tmp; echo $?
 #?   1
 #?
-function is_relpath () {
+function is-relpath () {
     [[ "${1:0:1}" != '/' ]]
 }
