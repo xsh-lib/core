@@ -1,131 +1,112 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -eo pipefail
 
-if [[ $DEBUG -gt 0 ]]; then
-    set -x
-else
-    set +x
-fi
+#? Description:
+#?   Filter plain file by fields.
+#?
+#? Usage:
+#?   @filter
+#?     [-f N] [...]
+#?     [-F N] [...]
+#?     -s STRING
+#?     FILE
+#?
+#? Options:
+#?   [-f N] [...]
+#?
+#?   Return the matching lines on the Nth field in FILE.
+#?   the STRING is matching as regex with case-sensitive.
 
-match_field_by_regexp () {
-    local field=${1:?}
-    local regexp=${2:?}
-    shift 2
+#?   [-F N] [...]
+#?
+#?   Return the matching lines on the Nth field in FILE.
+#?   the STRING is matching as literal string.
+#?
+#?   If both `-f` and `-F` are not set, then `-f0` is set as default to matching on
+#?   entire line.
+#?
+#?   N: `0` meant entire line, `NF` meant last field, `2$3$1` meant joined field: 2+3+1.
+#?
+#?   If more than one `-f or -F` given, then taking the value of second Nth field of lines
+#?   returned by the first match as STRING, to filter on the second Nth field with whole
+#?   file, and repeat the step until all `-f` and `-F` are processed, to get final result.
+#?
+#?   -s STRING
+#?
+#?   String to match.
+#?
+#?   FILE
+#?
+#?   File path.
+#?
+function filter () {
+    declare OPTIND OPTARG opt
+    declare -a fields
+    declare string
 
-    awk -v field=${field:?} \
-        -v regexp=${regexp:?} \
-        '{if (match($field, ".*" regexp ".*") > 0) print}' \
-        "$@"
-}
-
-match_field_by_string () {
-    local field=${1:?}
-    local string=${2:?}
-    shift 2
-
-    awk -v field=${field:?} \
-        -v string=${string:?} \
-        '{if ($field == string) print}' \
-        "$@"
-}
-
-cut_with_unique_sorted() {
-    cut "$@" | sort -u
-}
-
-match () {
-
-    usage () {
-        printf "${0##*/}\n"
-        printf "\t[-n | -N <N>] ...\n"
-        printf "\t-s STRING\n"
-        printf "\tFILE\n"
-
-        printf "OPTIONS\n"
-        printf "\t[-n | -N <N>] ...\n\n"
-        printf "\tReturn lines that matches the <STRING> on <N>th field in FILE.\n"
-        printf "\tWith -n, matching <STRING> as Regexp.\n"
-        printf "\tWith -N, matching <STRING> as exact String.\n\n"
-
-        printf "\t[-n | -N <N>] ...\n\n"
-        printf "\tIf multi -n/-N given, then return lines that matches the later <N>th field\n"
-        printf "\tof the lines returned by former <N>th field in FILE. And call recursively\n"
-        printf "\tto get result.\n\n"
-
-        printf "\t-s STRING\n\n"
-        printf "\tReturn lines that matches the STRING on whole line in FILE.\n\n"
-
-        printf "\tFILE\n\n"
-        printf "\tFile path.\n\n"
-
-        printf "\t-h\n\n"
-        printf "\tThis help.\n\n"
-        exit 255
-    }
-
-    local fields=()
-    local string
-
-    local opt
-    local OPTIND
-    while getopts n:N:s:h opt; do
+    while getopts f:F:s: opt; do
         case $opt in
-            n)
-                fields+=( -n "$OPTARG" )
+            f)
+                fields+=( -f "${OPTARG:?}" )
                 ;;
-            N)
-                fields+=( -N "$OPTARG" )
+            F)
+                fields+=( -F "${OPTARG:?}" )
                 ;;
             s)
                 string=$OPTARG
                 ;;
-            h|*)
-                usage >&2
+            *)
+                return 255
                 ;;
         esac
     done
     shift $((OPTIND-1))
-    local file=$1
+    declare file=$1
 
     if [[ -z $string || -z $file ]]; then
-        usage >&2
+        xsh log "parameter null or not set."
+        return 255
     fi
 
-    local field_opt field lines
-    if [[ ${#fields[@]} -ge 2 ]]; then
-        local field_opt=${fields[0]}
-        local field=${fields[1]}
-        unset fields[0]
-        unset fields[1]
-
-        if [[ $field_opt == '-n' ]]; then
-            lines="$(match_field_by_regexp "${field:?}" "${string:?}" "${file:?}")"
-        elif [[ $field_opt == '-N' ]]; then
-            lines="$(match_field_by_string "${field:?}" "${string:?}" "${file:?}")"
-        else
-            :
-        fi
-    else
-        lines="$(egrep "${string:?}" "${file:?}")"
+    if [[ ${#fields[@]} -eq 0 ]]; then
+        fields=(-f 0)
     fi
+
+    declare lines
+    case ${fields[0]} in
+        -f)
+            lines=$(awk "\$${fields[1]} ~ /${string:?}/ {print}" "${file:?}")
+            ;;
+        -F)
+            lines=$(awk "\$${fields[1]} == \"${string:?}\" {print}" "${file:?}")
+            ;;
+        *)
+            xsh log error "${fields[0]}: unsupported option."
+            return 255
+            ;;
+    esac
+
+    unset fields[0] fields[1]
 
     if [[ -n $lines ]]; then
-        if [[ ${#fields[@]} -ge 2 ]]; then
-            local strings string
-            strings=( $(echo "$lines" | cut_with_unique_sorted -d ' ' -f "${fields[3]}") )
+        if [[ ${#fields[@]} -gt 1 ]]; then
+            declare -a strings
+            # do not double quote this
+            strings=($(awk "{ print \$${fields[3]} }" <<< "$lines" | sort -u))
+
             for string in "${strings[@]}"; do
-                # Recursively call
-                match "${fields[@]}" -s "${string:?}" "${file:?}"
+                # recursive call
+                filter "${fields[@]}" -s "${string:?}" "${file:?}"
             done
         else
-            echo "$lines"
+            printf '%s\n' "$lines"
         fi
     else
-        : # Nothing to output
+        : # nothing to output
     fi
 }
 
-match "$@"
+filter "$@"
 
 exit
