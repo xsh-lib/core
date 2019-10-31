@@ -50,9 +50,9 @@
 #?
 function inject () {
 
-    local OPTIND OPTARG opt
+    declare OPTIND OPTARG opt
 
-    local content file position regex mark_begin mark_end \
+    declare content file position regex mark_begin mark_end \
           regex_mark_begin regex_mark_end
 
     while getopts c:p:e:m:n:x:y: opt; do
@@ -88,12 +88,12 @@ function inject () {
     file=${1:?}
 
     # backup file
-    local bak_file
+    declare bak_file
     bak_file="${file:?}-$(date '+%Y%m%d%H%M%S')"
     /bin/cp -a "${file:?}" "${bak_file:?}"
 
     # tmp file
-    local tmp_file=/tmp/${file##*/}-inject-$$
+    declare tmp_file=/tmp/${file##*/}-inject-$$
     /bin/cp -a "${file:?}" "${tmp_file:?}"
 
     # set to clean tmp file

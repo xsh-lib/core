@@ -25,9 +25,9 @@
 #?   /tmp/symblink/foo/f1
 #?
 function lnkpath () {
-    local link=$1
-    local dir=$2
-    local file
+    declare link=$1
+    declare dir=$2
+    declare file
 
     if [[ ${link:0:1} != '/' ]]; then
         if [[ -z ${dir} ]]; then

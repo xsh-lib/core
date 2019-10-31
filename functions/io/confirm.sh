@@ -14,10 +14,10 @@
 #?   $ if @confirm -m "are you sure?"; then echo Answer is yes; else echo Answer is no; fi
 #?
 function confirm () {
-    local OPTIND OPTARG opt
-    local message timeout
+    declare OPTIND OPTARG opt
+    declare message timeout
 
-    local positive=yes negative=no
+    declare positive=yes negative=no
 
     while getopts m:p:n:t: opt; do
         case $opt in
@@ -49,13 +49,13 @@ function confirm () {
         return 255
     fi
 
-    local options=( "-p" "${message} [${positive}/${negative}]: " )
+    declare options=( "-p" "${message} [${positive}/${negative}]: " )
 
     if [[ -n ${timeout} ]]; then
         options+=( "-t" "${timeout}" )
     fi
 
-    local REPLY
+    declare REPLY
     while read "${options[@]}" REPLY && [[ ${REPLY} != ${positive} && ${REPLY} != ${negative} ]]; do
         :
     done

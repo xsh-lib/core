@@ -90,11 +90,11 @@
 #?   __CSV_NR=5
 #?
 function parser () {
-    local opt OPTIND OPTARG
-    local table_separator output apply prefix quote single csv_file
-    local ln
-    local SEPARATOR=',' BETWEEN='"'
-    local BASE_DIR="${XSH_HOME}/lib/x/functions/csv"  # TODO: use varaible instead
+    declare opt OPTIND OPTARG
+    declare table_separator output apply prefix quote single csv_file
+    declare ln
+    declare SEPARATOR=',' BETWEEN='"'
+    declare BASE_DIR="${XSH_HOME}/lib/x/functions/csv"  # TODO: use varaible instead
 
     output='table'
 

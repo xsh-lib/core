@@ -16,8 +16,8 @@
 #?   # FooFooFoo
 #?
 function repeat () {
-    local str=$1 times=${2:-1}
-    local result lstr lresult limit remain_times i
+    declare str=$1 times=${2:-1}
+    declare result lstr lresult limit remain_times i
 
     if [[ -z ${str} ]]; then
         return

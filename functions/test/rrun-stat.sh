@@ -25,8 +25,8 @@
 #?   sys    0m0.000s
 #?
 function rrun-stat () {
-    local OPTARG OPTIND opt
-    local quiet
+    declare OPTARG OPTIND opt
+    declare quiet
 
     while getopts qsn: opt; do
         case ${opt} in

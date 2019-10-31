@@ -22,9 +22,9 @@
 #?   username ****word
 #?
 function mask () {
-    local opt OPTIND OPTARG
-    local delimiter flist clist mask fixed file
-    local BASE_DIR="${XSH_HOME}/lib/x/functions/file"  # TODO: use varaible instead
+    declare opt OPTIND OPTARG
+    declare delimiter flist clist mask fixed file
+    declare BASE_DIR="${XSH_HOME}/lib/x/functions/file"  # TODO: use varaible instead
 
     mask="*"  # set default mask char
 

@@ -70,9 +70,9 @@ function adjust-v () {
     #?
 
     # get the last argument
-    local ts=${@:(-1)}
+    declare ts=${@:(-1)}
 
-    local opt_v_regexp='^[+-]?[0-9]{1,}[ymdwHMS]$|^[+-]{1}(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$'
+    declare opt_v_regexp='^[+-]?[0-9]{1,}[ymdwHMS]$|^[+-]{1}(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$'
 
     if echo "$ts" \
             | egrep -q "$opt_v_regexp"; then
@@ -89,7 +89,7 @@ function adjust-v () {
     if [[ -z $ts ]]; then
         date "${adjusts[@]}" "${XSH_X_DATE__DATETIME_FMT:?}"
     else
-        local fmt=$(xsh /date/parser "${ts}")
+        declare fmt=$(xsh /date/parser "${ts}")
         date "${adjusts[@]}" -j -f "${fmt:?}" "${ts}" "+${fmt:?}"
     fi
 }

@@ -135,13 +135,13 @@ function adjust-d () {
             esac
         }
 
-        local sign digi unit
+        declare sign digi unit
 
         sign=${1:0:1}          # get first char
         digi=${1//[^0-9]/}     # remove non-digit
         unit=${1//[^a-zA-Z]/}  # remove non-letter
 
-        local name weekday
+        declare name weekday
         case ${#unit} in
             1)
                 # [ymdwHMS]
@@ -170,7 +170,7 @@ function adjust-d () {
                 ;;
         esac
 
-        local prefix= suffix=
+        declare prefix= suffix=
         case $sign in
             +)
                 if [[ -n $weekday ]]; then
@@ -194,7 +194,7 @@ function adjust-d () {
     }
 
     function __adjust-d__ () {
-        local ts
+        declare ts
 
         if ! __is_adjust_opt__ "${@:(-1)}"; then
             # get last argument
@@ -215,7 +215,7 @@ function adjust-d () {
         if [[ -z $ts ]]; then
             date -d "${adjusts[*]}" "${XSH_X_DATE__DATETIME_FMT:?}"
         else
-            local fmt=$(xsh /date/parser "${ts}")
+            declare fmt=$(xsh /date/parser "${ts}")
             date -d "${ts:?} ${adjusts[*]}" "+${fmt:?}"
         fi
     }
@@ -239,12 +239,12 @@ function adjust-d () {
         #? Output:
         #?   -13 ~ +13
         function __calc_delta_weekday__ () {
-            local base=${1:?}
-            local target=${2:?}
+            declare base=${1:?}
+            declare target=${2:?}
 
-            local sign_of_target=${target//[^+-]/}  # remove none [+-]
+            declare sign_of_target=${target//[^+-]/}  # remove none [+-]
 
-            local delta
+            declare delta
             case $sign_of_target in
                 [+-])
                     delta=$(( (target - ${sign_of_target}base + 7) % 7 ))
@@ -264,7 +264,7 @@ function adjust-d () {
             echo "$delta"
         }
 
-        local ts
+        declare ts
 
         if __is_adjust_opt__ "${@:(-1)}"; then
             ts=$(date "${XSH_X_DATE__DATETIME_FMT:?}")
@@ -276,32 +276,32 @@ function adjust-d () {
             set -- "${@:1:$(($# - 1))}"
         fi
 
-        local result
+        declare result
 
-        local sign=${1//[^+-]/}  # remove none [+-]
-        local unit=${1//[^a-zA-Z]/}  # remove non-letter
+        declare sign=${1//[^+-]/}  # remove none [+-]
+        declare unit=${1//[^a-zA-Z]/}  # remove non-letter
 
         if __has_weekday_opt__ "$1"; then
-            local current=$(date -d "$ts" +%u)  # 1 ~ 7
-            local target=$(date -d "$unit" +%u)  # 1 ~ 7
+            declare current=$(date -d "$ts" +%u)  # 1 ~ 7
+            declare target=$(date -d "$unit" +%u)  # 1 ~ 7
 
-            local delta=$(__calc_delta_weekday__ "${current:?}" "$sign${target:?}")
+            declare delta=$(__calc_delta_weekday__ "${current:?}" "$sign${target:?}")
             result=$(__adjust-d__ "${delta}d" "$ts")
         else
             case $sign in
                 [+-])
-                    local adjust=$(__bsd_to_gnu__ "$1")
-                    local fmt=$(xsh /date/parser "$ts")
+                    declare adjust=$(__bsd_to_gnu__ "$1")
+                    declare fmt=$(xsh /date/parser "$ts")
                     result="$(date -d "$ts $adjust" "+${fmt}")"
                     ;;
                 *)
-                    local digi=${1//[^0-9]/}  # remove non-digit
+                    declare digi=${1//[^0-9]/}  # remove non-digit
 
                     # hyphen `-`: don't pad the field
                     # lower `y` to upper `Y`: get year with Century
-                    local current=$(date -d "$ts" +%-${unit/y/Y})
+                    declare current=$(date -d "$ts" +%-${unit/y/Y})
 
-                    local delta=$((digi - current))
+                    declare delta=$((digi - current))
                     if [[ $delta -ge 0 ]]; then
                         delta=+$delta
                     fi

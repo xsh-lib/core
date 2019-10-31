@@ -61,10 +61,10 @@ function mxn () {
     #?   # World-Bar
     #?
     function __mxn () {
-        local OPTIND OPTARG opt
+        declare OPTIND OPTARG opt
 
         # Set default
-        local level=1
+        declare level=1
 
         # Options passing through to join
         declare -a options
@@ -86,14 +86,14 @@ function mxn () {
         shift $((OPTIND - 1))
 
         declare -a output_options
-        local i=2
+        declare i=2
         while [[ $i -lt $# ]]; do
             output_options+=( '-o' )
             output_options+=( "2.$i" )
             i=$((i + 1))
         done
 
-        local file1=$1 file2
+        declare file1=$1 file2
         if [[ $# -gt 2 ]]; then
             # 3 or more FILEs left
             file2=<(__mxn "${options[@]}" -l "$((level + 1))" "${@:2}")

@@ -16,8 +16,8 @@
 #?   Nothing.
 #?
 function is-compatible-sed-i-gnu () {
-    local tmpfile=/tmp/xsh-sed-compatible-$RANDOM
-    local ret=0
+    declare tmpfile=/tmp/xsh-sed-compatible-$RANDOM
+    declare ret=0
 
     touch "$tmpfile" \
         && {

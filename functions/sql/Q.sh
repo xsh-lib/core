@@ -56,12 +56,12 @@ function Q () {
     xsh import /string/lower '/util/*' '/sql/*' /csv/parser
 
     # Set default Field Separator (FS)
-    local Q_FS=''     # Internal FS
-    local Q_IFS=$' '    # Input FS
-    local Q_OFS=$'\t'   # Output FS
+    declare Q_FS=''     # Internal FS
+    declare Q_IFS=$' '    # Input FS
+    declare Q_OFS=$'\t'   # Output FS
 
-    local OPTIND OPTARG opt
-    local header=0
+    declare OPTIND OPTARG opt
+    declare header=0
 
     while getopts F:I:O:H opt; do
         case $opt in
@@ -84,7 +84,7 @@ function Q () {
     done
     shift $((OPTIND - 1))
 
-    local RESERVED_KEYWORDS OPERATORS
+    declare RESERVED_KEYWORDS OPERATORS
 
     RESERVED_KEYWORDS=(
         "select"
@@ -109,7 +109,7 @@ function Q () {
 
     # Parsing SQL
 
-    local Q_SELECTED_FIELDS Q_TABLE Q_WHERE
+    declare Q_SELECTED_FIELDS Q_TABLE Q_WHERE
     x-sql-parser "$@" || return
 
     if [[ ! -f $Q_TABLE ]]; then
@@ -118,12 +118,12 @@ function Q () {
 
     # Parsing table data into array
 
-    local Q_FIELDS Q_NR
+    declare Q_FIELDS Q_NR
     x-csv-parser -I "$Q_IFS" -e -a -p 'Q_' "$Q_TABLE"
 
     # Process where clause
 
-    local selected_row_indeces
+    declare selected_row_indeces
 
     if [[ ${#Q_WHERE[@]} -gt 0 ]]; then
 
@@ -135,10 +135,10 @@ function Q () {
         candidate_set[0]=0
         candidate_set[1]='|'
 
-        local s_field  # search field
-        local s_operator  # search operator
+        declare s_field  # search field
+        declare s_operator  # search operator
 
-        local i=1 expr
+        declare i=1 expr
         for expr in "${Q_WHERE[@]}"; do
             case $expr in
                 '('|')')
@@ -196,14 +196,14 @@ function Q () {
 
     # Build result record set
 
-    local row_index
+    declare row_index
     for row_index in ${selected_row_indeces[@]}; do
-        local i=0 qf_name ln
+        declare i=0 qf_name ln
         for qf_name in "${Q_SELECTED_FIELDS[@]}"; do
             if [[ $i -gt 0 ]]; then
                 printf "%s" "$Q_OFS"
             fi
-            local varname="Q_FIELDS_${qf_name}_ROWS[$row_index]"
+            declare varname="Q_FIELDS_${qf_name}_ROWS[$row_index]"
             printf "%s" "${!varname}"
             i=$((i + 1))
         done

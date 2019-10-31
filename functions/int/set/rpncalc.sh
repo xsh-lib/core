@@ -27,7 +27,7 @@ function rpncalc () {
 
     xsh import /int/set/op-comparator /int/set/set
 
-    local o1 o2
+    declare o1 o2
     while [[ $# -gt 0 ]]; do
         if __is_comparator "$1"; then
             # IS OPERATORS

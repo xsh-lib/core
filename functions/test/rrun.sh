@@ -20,8 +20,8 @@
 #?   Hello World
 #?
 function rrun () {
-    local OPTARG OPTIND opt
-    local shell times i
+    declare OPTARG OPTIND opt
+    declare shell times i
 
     while getopts sn: opt; do
         case ${opt} in

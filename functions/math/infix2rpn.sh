@@ -52,7 +52,7 @@
 #?   #########
 #?   function op-comparator-for-set () {
 #?
-#?     local OPERATORS=(
+#?     declare OPERATORS=(
 #?         [0]='|'
 #?         [1]='&'
 #?     )
@@ -69,8 +69,8 @@
 #?     }
 #?
 #?     if [[ -n $1 && -n $2 ]]; then
-#?         local p1=$(priority "$1")
-#?         local p2=$(priority "$2")
+#?         declare p1=$(priority "$1")
+#?         declare p2=$(priority "$2")
 #?         echo "$((p1 - p2))"
 #?     else
 #?         echo "${OPERATORS[@]}"
@@ -86,12 +86,12 @@ function infix2rpn () {
 
     # Set default operator comparator
     xsh import /int/op-comparator
-    local COMPARATOR=x-int-op-comparator
+    declare COMPARATOR=x-int-op-comparator
 
     # Set default output delimiter
-    local DELIMITER=' '
+    declare DELIMITER=' '
 
-    local OPTIND OPTARG opt
+    declare OPTIND OPTARG opt
     while getopts c:d: opt; do
         case $opt in
             c)
@@ -141,8 +141,8 @@ function infix2rpn () {
 
     # Convert Infix to RPN
 
-    local operand operator priority
-    local char
+    declare operand operator priority
+    declare char
     while IFS= read -r -n1 char; do
         case "$char" in
             # WHITESPACE or TAB

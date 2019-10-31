@@ -17,7 +17,7 @@ function get () {
 
     # the real implementation for the agent call
     function __get__ () {
-        local OPTIND OPTARG opt
+        declare OPTIND OPTARG opt
         declare -a fmts
 
         while getopts ${OPTION:?} opt; do
@@ -44,9 +44,9 @@ function get () {
         fi
     }
 
-    local list=${1:?}
+    declare list=${1:?}
 
-    local OPTION DEFAULT_OPTIONS CONDITION
+    declare OPTION DEFAULT_OPTIONS CONDITION
 
     # remove blankspace and `%`
     OPTION=${list//[ %]/}
@@ -64,7 +64,7 @@ function get () {
     shopt -s extglob
 
     # call the real implementation
-    __get__ "${@:2}"; local ret=$?
+    __get__ "${@:2}"; declare ret=$?
 
     # clean env
     unset -f __get__

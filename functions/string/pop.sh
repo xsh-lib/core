@@ -15,8 +15,8 @@
 #?   0
 #?
 function pop () {
-    local var
-    local val=${!1}
+    declare var
+    declare val=${!1}
 
     var=$(declare \
               | egrep -o "^[_]*$1[_]*" \

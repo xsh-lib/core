@@ -51,8 +51,8 @@
 #?     * function __xsh_trap_return_on_return__ ()
 #?
 function return () {
-    local OPTIND OPTARG opt
-    local fire_once=0 fire_on_last=0 fire_on_name append=0
+    declare OPTIND OPTARG opt
+    declare fire_once=0 fire_on_last=0 fire_on_name append=0
 
     while getopts 1f:F:a opt; do
         case $opt in
@@ -78,12 +78,12 @@ function return () {
 
     # generate function code
 
-    local funcode
+    declare funcode
 
     if [[ $append -eq 1 ]] && \
            declare -f __xsh_trap_return_on_return__ >/dev/null; then
         funcode=$(
-            local ln
+            declare ln
             while IFS=$'' read -r ln; do
                 if [[ $ln == '        };' ]]; then
                     # append new command
@@ -114,9 +114,9 @@ function return () {
             # global flag for cleaning RETURN trap
             __XSH_TRAP_RETURN_CLEAN_FLAG=0
 
-            local fire_on_name="'$fire_on_name'"
-            local fire_on_last="'$fire_on_last'"
-            local fire_once="'$fire_once'"
+            declare fire_on_name="'$fire_on_name'"
+            declare fire_on_last="'$fire_on_last'"
+            declare fire_once="'$fire_once'"
 
             # firing logic
             if [[ -z $fire_on_name \

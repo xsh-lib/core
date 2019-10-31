@@ -15,7 +15,7 @@
 #?   # 255
 #?
 function hex2dec () {
-    local hex
+    declare hex
 
     hex=$(xsh /string/upper "$1")
     case ${hex:0:1} in

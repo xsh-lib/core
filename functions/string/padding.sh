@@ -17,8 +17,8 @@
 #?   10101010
 #?
 function padding () {
-    local str=$1 padding=$2 len=$3
-    local gap
+    declare str=$1 padding=$2 len=$3
+    declare gap
 
     if [[ -z ${str} || -z ${padding} || -z ${len} ]]; then
         return 255

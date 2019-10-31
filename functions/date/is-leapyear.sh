@@ -16,7 +16,7 @@
 #?   1
 #?
 function is-leapyear () {
-    local year=$(xsh /date/year "${1:?}")
+    declare year=$(xsh /date/year "${1:?}")
 
     if [[ $((year % 4)) -eq 0 && ( $((year % 100)) -ne 0 || $((year % 400)) -eq 0 ) ]] ; then
         return 0

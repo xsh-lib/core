@@ -20,7 +20,7 @@
 #?      @repeat 'Foo\nBar' 3
 #?
 function repeat () {
-    local str=$1 times=${2:-1}
+    declare str=$1 times=${2:-1}
 
     if [[ -z ${str} ]]; then
         return

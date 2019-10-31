@@ -12,6 +12,6 @@
 #?   3 4
 #?
 function index () {
-    local -a __index=\(\${!$1[@]}\)  # magic indirect expansion
+    declare -a __index=\(\${!$1[@]}\)  # magic indirect expansion
     echo "${__index[@]}"
 }

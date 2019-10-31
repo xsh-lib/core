@@ -34,12 +34,12 @@ function op-comparator () {
         esac
     }
 
-    local -r OPERATORS=(
+    declare -r OPERATORS=(
         [0]='|'
         [1]='&'
     )
 
-    local p1 p2 ret
+    declare p1 p2 ret
     if [[ -n $1 && -n $2 ]]; then
         p1=$(__priority "$1")
         p2=$(__priority "$2")

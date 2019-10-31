@@ -11,8 +11,8 @@
 #?   [-e]      Output the entire trap expression rather than the command.
 #?
 function get () {
-    local OPTIND OPTARG opt
-    local expr=0
+    declare OPTIND OPTARG opt
+    declare expr=0
 
     while getopts e opt; do
         case $opt in
@@ -26,7 +26,7 @@ function get () {
     done
     shift $((OPTIND - 1))
 
-    local str
+    declare str
     str=$(trap -p "${1:?}")
 
     if [[ -z $str && $expr -eq 0 ]]; then

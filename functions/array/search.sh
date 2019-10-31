@@ -43,9 +43,9 @@
 #?   4
 #?
 function search () {
-    local OPTIND OPTARG
+    declare OPTIND OPTARG
 
-    local __opt __operand='='
+    declare __opt __operand='='
     while getopts o: __opt; do
         case $__opt in
             o)
@@ -63,7 +63,7 @@ function search () {
         return 255
     fi
 
-    local __i __arr_i
+    declare __i __arr_i
     for __i in $(xsh /array/index "$1"); do
         __arr_i="$1[__i]"
 

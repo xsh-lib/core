@@ -22,9 +22,9 @@
 #?   Output format.
 #?
 function convert () {
-    local OPTIND OPTARG opt
+    declare OPTIND OPTARG opt
 
-    local input_fmt
+    declare input_fmt
     while getopts f opt; do
         case $opt in
             f)
@@ -37,8 +37,8 @@ function convert () {
     done
     shift $((OPTIND - 1))
 
-    local ts=${1:?}
-    local output_fmt=${2:?}
+    declare ts=${1:?}
+    declare output_fmt=${2:?}
 
     if xsh /date/is-compatible-date-d; then
         # for GNU date

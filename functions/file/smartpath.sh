@@ -25,8 +25,8 @@
 #?   /tmp/foo/bar.zip
 #?
 function smartpath () {
-    local file=${1:?}
-    local dir=$2
+    declare file=${1:?}
+    declare dir=$2
 
     if xsh /file/is_abspath "${file:?}"; then
         echo "$file"

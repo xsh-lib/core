@@ -35,9 +35,9 @@
 #?   foo=Foo bar=Bar,24,25,26
 #?
 function override () {
-    local OPTIND OPTARG __opt
+    declare OPTIND OPTARG __opt
 
-    local __append=0 __merge=0 __separator
+    declare __append=0 __merge=0 __separator
 
     while getopts ams: __opt; do
         case $__opt in
@@ -57,7 +57,7 @@ function override () {
     done
     shift $((OPTIND - 1))
 
-    local __item __name __value
+    declare __item __name __value
     declare -a __arrays
 
     for __item in "$@"; do

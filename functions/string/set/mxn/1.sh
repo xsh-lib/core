@@ -47,12 +47,12 @@
 #?   when doing recurvive call.
 #?
 function mxn () {
-    local OPTIND OPTARG opt
+    declare OPTIND OPTARG opt
 
     # Set default
-    local INPUT_DELIMITER='\n'
-    local OUTPUT_DELIMITER=' '
-    local SIGNATURE='{<N>}'
+    declare INPUT_DELIMITER='\n'
+    declare OUTPUT_DELIMITER=' '
+    declare SIGNATURE='{<N>}'
 
     while getopts I:O:s: opt; do
         case $opt in
@@ -95,11 +95,11 @@ function mxn () {
     #?   # World-Foo World-Bar
     #?
     function __mxn () {
-        local OPTIND OPTARG opt
+        declare OPTIND OPTARG opt
 
         # Set default
-        local level=1
-        local output_mark="${SIGNATURE//<N>/$level}"
+        declare level=1
+        declare output_mark="${SIGNATURE//<N>/$level}"
         declare -a parallel_options
 
         while getopts l:o:P opt; do
@@ -124,9 +124,9 @@ function mxn () {
         shift $((OPTIND - 1))
 
         # Set unlimited number of replacements for BSD version xargs
-        local maximum_replace_options=('-R' '-1')
+        declare maximum_replace_options=('-R' '-1')
 
-        local set
+        declare set
         if [[ $INPUT_DELIMITER == '\n' ]]; then
             set=$1
         else
@@ -135,7 +135,7 @@ function mxn () {
 
         if [[ $# -gt 1 ]]; then
             # 2 or more SETs left
-            local next_output_mark="${output_mark}${OUTPUT_DELIMITER}${SIGNATURE//<N>/$((level + 1))}"
+            declare next_output_mark="${output_mark}${OUTPUT_DELIMITER}${SIGNATURE//<N>/$((level + 1))}"
 
             # Try not to quote the command substitution: $(__mxn -l ... -o ... ...).
             # Because xargs has a limitation of 255 bytes long for each argument of utility.

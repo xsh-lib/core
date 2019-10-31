@@ -18,7 +18,7 @@
 function eval () {
     declare -a RPN
 
-    local ln
+    declare ln
     while read -r ln; do
         RPN+=( "$ln" )
     done <<< "$(xsh /math/infix2rpn -c 'xsh /int/set/op-comparator' -d '\n' "$*")"

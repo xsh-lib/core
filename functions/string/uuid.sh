@@ -16,7 +16,7 @@
 #?   35b6aef6-af88-11e9-82fc-a3557caf0724
 #?
 function uuid () {
-    local N B C='89ab'
+    declare N B C='89ab'
     for (( N=0; N < 16; ++N ))
     do
         B=$(( $RANDOM%256 ))

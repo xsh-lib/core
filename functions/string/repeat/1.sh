@@ -16,7 +16,7 @@
 #?   FooFooFoo
 #?
 function repeat () {
-    local str=$1 times=${2:-1}
+    declare str=$1 times=${2:-1}
 
     if [[ -z ${str} ]]; then
         return
@@ -28,7 +28,7 @@ function repeat () {
             return int(log(m/k1)/log(k2))
         }
         function repeat(str, times,
-                        # local variables
+                        # declare variables
                         lstr, lresult, limit, result, i, remain_times) {
             lstr=length(str)
             lresult=lstr*times

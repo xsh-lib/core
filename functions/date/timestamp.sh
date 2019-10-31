@@ -11,9 +11,9 @@
 #?   [+OUTPUT_FMT]   Date format string.
 #?
 function timestamp () {
-    local OPTIND OPTARG opt
+    declare OPTIND OPTARG opt
 
-    local suffix nano_delta
+    declare suffix nano_delta
     while getopts imn opt; do
         case $opt in
             i)
@@ -34,7 +34,7 @@ function timestamp () {
         esac
     done
     shift $((OPTIND - 1))
-    local fmt=${1:-${XSH_X_DATE__DATETIME_FMT:?}}
+    declare fmt=${1:-${XSH_X_DATE__DATETIME_FMT:?}}
 
     if [[ -n $suffix ]]; then
         if xsh /date/is-compatible-date-N; then
@@ -44,7 +44,7 @@ function timestamp () {
             return 255
         fi
 
-        local ts=$(date "${fmt}")
+        declare ts=$(date "${fmt}")
 
         # remove the surplus precision from the end
         echo "${ts%${nano_delta}}"

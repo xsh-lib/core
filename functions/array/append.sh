@@ -13,7 +13,7 @@
 #?   declare -a arr='([3]="III" [4]="IV" [5]="V" [6]="VI")'
 #?
 function append () {
-    local __i
+    declare __i
 
     if [[ $# -lt 2 ]]; then
         return 255

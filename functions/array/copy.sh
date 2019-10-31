@@ -13,7 +13,7 @@
 #?   declare -a new='([3]="III" [4]="IV")'
 #?
 function copy () {
-    local __i
+    declare __i
 
     if [[ $1 == $2 ]]; then
         return 255

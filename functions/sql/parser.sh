@@ -23,7 +23,7 @@
 #?   Q_WHERE=([0]="f1" [1]="=" [2]="x")
 #?
 function parser () {
-    local clause
+    declare clause
 
     Q_SELECTED_FIELDS=()
     Q_TABLE=

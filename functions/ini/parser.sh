@@ -57,10 +57,10 @@
 #?   __INI_SECTIONS_section_b_VALUES_key4=4
 #?
 function parser () {
-    local opt OPTIND OPTARG
-    local apply prefix quote single ini_file
-    local ln
-    local BASE_DIR="${XSH_HOME}/lib/x/functions/ini"  # TODO: use varaible instead
+    declare opt OPTIND OPTARG
+    declare apply prefix quote single ini_file
+    declare ln
+    declare BASE_DIR="${XSH_HOME}/lib/x/functions/ini"  # TODO: use varaible instead
 
     while getopts ap:qs opt; do
         case ${opt} in

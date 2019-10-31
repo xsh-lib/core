@@ -21,10 +21,10 @@
 #?   The word cat is included in word \033[31mcat\033[0malog.
 #?
 function mark () {
-    local opt OPTIND OPTARG
-    local pattern delimiter flist clist marker file
-    local MARKERS
-    local BASE_DIR="${XSH_HOME}/lib/x/functions/file"  # TODO: use varaible instead
+    declare opt OPTIND OPTARG
+    declare pattern delimiter flist clist marker file
+    declare MARKERS
+    declare BASE_DIR="${XSH_HOME}/lib/x/functions/file"  # TODO: use varaible instead
 
     while getopts p:d:f:c:m: opt; do
         case ${opt} in

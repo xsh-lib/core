@@ -35,8 +35,8 @@
 #?     * function __xsh_trap_err_on_err__ ()
 #?
 function err () {
-    local OPTIND OPTARG opt
-    local on_error
+    declare OPTIND OPTARG opt
+    declare on_error
 
     while getopts Eer opt; do
         case $opt in
@@ -57,25 +57,25 @@ function err () {
 
     # generate function code
 
-    local funcode
+    declare funcode
 
     funcode='
         function __xsh_trap_err_on_err__ () {
-            local ret=$1
-            local command=$2
-            local lineno=$3
-            local func=($4)  # do not double quote the parameter
-            local script=$5
-            local source=("${@:6}")
+            declare ret=$1
+            declare command=$2
+            declare lineno=$3
+            declare func=($4)  # do not double quote the parameter
+            declare script=$5
+            declare source=("${@:6}")
 
-            local max_index
+            declare max_index
             max_index=$(printf "%s\n" ${!func[@]} ${!source[@]} | sort -rn | head -1)
 
             printf "Error code: %s\n" "$ret"
             printf "Traceback (most recent call first)\n"
 
             if [[ -n $max_index ]]; then
-                local index
+                declare index
                 for index in $(seq 0 "$max_index"); do
                     if [[ $script == -bash || $index -gt 0 ]]; then
                         lineno=?

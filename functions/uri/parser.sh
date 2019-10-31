@@ -72,7 +72,7 @@
 #?
 function parser () {
     # get the last parameter
-    local uri=${@:(-1)}
+    declare uri=${@:(-1)}
 
     #? Following regex is based on https://stackoverflow.com/a/45977232 by Patryk Obara.
     #? Extended to support new schemes, such as: file, mailto, news, tel and urn.
@@ -108,7 +108,7 @@ function parser () {
         return 255
     fi
 
-    local OPTIND OPTARG opt
+    declare OPTIND OPTARG opt
 
     while getopts sauhoprqf opt; do
         case $opt in

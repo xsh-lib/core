@@ -18,8 +18,8 @@
 #?   declare -a arr='([3]="x=III" [5]="y=V")'
 #?
 function merge () {
-    local __i __j
-    local __arr_i __arr_j
+    declare __i __j
+    declare __arr_i __arr_j
 
     if [[ -z $1 ]]; then
         printf "ERROR: Array name is null or not set.\n" >&2
