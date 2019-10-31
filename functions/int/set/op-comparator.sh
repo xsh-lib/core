@@ -44,12 +44,12 @@ function op-comparator () {
         p1=$(__priority "$1")
         p2=$(__priority "$2")
         if [[ -n $p1 && -n $p2 ]]; then
-            ret="$((p1 - p2))"
+            ret=$((p1 - p2))
         else
             ret=
         fi
     else
-        ret="${OPERATORS[*]}"
+        ret=${OPERATORS[*]}
     fi
 
     unset -f __priority

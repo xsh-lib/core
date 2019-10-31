@@ -294,7 +294,7 @@ function adjust-d () {
                     declare adjust fmt
                     adjust=$(__bsd_to_gnu__ "$1")
                     fmt=$(xsh /date/parser "$ts")
-                    result="$(date -d "$ts $adjust" "+${fmt}")"
+                    result=$(date -d "$ts $adjust" "+${fmt}")
                     ;;
                 *)
                     declare digi=${1//[^0-9]/}  # remove non-digit
@@ -316,7 +316,7 @@ function adjust-d () {
         shift
         if [[ $# -gt 0 ]]; then
             # Call signle-steply to get result
-            result="$(__adjust-d-signle-step__ "$@" "$result")"
+            result=$(__adjust-d-signle-step__ "$@" "$result")
         fi
 
         # clean env
