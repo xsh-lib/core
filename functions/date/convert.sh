@@ -50,13 +50,13 @@ function convert () {
         fi
 
         if [[ -z $input_fmt ]]; then
-            printf "$FUNCNAME: ERROR: Unable to parse format for '%s', please use '-f INPUT_FMT'.\n" "$ts" >&2
+            xsh log error "$ts: unable to parse format, please use '-f <INPUT_FMT>'."
             return 255
         fi
 
         date -j -f "$input_fmt" "$ts" "$output_fmt"
     else
-        printf "$FUNCNAME: ERROR: Not found the capable date util.\n" >&2
+        xsh log error "not found the capable date util."
         return 255
     fi
 }

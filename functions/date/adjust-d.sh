@@ -145,18 +145,18 @@ function adjust-d () {
         case ${#unit} in
             1)
                 # [ymdwHMS]
-                name=$(__short_to_long__ "${unit}")
+                name=$(__short_to_long__ "$unit")
 
                 # clean env
                 unset -f __short_to_long__
 
                 if [[ -z $name ]]; then
-                    printf "$FUNCNAME: ERROR: Invalid option: '%s' in '%s'.\n" "$unit" "$1" >&2
+                    xsh log error "$1: invalid option: invalid UNIT: '$unit'"
                     return 255
                 fi
 
                 if [[ -z $digi ]]; then
-                    printf "$FUNCNAME: ERROR: Invalid option: no VALUE in '%s'.\n" "$1" >&2
+                    xsh log error "$1: invalid option: VALUE is missing."
                     return 255
                 fi
                 ;;
@@ -164,7 +164,7 @@ function adjust-d () {
                 weekday=$unit
 
                 if [[ -n $digi ]]; then
-                    printf "$FUNCNAME: ERROR: Invalid option: found VALUE '%s' in '%s'.\n" "$digi" "$1" >&2
+                    xsh log error "$1: invalid option: invlid VALUE: '$digi'"
                     return 255
                 fi
                 ;;
@@ -187,7 +187,7 @@ function adjust-d () {
                 fi
                 ;;
             *)
-                printf "$FUNCNAME: ERROR: Invalid option: not starting with [+-]: '%s'\n" "$1" >&2
+                xsh log error "$1: invalid option: not started with [+-]."
                 return 255
                 ;;
         esac

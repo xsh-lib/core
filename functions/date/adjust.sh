@@ -69,7 +69,7 @@ function adjust () {
     elif xsh /date/is-compatible-date-d; then
         xsh /date/adjust-d "$@"
     else
-        printf "$FUNCNAME: ERROR: Not found the capable date util.\n" >&2
+        xsh log error "not found the capable date util."
         return 255
     fi
 }

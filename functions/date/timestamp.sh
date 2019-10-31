@@ -40,7 +40,7 @@ function timestamp () {
         if xsh /date/is-compatible-date-N; then
             fmt=${fmt}.%N
         else
-            printf "$FUNCNAME: ERROR: Command 'date' doesn't support format: %s.\n" "+%N" >&2
+            xsh log error "+%N: the format is not supported by date."
             return 255
         fi
 

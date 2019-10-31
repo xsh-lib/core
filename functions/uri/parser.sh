@@ -104,7 +104,7 @@ function parser () {
 
     # parse and validate
     if [[ ! $uri =~ $uri_regex ]]; then
-        printf "$FUNCNAME: ERROR: URI is not valid: '%s'.\n" "$uri" >&2
+        xsh log error "$uri: URI is not valid."
         return 255
     fi
 

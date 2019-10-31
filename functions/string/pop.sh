@@ -25,7 +25,7 @@ function pop () {
               | head -1)
 
     if [[ -z ${var} ]]; then
-	    echo "$FUNCNAME: no further can be popped." >&2
+	    xsh log error "no further can be popped."
 	    return 255
     fi
 

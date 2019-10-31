@@ -119,7 +119,7 @@ function infix2rpn () {
             while [[ ${#STACK[@]} -gt 0 && ${STACK[@]:(-1)} != '(' ]]; do
                 priority=$($COMPARATOR "$operator" "${STACK[@]:(-1)}")
                 if [[ -z $priority ]]; then
-                    printf "Wrong operator in the expression or specified wrong comparator\n" >&2
+                    xsh log error "wrong operator in the expression or specified wrong comparator."
                     return 255
                 elif [[ $priority -gt 0 ]]; then
                     break
@@ -135,7 +135,7 @@ function infix2rpn () {
 
     # Check op-comparator vailability
     if ! $COMPARATOR >/dev/null 2>&1; then
-        printf "$FUNCNAME: ERROR: Not found the operator comaparator: %s.\n" "$COMPARATOR" >&2
+        xsh log error "$COMPARATOR: not found the operator comaparator."
         return 255
     fi
 
@@ -168,7 +168,7 @@ function infix2rpn () {
                 if [[ ${STACK[@]:(-1)} == '(' ]]; then
                     unset STACK[$((${#STACK[@]} - 1))]
                 else
-                    printf "$FUNCNAME: ERROR: Wrong expression found! Found a right parenthesis ')' without a paired left parentthesis '('.\n" >&2
+                    xsh log error "wrong expression found! a right parenthesis ')' without a paired left parentthesis '('."
                     return 255
                 fi
                 ;;
