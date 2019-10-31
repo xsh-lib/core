@@ -89,7 +89,7 @@ function inject () {
 
     # backup file
     declare bak_file
-    bak_file="${file:?}-$(date '+%Y%m%d%H%M%S')"
+    bak_file=${file:?}-$(date '+%Y%m%d%H%M%S')
     /bin/cp -a "${file:?}" "${bak_file:?}"
 
     # tmp file

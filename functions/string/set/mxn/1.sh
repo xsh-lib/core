@@ -99,7 +99,7 @@ function mxn () {
 
         # Set default
         declare level=1
-        declare output_mark="${SIGNATURE//<N>/$level}"
+        declare output_mark=${SIGNATURE//<N>/$level}
         declare -a parallel_options
 
         while getopts l:o:P opt; do
@@ -130,12 +130,12 @@ function mxn () {
         if [[ $INPUT_DELIMITER == '\n' ]]; then
             set=$1
         else
-            set="${1//${INPUT_DELIMITER}/$'\n'}"
+            set=${1//${INPUT_DELIMITER}/$'\n'}
         fi
 
         if [[ $# -gt 1 ]]; then
             # 2 or more SETs left
-            declare next_output_mark="${output_mark}${OUTPUT_DELIMITER}${SIGNATURE//<N>/$((level + 1))}"
+            declare next_output_mark=${output_mark}${OUTPUT_DELIMITER}${SIGNATURE//<N>/$((level + 1))}
 
             # Try not to quote the command substitution: $(__mxn -l ... -o ... ...).
             # Because xargs has a limitation of 255 bytes long for each argument of utility.

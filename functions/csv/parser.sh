@@ -94,7 +94,7 @@ function parser () {
     declare table_separator output apply prefix quote single csv_file
     declare ln
     declare SEPARATOR=',' BETWEEN='"'
-    declare BASE_DIR="${XSH_HOME}/lib/x/functions/csv"  # TODO: use varaible instead
+    declare BASE_DIR=${XSH_HOME}/lib/x/functions/csv  # TODO: use varaible instead
 
     output='table'
 

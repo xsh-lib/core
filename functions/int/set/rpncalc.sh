@@ -31,9 +31,9 @@ function rpncalc () {
     while [[ $# -gt 0 ]]; do
         if __is_comparator "$1"; then
             # IS OPERATORS
-            o1="${STACK[@]:(-1)}"
+            o1=${STACK[@]:(-1)}
             unset STACK[$((${#STACK[@]} - 1))]
-            o2="${STACK[@]:(-1)}"
+            o2=${STACK[@]:(-1)}
             unset STACK[$((${#STACK[@]} - 1))]
 
             STACK+=( "$(x-int-set-set "$o1" "$1" "$o2")" )
