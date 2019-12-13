@@ -162,7 +162,7 @@ function return () {
         fi
 
         # set trap RETURN
-        trap 'ret=$?; __xsh_trap_return_on_return__ $ret 1>&2; [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]] && trap - RETURN || :; __xsh_trap_return_bypass__ $ret' RETURN
+        trap 'declare ret=$?; __xsh_trap_return_on_return__ $ret 1>&2; [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]] && trap - RETURN || :; __xsh_trap_return_bypass__ $ret' RETURN
     else
         xsh log error "parameter COMMAND null or not set."
         return 255
