@@ -6,9 +6,11 @@ This repo is the core library of xsh.
 
 About xsh and its libraries, check out [xsh document](https://github.com/alexzhangs/xsh)
 
-## Status
+## Requirements
 
-Currently this project is at version 0.x, and is unstable.
+Tested with `base 3.2` on macOS High Sierra, but should be working on Linux.
+
+This project is still at version 0.x, and should be considered immature.
 
 ## Installation
 
