@@ -42,7 +42,7 @@
 #?   BAR
 #?
 #?   $ @parser eval '{"foo": ["bar", "baz"]}' '[item.upper() for item in {JSON}["foo"]]'
-#?   ["BAR", BAZ"]
+#?   ["BAR", "BAZ"]
 #?
 function parser () {
     declare BASE_DIR=${XSH_HOME}/lib/x/functions/json  # TODO: use varaible instead
