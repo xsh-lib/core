@@ -221,7 +221,7 @@ function adjust-d () {
         fi
     }
 
-    function __adjust-d-signle-step__ () {
+    function __adjust-d-single-step__ () {
 
         #? Calculate the delta days between the base weekday and the target weekday.
         #?
@@ -315,8 +315,8 @@ function adjust-d () {
 
         shift
         if [[ $# -gt 0 ]]; then
-            # Call signle-steply to get result
-            result=$(__adjust-d-signle-step__ "$@" "$result")
+            # Call itself recursively to get result
+            result=$(__adjust-d-single-step__ "$@" "$result")
         fi
 
         # clean env
@@ -328,7 +328,7 @@ function adjust-d () {
 
     if __has_weekday_opt__ "$*" || __has_unsigned_opt__ "$*"; then
         # handle logic of highlight point 2 and 3
-        __adjust-d-signle-step__ "$@"
+        __adjust-d-single-step__ "$@"
 
     else
         __adjust-d__ "$@"
@@ -341,5 +341,5 @@ function adjust-d () {
           __has_unsigned_opt__ \
           __bsd_to_gnu__ \
           __adjust-d__ \
-          __adjust-d-signle-step__
+          __adjust-d-single-step__
 }
