@@ -71,8 +71,8 @@
 #?   * https://en.wikipedia.org/wiki/Uniform_Resource_Identifier
 #?
 function parser () {
-    # get the last parameter
-    declare uri=${@:(-1)}
+    # get the last argument
+    declare uri=${!#}
 
     #? Following regex is based on https://stackoverflow.com/a/45977232 by Patryk Obara.
     #? Extended to support new schemes, such as: file, mailto, news, tel and urn.

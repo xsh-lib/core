@@ -70,7 +70,7 @@ function adjust-v () {
     #?
 
     # get the last argument
-    declare ts=${@:(-1)}
+    declare ts=${!#}
 
     declare opt_v_regexp='^[+-]?[0-9]{1,}[ymdwHMS]$|^[+-]{1}(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$'
 

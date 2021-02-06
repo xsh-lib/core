@@ -14,5 +14,5 @@
 function ilast () {
     # try to declare nothing, new variable may override input variable.
     set -- $(xsh /array/index "$1")
-    echo "${@:(-1)}"
+    echo "${!#}"
 }

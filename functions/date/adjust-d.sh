@@ -196,9 +196,9 @@ function adjust-d () {
     function __adjust-d__ () {
         declare ts
 
-        if ! __is_adjust_opt__ "${@:(-1)}"; then
+        if ! __is_adjust_opt__ "${!#}"; then
             # get last argument
-            ts=${@:(-1)}
+            ts=${!#}
 
             # remove last argument from the argument list
             set -- "${@:1:$(($# - 1))}"
@@ -267,11 +267,11 @@ function adjust-d () {
 
         declare ts
 
-        if __is_adjust_opt__ "${@:(-1)}"; then
+        if __is_adjust_opt__ "${!#}"; then
             ts=$(date "${XSH_X_DATE__DATETIME_FMT:?}")
         else
             # get last argument
-            ts=${@:(-1)}
+            ts=${!#}
 
             # remove last argument from the argument list
             set -- "${@:1:$(($# - 1))}"
