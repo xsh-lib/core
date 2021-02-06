@@ -201,7 +201,7 @@ function adjust-d () {
             ts=${!#}
 
             # remove last argument from the argument list
-            set -- "${@:1:$(($# - 1))}"
+            set -- "${@:1:$#-1}"
         fi
 
         declare -a adjusts
@@ -274,7 +274,7 @@ function adjust-d () {
             ts=${!#}
 
             # remove last argument from the argument list
-            set -- "${@:1:$(($# - 1))}"
+            set -- "${@:1:$#-1}"
         fi
 
         declare result current target delta

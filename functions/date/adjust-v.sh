@@ -80,7 +80,7 @@ function adjust-v () {
         unset ts
     else
         # remove last argument from the argument list
-        set -- "${@:0:$#}"
+        set -- "${@:1:$#-1}"
     fi
 
     # prefix `-v ` for each argument
