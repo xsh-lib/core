@@ -1,19 +1,14 @@
+#? Description:
+#?   Find the value of `Y` to the given number `X` for the equation `Y=f(X)={Y=X^0 if X!=0, Y=0 if X=0}`.
+#?
 #? Usage:
-#?   @sign NUMBER
+#?   @sign <NUMBER>
 #?
 #? Output:
-#?   1, -1, 0, -0, or ''.
+#?   0:   IF X=0
+#?   1:   If X>0 or X=NaN (Not a Number)
+#?  -1:   If X<0
 #?
 function sign () {
-    if test "$1" == '0'; then
-        echo 0
-    elif test "$1" == '-0'; then
-        echo -0
-    elif test "$1" -gt 0; then
-        echo 1
-    elif test "$1" -lt 0; then
-        echo -1
-    else
-        printf "ERROR: unknown error\n" >&2
-    fi
+    awk -v x="${1:?}" 'BEGIN {if (x == 0) print x; else print x^0}'
 }
