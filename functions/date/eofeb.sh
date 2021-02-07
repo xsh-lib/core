@@ -12,7 +12,7 @@
 #?   28
 #?
 function eofeb () {
-    if xsh /date/is-leapyear "${1:?}"; then
+    if xsh /date/leap/year/is "${1:?}"; then
         echo 29
     else
         echo 28

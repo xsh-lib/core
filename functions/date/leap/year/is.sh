@@ -2,20 +2,20 @@
 #?   Test whether the year of given date is leap year.
 #?
 #? Usage:
-#?   @is-leapyear <TIMESTAMP>
+#?   @is <TIMESTAMP>
 #?
 #? Return:
 #?   0:    Yes
 #?   !=0:  No
 #?
 #? Example:
-#?   $ @is-leapyear 2012; echo $?
+#?   $ @is 2012; echo $?
 #?   0
 #?
-#?   $ @is-leapyear 2011; echo $?
+#?   $ @is 2011; echo $?
 #?   1
 #?
-function is-leapyear () {
+function is () {
     declare year
     year=$(xsh /date/year "${1:?}")
 
