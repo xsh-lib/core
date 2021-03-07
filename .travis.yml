@@ -1,0 +1,10 @@
+language: bash
+before-install:
+  - git clone --depth=50 --branch=master https://github.com/alexzhangs/xsh.git alexzhangs/xsh
+  - bash alexzhangs/xsh/install.sh
+install:
+  - xsh load -b "$TRAVIS_BRANCH" xsh-lib/core
+script:
+  - source ~/.bash_profile
+  - xsh list
+  - bash test.sh
