@@ -87,4 +87,4 @@ if __name__ == '__main__':
     parser = DataParser(*sys.argv[1:3])
     result = parser.run(*sys.argv[3:])
 
-    print DataParser.dumps(result)
+    print(DataParser.dumps(result))
