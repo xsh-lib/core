@@ -25,7 +25,7 @@ function rpncalc () {
 
     declare -a STACK
 
-    xsh import /int/set/op-comparator /int/set/set
+    xsh imports /int/set/op-comparator /int/set/set
 
     declare o1 o2
     while [[ $# -gt 0 ]]; do
