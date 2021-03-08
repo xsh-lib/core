@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -o pipefail
+
 xsh log info 'xsh list /'
 xsh list /
 
