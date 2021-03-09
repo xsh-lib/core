@@ -15,7 +15,7 @@ xsh log info "/date/adjust"
 [[ $(xsh /date/adjust +30M +30S "2008-10-10 00:00:00") == "2008-10-10 00:30:30" ]]
 
 xsh log info "/date/convert"
-[[ $(xsh /date/convert "2008-10-10 00:30:30" "+%a %b  %d %T %Z %Y") == "Fri Oct  10 00:30:30 CST 2008" ]]
+[[ $(TZ=UTC xsh /date/convert "2008-10-10 00:30:30" "+%a %b  %d %T %Z %Y") == "Fri Oct  10 00:30:30 UTC 2008" ]]
 
 xsh log info "/math/dec2hex"
 [[ $(xsh /math/dec2hex 255) == FF ]]
