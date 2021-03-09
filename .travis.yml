@@ -1,9 +1,15 @@
 language: bash
+jobs:
+  include:
+    - os: linux
+      dist: xenial
+    - os: osx
+      osx_image: xcode12.2
 before-install:
   - git clone --depth=50 --branch=master https://github.com/alexzhangs/xsh.git alexzhangs/xsh
   - bash alexzhangs/xsh/install.sh
 install:
-  - source ~/.bash_profile
+  - source ~/.xshrc
   - xsh load -b "$TRAVIS_BRANCH" xsh-lib/core
 script:
   - xsh list

@@ -20,8 +20,8 @@ About xsh and its libraries, check out [xsh document](https://github.com/alexzha
 
 Tested with bash:
 
-* 4.3.48(1)-release
-* 3.2.57(1)-release
+* 4.3.48 on Linux
+* 3.2.57 on macOS
 
 This project is still at version 0.x, and should be considered immature.
 
