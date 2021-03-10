@@ -2,15 +2,18 @@
 #?   Let you be able to use `getopts` in this way: `./script -x foo bar -y baz`
 #?   It will set an array OPTARG=(for bar) for the option `-x`.
 #?   This works only within the `getopts` context.
+#?   This util must be import first before to use. Because the function `xsh`
+#?   will break the OPTIND and OPTARG variables.
 #?
 #? Usage:
-#?   @extra "$@"; arr=( "${OPTARG[@]}" )
+#?   x-util-getopts-extra "$@"
 #?
 #? Example:
+#?   xsh imports /util/getopts/extra
 #?   while getopts x:y: opt; do
 #?     case $opt in
 #?       x)
-#?         @extra "$@"; x=( "${OPTARG[@]}" );;
+#?         x-util-getopts-extra "$@"; x=( "${OPTARG[@]}" );;
 #?       y)
 #?         y=$OPTARG;;
 #?     esac
