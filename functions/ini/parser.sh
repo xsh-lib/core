@@ -60,7 +60,7 @@ function parser () {
     declare opt OPTIND OPTARG
     declare apply prefix quote single ini_file
     declare ln
-    declare BASE_DIR=${XSH_HOME}/lib/x/functions/ini  # TODO: use varaible instead
+    declare BASE_DIR=${XSH_HOME:?}/lib/x/functions/ini  # TODO: use varaible instead
 
     while getopts ap:qs opt; do
         case ${opt} in

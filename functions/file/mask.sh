@@ -24,7 +24,7 @@
 function mask () {
     declare opt OPTIND OPTARG
     declare delimiter flist clist mask fixed file
-    declare BASE_DIR=${XSH_HOME}/lib/x/functions/file  # TODO: use varaible instead
+    declare BASE_DIR=${XSH_HOME:?}/lib/x/functions/file  # TODO: use varaible instead
 
     mask="*"  # set default mask char
 

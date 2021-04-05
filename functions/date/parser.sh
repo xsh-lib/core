@@ -15,7 +15,7 @@
 #?   HH:MM:SS
 #?
 function parser () {
-    declare base_dir=${XSH_HOME}/lib/x/functions/date  # TODO: use varaible instead
+    declare base_dir=${XSH_HOME:?}/lib/x/functions/date  # TODO: use varaible instead
 
     # --re-interval (In short words)
     # 
