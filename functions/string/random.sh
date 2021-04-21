@@ -14,5 +14,6 @@
 #?   db4eb095a0a921f0cc1804cf7d01fec7
 #?
 function random () {
-    od -vN "$((${1:-16} / 2))" -An -tx1 /dev/urandom | tr -d ' '
+    declare str=$(od -vN "$((${1:-16} / 2))" -An -tx1 /dev/urandom)
+    echo "${str//[ $'\n']}"  # remove all whitespaces and newlines
 }
