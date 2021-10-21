@@ -20,7 +20,7 @@
 #?   done
 #?
 function extra () {
-    if [[ -z $OPTIND ]]; then
+    if [[ -z ${OPTIND} ]]; then
         xsh log error "not in the context of getopts."
         return 255
     fi
