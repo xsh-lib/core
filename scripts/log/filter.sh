@@ -17,7 +17,7 @@ set -eo pipefail
 #?
 #?   Return the matching lines on the Nth field in FILE.
 #?   the STRING is matching as regex with case-sensitive.
-
+#?
 #?   [-F N] [...]
 #?
 #?   Return the matching lines on the Nth field in FILE.
@@ -28,7 +28,7 @@ set -eo pipefail
 #?
 #?   N: `0` meant entire line, `NF` meant last field, `2$3$1` meant joined field: 2+3+1.
 #?
-#?   If more than one `-f or -F` given, then taking the value of second Nth field of lines
+#?   If more than one `-f or -F` given, then taking the value of first Nth field of lines
 #?   returned by the first match as STRING, to filter on the second Nth field with whole
 #?   file, and repeat the step until all `-f` and `-F` are processed, to get final result.
 #?
