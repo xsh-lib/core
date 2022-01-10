@@ -138,7 +138,9 @@ function parser () {
 
     if [[ ${apply} ]]; then
         while read ln; do
-            xsh /string/global "${ln}"
+            if [[ -n ${ln} ]]; then
+                xsh /string/global "${ln}"
+            fi
         done <<< "$(
              awk -v separator="${SEPARATOR}" \
                  -v between=${BETWEEN} \

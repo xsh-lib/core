@@ -93,7 +93,9 @@ function parser () {
 
     if [[ ${apply} ]]; then
         while read ln; do
-            xsh /string/global "${ln}"
+            if [[ -n ${ln} ]]; then
+                xsh /string/global "${ln}"
+            fi
         done <<< "$(
              awk -v prefix="${prefix}" \
                  -f "${BASE_DIR}/parser.awk" \
