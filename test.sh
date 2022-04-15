@@ -38,9 +38,6 @@ xsh log info "/json/parser"
 xsh log info "/uri/parser"
 [[ $(xsh /uri/parser -s https://github.com) == https ]]
 
-xsh log info "/sql/parser"
-[[ $(xsh /sql/parser select f1,f2 from A where f1 = x; set | grep ^Q_WHERE) == 'Q_WHERE=([0]="f1" [1]="=" [2]="x")' ]]
-
 # TODO: Use the utilities's document (the section `Example`) to generate the
 #       test cases.
 
