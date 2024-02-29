@@ -7,7 +7,7 @@
 #? Usage:
 #?   @mxn [-I INPUT_DELIMITER] [-O OUTPUT_DELIMITER] [-s SIGNATURE] <SET> [...]
 #?
-#? Options
+#? Options:
 #?   SET [...]               A string contains items delimited with INPUT_DELIMITER.
 #?
 #?   [-I INPUT_DELIMITER]    Used to separate items of input SET. Default is '\n'.
