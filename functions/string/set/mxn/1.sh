@@ -140,13 +140,13 @@ function mxn () {
             # Try not to quote the command substitution: $(__mxn -l ... -o ... ...).
             # Because xargs has a limitation of 255 bytes long for each argument of utility.
             # shellcheck disable=SC2046
-            xargs "${maximum_replace_options[@]}" "${parallel_option[@]}" \
+            xargs "${maximum_replace_options[@]}" "${parallel_options[@]}" \
                   -I "${SIGNATURE//<N>/$level}" \
                   echo $(__mxn -l "$((level + 1))" -o "$next_output_mark" "${@:2}") \
                   <<< "$set"
         else
             # Only 1 SET left
-            xargs "${maximum_replace_options[@]}" "${parallel_option[@]}" \
+            xargs "${maximum_replace_options[@]}" "${parallel_options[@]}" \
                   -I "${SIGNATURE//<N>/$level}" \
                   echo "$output_mark" \
                   <<< "$set"
