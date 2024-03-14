@@ -109,6 +109,7 @@ function return () {
             done <<< "$(declare -f __xsh_trap_return_on_return__)"
                )
     else
+        # shellcheck disable=SC2016
         funcode='
         function __xsh_trap_return_bypass__ () {
             if [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]]; then
@@ -168,14 +169,14 @@ function return () {
 
     if [[ -n $1 ]]; then
         # source the generated function
-        source /dev/stdin <<< "$funcode"
-
-        if [[ $? -ne 0 ]]; then
+        # shellcheck source=/dev/null
+        if ! source /dev/stdin <<< "$funcode"; then
             xsh log error "failed source function: $funcode"
             return 255
         fi
 
         # set trap RETURN
+        # shellcheck disable=SC2154
         trap '__xsh_trap_return_on_return__ 1>&2; [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]] && trap - RETURN || :; __xsh_trap_return_bypass__' RETURN
     else
         xsh log error "parameter COMMAND null or not set."

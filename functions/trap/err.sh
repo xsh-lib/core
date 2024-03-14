@@ -47,10 +47,10 @@ function err () {
                 set -E
                 ;;
             e)
-                on_error=exit
+                on_error='exit'
                 ;;
             r)
-                on_error=return
+                on_error='return'
                 ;;
             *)
                 return 255
@@ -62,6 +62,7 @@ function err () {
 
     declare funcode
 
+    # shellcheck disable=SC2016
     funcode='
         function __xsh_trap_err_on_err__ () {
             declare ret=$1
@@ -95,9 +96,8 @@ function err () {
         }'
 
     # source the generated function
-    source /dev/stdin <<< "$funcode"
-
-    if [[ $? -ne 0 ]]; then
+    # shellcheck source=/dev/null
+    if ! source /dev/stdin <<< "$funcode"; then
         xsh log error "failed source function: $funcode"
         return 255
     fi
