@@ -75,7 +75,7 @@ function adjust-v () {
     declare opt_v_regexp='^[+-]?[0-9]{1,}[ymdwHMS]$|^[+-]{1}(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$'
 
     if echo "$ts" \
-            | egrep -q "$opt_v_regexp"; then
+            | grep -E -q "$opt_v_regexp"; then
         # not a timestamp
         unset ts
     else
@@ -84,6 +84,7 @@ function adjust-v () {
     fi
 
     # prefix `-v ` for each argument
+    # shellcheck disable=SC2206
     adjusts=( ${@/#/-v } )
 
     if [[ -z $ts ]]; then

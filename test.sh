@@ -6,6 +6,7 @@ xsh log info 'xsh list /'
 xsh list /
 
 xsh log info "/array/first"
+# shellcheck disable=SC2034
 [[ $(arr=([3]="III" [4]="IV"); xsh /array/first arr) == III ]]
 
 xsh log info "/file/mask"

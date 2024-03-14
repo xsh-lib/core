@@ -105,17 +105,17 @@ function adjust-d () {
 
     #? test whether the argument is for adjustment
     function __is_adjust_opt__ () {
-        egrep -q '^[+-]?[0-9]{1,}[ymdwHMS]$|^[+-]?[a-zA-Z]{3,}$' <<< "$1"
+        grep -E -q '^[+-]?[0-9]{1,}[ymdwHMS]$|^[+-]?[a-zA-Z]{3,}$' <<< "$1"
     }
 
     #? test whether it's running into the highlight point 2
     function __has_weekday_opt__ () {
-        egrep -q '[+-]?[a-zA-Z]{3,}' <<< "$*"
+        grep -E -q '[+-]?[a-zA-Z]{3,}' <<< "$*"
     }
 
     #? test whether it's running into the highlight point 3
     function __has_unsigned_opt__ () {
-        egrep -q '(^| )[0-9]{1,}[a-zA-Z]' <<< "$*"
+        grep -E -q '(^| )[0-9]{1,}[a-zA-Z]' <<< "$*"
     }
 
     # translate BSD date style `-v` options to GNU date style `-d` options
@@ -170,7 +170,6 @@ function adjust-d () {
                 ;;
         esac
 
-        declare prefix= suffix=
         case $sign in
             +)
                 if [[ -n $weekday ]]; then
@@ -301,7 +300,7 @@ function adjust-d () {
 
                     # hyphen `-`: don't pad the field
                     # lower `y` to upper `Y`: get year with Century
-                    current=$(date -d "$ts" +%-${unit/y/Y})
+                    current=$(date -d "$ts" "+%-${unit/y/Y}")
 
                     delta=$((digi - current))
                     if [[ $delta -ge 0 ]]; then

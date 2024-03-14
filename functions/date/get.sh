@@ -20,7 +20,8 @@ function get () {
         declare OPTIND OPTARG opt
         declare -a fmts
 
-        while getopts ${OPTION:?} opt; do
+        while getopts "${OPTION:?}" opt; do
+            # shellcheck disable=SC2254
             case $opt in
                 $CONDITION)
                     fmts+=( "%$opt" )
@@ -33,8 +34,8 @@ function get () {
         shift $((OPTIND - 1))
 
         # set default
-        if [[ -z ${fmts[@]} ]]; then
-            fmts=( ${DEFAULT_OPTIONS[@]:?} )
+        if [[ -z ${fmts[*]} ]]; then
+            fmts=( "${DEFAULT_OPTIONS[@]:?}" )
         fi
 
         if [[ -z $1 ]]; then
@@ -51,9 +52,10 @@ function get () {
     # remove blankspace and `%`
     OPTION=${list//[ %]/}
 
+    # shellcheck disable=SC2206
     DEFAULT_OPTIONS=( ${list} )
     # remove the non-default options
-    DEFAULT_OPTIONS=( ${DEFAULT_OPTIONS[@]#[a-zA-Z]} )
+    DEFAULT_OPTIONS=( "${DEFAULT_OPTIONS[@]#[a-zA-Z]}" )
 
     # generate extglob condition `@(x|y)`
     CONDITION=${list//%/}

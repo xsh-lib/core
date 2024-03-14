@@ -56,7 +56,7 @@ function confirm () {
     fi
 
     declare REPLY
-    while read "${options[@]}" REPLY && [[ ${REPLY} != ${positive} && ${REPLY} != ${negative} ]]; do
+    while read -r "${options[@]}" REPLY && [[ ${REPLY} != "${positive}" && ${REPLY} != "${negative}" ]]; do
         :
     done
 
@@ -67,9 +67,9 @@ function confirm () {
         sleep 1
     fi
 
-    if [[ ${REPLY} == ${negative} ]]; then
+    if [[ ${REPLY} == "${negative}" ]]; then
         return 1
-    elif [[ ${REPLY} == ${positive} ]]; then
+    elif [[ ${REPLY} == "${positive}" ]]; then
         return 0
     else
         return 255

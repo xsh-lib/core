@@ -19,7 +19,7 @@ function uuid () {
     declare N B C='89ab'
     for (( N=0; N < 16; ++N ))
     do
-        B=$(( $RANDOM%256 ))
+        B=$(( RANDOM%256 ))
         case $N in
             6)
                 printf '4%x' $(( B%16 ))

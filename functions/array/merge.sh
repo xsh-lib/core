@@ -37,13 +37,13 @@ function merge () {
             __arr_j="$1[__j]"
 
             if [[ -z $2 ]]; then
-                if [[ ${!__arr_i} == ${!__arr_j} ]]; then
-                    unset ${__arr_i}
+                if [[ ${!__arr_i} == "${!__arr_j}" ]]; then
+                    unset "${__arr_i}"
                     break
                 fi
             else
-                if [[ ${!__arr_i%%${2}*} == ${!__arr_j%%${2}*} ]]; then
-                    unset ${__arr_i}
+                if [[ ${!__arr_i%%"${2}"*} == "${!__arr_j%%"${2}"*}" ]]; then
+                    unset "${__arr_i}"
                     break
                 fi
             fi

@@ -34,8 +34,8 @@ function smartpath () {
         xsh /file/abspath "$dir/$file"
     elif [[ -f $file ]]; then
         xsh /file/abspath "$file"
-    elif [[ $BASH_SOURCE != -bash && -f "$(dirname "$BASH_SOURCE")/$file" ]]; then
-        xsh /file/abspath "$(dirname "$BASH_SOURCE")/$file"
+    elif [[ ${BASH_SOURCE[0]} != -bash && -f "$(dirname "${BASH_SOURCE[0]}")/$file" ]]; then
+        xsh /file/abspath "$(dirname "${BASH_SOURCE[0]}")/$file"
     else
         xsh log error "not found: $file $dir"
         return 255

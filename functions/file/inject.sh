@@ -98,7 +98,7 @@ function inject () {
 
     # set to clean tmp file
     xsh import /trap/return
-    x-trap-return -F $FUNCNAME "rm -f ${tmp_file:?}"
+    x-trap-return -F "${FUNCNAME[0]}" "rm -f ${tmp_file:?}"
 
     # add marks
     if [[ -n $mark_begin && -n $mark_end ]]; then

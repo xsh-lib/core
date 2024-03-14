@@ -15,7 +15,7 @@
 function copy () {
     declare __i
 
-    if [[ $1 == $2 ]]; then
+    if [[ $1 == "$2" ]]; then
         return 255
     else
         unset "$2"

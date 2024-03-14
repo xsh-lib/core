@@ -23,7 +23,6 @@
 function mark () {
     declare opt OPTIND OPTARG
     declare pattern delimiter flist clist marker file
-    declare MARKERS
     declare BASE_DIR=${XSH_HOME:?}/lib/x/functions/file  # TODO: use varaible instead
 
     while getopts p:d:f:c:m: opt; do
@@ -51,7 +50,7 @@ function mark () {
     shift $((OPTIND - 1))
     file=$1
 
-    if [[ -z ${marker[@]} ]]; then
+    if [[ -z ${marker[*]} ]]; then
         marker=bold
     fi
 

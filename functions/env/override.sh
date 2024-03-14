@@ -69,7 +69,7 @@ function override () {
             xsh /array/append "$__name" "$__value"
         else
             # set name=value
-            xsh /string/copy __value $__name
+            xsh /string/copy __value "$__name"
         fi
 
         if xsh /array/is-array "$__name"; then

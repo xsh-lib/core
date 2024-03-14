@@ -13,6 +13,7 @@
 #?
 function ifirst () {
     # try to declare nothing, new variable may override input variable.
+    # shellcheck disable=SC2046
     set -- $(xsh /array/index "$1")
     echo "$1"
 }

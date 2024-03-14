@@ -113,7 +113,7 @@ function mxn () {
                 P)
                     parallel_options=(
                         '-P'
-                        $(xsh /sys/cpu/cores)
+                        "$(xsh /sys/cpu/cores)"
                     )
                     ;;
                 *)
@@ -139,6 +139,7 @@ function mxn () {
 
             # Try not to quote the command substitution: $(__mxn -l ... -o ... ...).
             # Because xargs has a limitation of 255 bytes long for each argument of utility.
+            # shellcheck disable=SC2046
             xargs "${maximum_replace_options[@]}" "${parallel_option[@]}" \
                   -I "${SIGNATURE//<N>/$level}" \
                   echo $(__mxn -l "$((level + 1))" -o "$next_output_mark" "${@:2}") \

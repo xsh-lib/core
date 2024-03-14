@@ -12,7 +12,7 @@
 #?   29
 #?
 function eomonth () {
-    case $(expr $(xsh /date/month "${1:?}")) in
+    case $(( $(xsh /date/month "${1:?}") )) in
         1|3|5|7|8|10|12)
             echo 31
             ;;

@@ -93,6 +93,7 @@ function parser () {
     declare opt OPTIND OPTARG
     declare table_separator output apply prefix quote single csv_file
     declare ln
+    # shellcheck disable=SC2089
     declare SEPARATOR=',' BETWEEN='"'
     declare BASE_DIR=${XSH_HOME:?}/lib/x/functions/csv  # TODO: use varaible instead
 
@@ -137,13 +138,13 @@ function parser () {
     prefix=${prefix:-__CSV_}
 
     if [[ ${apply} ]]; then
-        while read ln; do
+        while read -r ln; do
             if [[ -n ${ln} ]]; then
                 xsh /string/global "${ln}"
             fi
         done <<< "$(
              awk -v separator="${SEPARATOR}" \
-                 -v between=${BETWEEN} \
+                 -v between="${BETWEEN}" \
                  -v output=variable \
                  -v prefix="${prefix}" \
                  -f "${BASE_DIR}/parser.awk" \
@@ -151,14 +152,14 @@ function parser () {
              )"
     elif [[ ${output} == 'table' ]]; then
         awk -v separator="${SEPARATOR}" \
-            -v between=${BETWEEN} \
+            -v between="${BETWEEN}" \
             -v output=${output} \
             -v table_separator="${table_separator:-|}" \
             -f "${BASE_DIR}/parser.awk" \
             "${csv_file}"
     elif [[ ${output} == 'variable' ]]; then
-        awk -v separator=${SEPARATOR} \
-            -v between=${BETWEEN} \
+        awk -v separator="${SEPARATOR}" \
+            -v between="${BETWEEN}" \
             -v output=${output} \
             -v prefix="${prefix}" \
             -v quote="${quote}" \

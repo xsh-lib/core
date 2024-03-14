@@ -16,5 +16,5 @@
 #?   Nothing.
 #?
 function is-compatible-date-N () {
-    date +%N | grep [0-9] >/dev/null 2>&1
+    date +%N | grep '[0-9]' >/dev/null 2>&1
 }

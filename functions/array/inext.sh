@@ -12,6 +12,7 @@
 #?   5
 #?
 function inext () {
+    # shellcheck disable=SC2046
     set -- $(xsh /array/ilast "$1")
     case "$1" in
         '')

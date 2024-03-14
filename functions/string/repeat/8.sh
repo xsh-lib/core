@@ -31,7 +31,7 @@ function repeat () {
     result=${str}
     while [[ ${i} -lt ${limit} ]]; do
         result=${result}${result} || return
-        let i++
+        ((i++))
     done
 
     remain_times=$(((lresult - lstr * (2 ** limit)) / lstr))

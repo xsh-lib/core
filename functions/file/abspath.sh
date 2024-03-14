@@ -27,7 +27,7 @@ function abspath () {
     if xsh /file/is-abspath "$1"; then
         echo "$1"
     elif [[ -d $1 ]]; then
-        echo "$(cd "$1" && pwd)"
+        cd "$1" && pwd
     else
         dir=$(cd "$(dirname "$1")" && pwd)
         file=$(basename "$1")

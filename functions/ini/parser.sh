@@ -92,7 +92,7 @@ function parser () {
     prefix=${prefix:-__INI_}
 
     if [[ ${apply} ]]; then
-        while read ln; do
+        while read -r ln; do
             if [[ -n ${ln} ]]; then
                 xsh /string/global "${ln}"
             fi

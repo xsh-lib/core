@@ -48,6 +48,7 @@ function timestamp () {
         ts=$(date "${fmt}")
 
         # remove the surplus precision from the end
+        # shellcheck disable=SC2295
         echo "${ts%${nano_delta}}"
     else
         date "${fmt}"

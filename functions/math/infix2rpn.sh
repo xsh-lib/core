@@ -117,7 +117,7 @@ function infix2rpn () {
 
     function __process_operator () {
         if [[ -n $operator ]]; then
-            while [[ ${#STACK[@]} -gt 0 && ${STACK[@]:(-1)} != '(' ]]; do
+            while [[ ${#STACK[@]} -gt 0 && ${STACK[*]:(-1)} != '(' ]]; do
                 priority=$($COMPARATOR "$operator" "${STACK[@]:(-1)}")
                 if [[ -z $priority ]]; then
                     xsh log error "wrong operator in the expression or specified wrong comparator."
@@ -126,7 +126,7 @@ function infix2rpn () {
                     break
                 else
                     OUTPUT+=( "${STACK[@]:(-1)}" )
-                    unset STACK[$((${#STACK[@]} - 1))]
+                    unset "STACK[$((${#STACK[@]} - 1))]"
                 fi
             done
             STACK+=( "$operator" )
@@ -161,13 +161,13 @@ function infix2rpn () {
             ')')
                 __process_operand || return $?
 
-                while [[ ${STACK[@]:(-1)} != '(' ]]; do
+                while [[ ${STACK[*]:(-1)} != '(' ]]; do
                     OUTPUT+=( "${STACK[@]:(-1)}" )
-                    unset STACK[$((${#STACK[@]} - 1))]
+                    unset "STACK[$((${#STACK[@]} - 1))]"
                 done
 
-                if [[ ${STACK[@]:(-1)} == '(' ]]; then
-                    unset STACK[$((${#STACK[@]} - 1))]
+                if [[ ${STACK[*]:(-1)} == '(' ]]; then
+                    unset "STACK[$((${#STACK[@]} - 1))]"
                 else
                     xsh log error "wrong expression found! a right parenthesis ')' without a paired left parentthesis '('."
                     return 255
@@ -190,7 +190,7 @@ function infix2rpn () {
 
     while [[ ${#STACK[@]} -gt 0 ]]; do
         OUTPUT+=( "${STACK[@]:(-1)}" )
-        unset STACK[$((${#STACK[@]} - 1))]
+        unset "STACK[$((${#STACK[@]} - 1))]"
     done
 
     unset -f __process_operand __process_operator

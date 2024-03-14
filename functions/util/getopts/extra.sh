@@ -29,6 +29,7 @@ function extra () {
     # if the next argument is not an option, then append it to array OPTARG
     while [[ ${OPTIND} -le $# && ${!OPTIND:0:1} != '-' ]]; do
         OPTARG[i]=${!OPTIND}
-        let i++ OPTIND++
+        ((i++))
+        ((OPTIND++))
     done
 }

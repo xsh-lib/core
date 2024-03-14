@@ -23,7 +23,7 @@ function repeat () {
     fi
 
     awk -v str="${str}" \
-        -v times=${times} '
+        -v times="${times}" '
         function lim(m, k1, k2) {
             return int(log(m/k1)/log(k2))
         }

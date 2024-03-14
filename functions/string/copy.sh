@@ -15,7 +15,7 @@
 #?   x
 #?
 function copy () {
-    if [[ "$1" == "$2" ]]; then
+    if [[ $1 == "$2" ]]; then
         return 255
     else
         unset "$2"  # in case $2 is Array

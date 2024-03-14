@@ -25,7 +25,7 @@ function count () {
         ts=$(xsh /date/timestamp)
     fi
 
-    declare date year month day
+    declare year month day
     year=$(xsh /date/year "$ts")
     month=$(xsh /date/month "$ts")
     day=$(xsh /date/day "$ts")
@@ -35,26 +35,26 @@ function count () {
         # the day is < Feb 29
         if [[ $offset -gt 0 ]]; then
             # forward, don't calculate the end year
-            let end_year++
+            ((end_year++))
         elif [[ $offset -lt 0 ]]; then
             # backward, don't calculate the start year
-            let start_year--
+            ((start_year--))
         fi
     else
         # the day is >= Feb 29
         if [[ $offset -gt 0 ]]; then
             # forward, don't calculate the start year
-            let start_year--
+            ((start_year--))
         elif [[ $offset -lt 0 ]]; then
             # backward, don't calculate the end year
-            let end_year++
+            ((end_year++))
         fi
     fi
 
     declare cnt=0
     for year in $(seq "$start_year" "$end_year"); do
         if xsh /date/leap/year/is "$year"; then
-            let cnt++
+            ((cnt++))
         fi
     done
     echo "$cnt"

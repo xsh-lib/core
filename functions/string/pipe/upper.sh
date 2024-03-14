@@ -9,5 +9,5 @@
 #?   FOO
 #?
 function upper () {
-    tr [:lower:] [:upper:] < /dev/stdin
+    tr '[:lower:]' '[:upper:]' < /dev/stdin
 }

@@ -67,6 +67,7 @@ function search () {
     for __i in $(xsh /array/index "$1"); do
         __arr_i="$1[__i]"
 
-        test "${!__arr_i}" "$__operand" "$2" && echo $__i || :
+        # shellcheck disable=SC2015
+        test "${!__arr_i}" "$__operand" "$2" && echo "$__i" || :
     done
 }

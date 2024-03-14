@@ -9,5 +9,5 @@
 #?   foo
 #?
 function lower () {
-    tr [:upper:] [:lower:] < /dev/stdin
+    tr '[:upper:]' '[:lower:]' < /dev/stdin
 }

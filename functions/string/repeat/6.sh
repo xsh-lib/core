@@ -22,5 +22,5 @@ function repeat () {
         return
     fi
 
-    awk -v str="${str}" -v times=${times} 'BEGIN {while (i++ < times) printf("%s", str)}'
+    awk -v str="${str}" -v times="${times}" 'BEGIN {while (i++ < times) printf("%s", str)}'
 }
