@@ -6,9 +6,12 @@
 #?
 #? Options:
 #?   [-E]         If set, the ERR trap is inherited by shell functions.
-#?   [-e]         If set, exit on error.
-#?   [-r]         If set, return on error.
+#?   [-e]         If set, exit on error, otherwise will continue after the error.
+#?   [-r]         If set, return on error, otherwise will continue after the error.
 #?                Make sure use this option inside function.
+#?
+#? Return:
+#?   The return code of the trapped command is always honored whenever it exits, returns or continues.
 #?
 #? Output:
 #?   The stdout of COMMAND is redirected to stderr, to avoid to mess the original output.
@@ -31,7 +34,7 @@
 #?   The ERR trap is NOT cleaned by any means, your should handle this in your code.
 #?
 #? Self Clean:
-#?   This util have to left a resource remain uncleaned:
+#?   This util have to leave a resource remain uncleaned:
 #?     * function __xsh_trap_err_on_err__ ()
 #?
 function err () {
@@ -71,7 +74,7 @@ function err () {
             declare max_index
             max_index=$(printf "%s\n" ${!func[@]} ${!source[@]} | sort -rn | head -1)
 
-            printf "Error code: %s\n" "$ret"
+            printf "\nError code: %s\n" "$ret"
             printf "Traceback (most recent call first)\n"
 
             if [[ -n $max_index ]]; then

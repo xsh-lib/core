@@ -22,6 +22,9 @@
 #?                  * Return code:   available as `$1`.
 #?                  * Function name: available as `${FUNCNAME[1]}'.
 #?
+#? Return:
+#?   The return code of the trapped function is always honored.
+#?
 #? Output:
 #?   The stdout of COMMAND is redirected to stderr, to avoid to mess the original output.
 #?
