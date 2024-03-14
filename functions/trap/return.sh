@@ -118,7 +118,6 @@ function return () {
                 # clean env: unset self
                 unset -f $FUNCNAME
             fi
-            return $1
         }
 
         function __xsh_trap_return_on_return__ () {
@@ -163,8 +162,7 @@ function return () {
 
             fi
 
-            # return the former return code
-            return $1
+            # do not need to explicitly return the former return code, trap would handle this
         }'
     fi
 
@@ -178,7 +176,7 @@ function return () {
         fi
 
         # set trap RETURN
-        trap 'declare ret=$?; __xsh_trap_return_on_return__ $ret 1>&2; [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]] && trap - RETURN || :; __xsh_trap_return_bypass__ $ret' RETURN
+        trap '__xsh_trap_return_on_return__ 1>&2; [[ $__XSH_TRAP_RETURN_CLEAN_FLAG -eq 1 ]] && trap - RETURN || :; __xsh_trap_return_bypass__' RETURN
     else
         xsh log error "parameter COMMAND null or not set."
         return 255
