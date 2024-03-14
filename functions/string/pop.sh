@@ -15,23 +15,23 @@
 #?   0
 #?
 function pop () {
-    declare var
-    declare val=${!1}
+    declare __popping_from_variable_name
+    declare __popping_value=${!1}
 
-    var=$(declare \
+    __popping_from_variable_name=$(declare \
               | grep -E -o "^[_]*$1[_]*" \
               | awk -F "$1" '$1 == $2' \
               | sort \
               | head -1)
 
-    if [[ -z ${var} ]]; then
+    if [[ -z ${__popping_from_variable_name} ]]; then
 	    xsh log error "no further can be popped."
 	    return 255
     fi
 
-    if xsh /string/copy "${var}" "$1"; then
-        unset "${var}"
-        echo "${val}"
+    if xsh /string/copy "${__popping_from_variable_name}" "$1"; then
+        unset "${__popping_from_variable_name}"
+        echo "${__popping_value}"
     else
         return $?
     fi
