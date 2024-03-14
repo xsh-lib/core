@@ -54,6 +54,19 @@
 #?     * function __xsh_trap_return_on_return__ ()
 #?
 function return () {
+
+    #? Description:
+    #?   Count the number of given function name in ${FUNCNAME[@]}
+    #?
+    #? Usage:
+    #?   __xsh_count_in_funcstack__ <FUNCNAME>
+    #?
+    function __xsh_count_in_funcstack__ () {
+        # shellcheck disable=SC2317
+        printf '%s\n' "${FUNCNAME[@]}" \
+            | grep -c "^${1}$"
+    }
+
     declare OPTIND OPTARG opt
     declare fire_once=0 fire_on_last=0 fire_on_name append=0
 
@@ -127,14 +140,14 @@ function return () {
                                && (( $fire_on_last -eq 0 && ${FUNCNAME[1]} == $fire_on_name ) \
                                         || ( $fire_on_last -eq 1 \
                                                  && ${FUNCNAME[1]} == $fire_on_name \
-                                                 && $(xsh count_in_funcstack "$fire_on_name") == 1 )) )
+                                                 && $(__xsh_count_in_funcstack__ "$fire_on_name") == 1 )) )
                 ]]; then
 
                 # clean RETURN trap logic
                 if  [[ $fire_once -eq 1 \
                            || ${#FUNCNAME[@]} -eq 2 \
                            || ( -n $fire_on_name && ${FUNCNAME[1]} == $fire_on_name \
-                                    && $(xsh count_in_funcstack "$fire_on_name") == 1 ) \
+                                    && $(__xsh_count_in_funcstack__ "$fire_on_name") == 1 ) \
                      ]]; then
 
                     # clean env: unset self
