@@ -35,7 +35,8 @@ function expand () {
                 ;;
         esac
     done
-    
+    shift $((OPTIND -1))
+
     declare item
     for item in "$@"; do
         # shellcheck disable=SC2046
