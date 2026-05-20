@@ -4,7 +4,7 @@
 [![GitHub](https://img.shields.io/github/license/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/commits/master)
 
-[![Travis (.com)](https://img.shields.io/travis/com/xsh-lib/core.svg?style=flat-square)](https://travis-ci.com/xsh-lib/core)
+[![Test](https://github.com/xsh-lib/core/actions/workflows/test.yml/badge.svg)](https://github.com/xsh-lib/core/actions/workflows/test.yml)
 [![GitHub issues](https://img.shields.io/github/issues/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/pulls)
 

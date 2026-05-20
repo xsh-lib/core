@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Install xsh
+        run: |
+          git clone --depth=50 --branch=master https://github.com/alexzhangs/xsh.git /tmp/xsh
+          bash /tmp/xsh/install.sh
+
+      - name: Load library from current branch
+        shell: bash
+        run: |
+          source ~/.xshrc
+          xsh load -b "${{ github.head_ref || github.ref_name }}" xsh-lib/core
+
+      - name: Run tests
+        shell: bash
+        run: |
+          source ~/.xshrc
+          xsh list
+          bash ~/.xsh/repo/xsh-lib/core/test.sh
