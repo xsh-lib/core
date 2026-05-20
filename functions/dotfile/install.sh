@@ -17,15 +17,15 @@
 #?            At least one of -a or NAME is required.
 #?
 #? Example:
-#?   $ @install bash_profile
-#?     INSTALL bash/bash_profile  -> ~/.bash_profile
+#?   $ @install bashrc
+#?     INSTALL bash/bashrc        -> ~/.bashrc
 #?
 #?     To apply changes, run:
-#?       source ~/.bash_profile
+#?       source ~/.bashrc
 #?
 #?   $ @install -a
-#?     INSTALL bash/bash_profile  -> ~/.bash_profile
-#?     INSTALL aws/config         -> ~/.aws/config
+#?     INSTALL bash/bashrc        -> ~/.bashrc
+#?     INSTALL git/gitconfig      -> ~/.gitconfig
 #?     ...
 #?
 function install () {

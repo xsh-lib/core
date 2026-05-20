@@ -2,7 +2,8 @@
 #?   Show differences between HOME and repository versions of dotfiles.
 #?
 #?   By default uses the terminal diff tool ($DIFF_TOOL, or `diff`).
-#?   With -g, opens a GUI diff tool ($GUI_DIFF_TOOL, or `bcomp`).
+#?   With -g, opens a GUI diff tool ($GUI_DIFF_TOOL). GUI_DIFF_TOOL must
+#?   be set when using -g (e.g. opendiff, meld, bcomp, kdiff3).
 #?
 #? Usage:
 #?   @diff [-g] <-a | NAME>
@@ -15,19 +16,19 @@
 #?
 #? Environment:
 #?   DIFF_TOOL       Terminal diff command (default: diff).
-#?   GUI_DIFF_TOOL   GUI diff command (default: bcomp).
+#?   GUI_DIFF_TOOL   GUI diff command (required for -g; no default).
 #?
 #? Example:
-#?   $ @diff bash_profile
-#?   === bash/bash_profile ===
+#?   $ @diff bashrc
+#?   === bash/bashrc ===
 #?   < ...
 #?   > ...
 #?
-#?   $ @diff -g bash_profile
-#?   (opens Beyond Compare)
+#?   $ @diff -g gitconfig
+#?   (opens GUI diff tool)
 #?
 #?   $ @diff -a
-#?   === bash/bash_profile ===
+#?   === bash/bashrc ===
 #?   ...
 #?   === git/gitconfig ===
 #?   ...
@@ -64,7 +65,11 @@ function diff () {
 
     declare diff_tool
     if [[ $gui -eq 1 ]]; then
-        diff_tool=${GUI_DIFF_TOOL:-bcomp}
+        diff_tool=${GUI_DIFF_TOOL:-}
+        if [[ -z $diff_tool ]]; then
+            printf "ERROR: GUI_DIFF_TOOL is not set.\n" >&2
+            return 255
+        fi
     else
         diff_tool=${DIFF_TOOL:-diff}
     fi

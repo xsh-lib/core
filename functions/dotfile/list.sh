@@ -14,13 +14,13 @@
 #?
 #? Example:
 #?   $ @list
-#?     bash/bash_profile                -> ~/.bash_profile              [source]
-#?     aws/config                       -> ~/.aws/config
+#?     bash/bashrc                      -> ~/.bashrc                    [source]
 #?     git/gitconfig                    -> ~/.gitconfig
+#?     ssh/config                       -> ~/.ssh/config
 #?
 #?   $ @list bash
-#?     bash/bash_profile                -> ~/.bash_profile              [source]
-#?     bash/env-davionlabs              -> ~/.env-davionlabs            [source]
+#?     bash/bashrc                      -> ~/.bashrc                    [source]
+#?     bash/bash_aliases                -> ~/.bash_aliases              [source]
 #?
 function list () {
     declare output

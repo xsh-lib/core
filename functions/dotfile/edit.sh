@@ -16,7 +16,7 @@
 #?   EDITOR       Terminal editor command (default: vim).
 #?
 #? Example:
-#?   $ @edit bash_profile        # opens in $GUI_EDITOR (e.g. VS Code)
+#?   $ @edit bashrc               # opens in $GUI_EDITOR
 #?   $ @edit -t gitconfig        # opens in $EDITOR (e.g. vim)
 #?
 function edit () {

@@ -16,10 +16,10 @@
 #?
 #? Example:
 #?   $ @status
-#?     [=] bash/bash_profile
-#?     [M] bash/env-davionlabs
-#?     [!] bash/env-0xriver              (home file missing)
-#?     [=] git/gitconfig
+#?     [=] bash/bashrc
+#?     [M] git/gitconfig
+#?     [!] ssh/config                    (home file missing)
+#?     [=] vim/vimrc
 #?
 function status () {
     declare output

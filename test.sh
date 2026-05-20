@@ -40,8 +40,8 @@ xsh log info "/uri/parser"
 [[ $(xsh /uri/parser -s https://github.com) == https ]]
 
 # ---------- dotfile ----------
-# Tests use a temporary repo with a .dotfilemap to avoid depending on the
-# user's real macos-dotfile checkout.
+# Tests use a temporary repo with a .dotfilemap to avoid depending on any
+# real dotfile repository.
 
 xsh log info "/dotfile/resolve, /dotfile/list, /dotfile/status, /dotfile/load, /dotfile/install, /dotfile/diff"
 

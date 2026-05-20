@@ -26,11 +26,11 @@
 #?   255 if the repo or map file is not found, or no entry matched.
 #?
 #? Example:
-#?   $ @resolve bash_profile
-#?   /path/to/repo/bash/bash_profile	/Users/me/.bash_profile	source	bash/bash_profile
+#?   $ @resolve bashrc
+#?   /path/to/repo/bash/bashrc	/home/user/.bashrc	source	bash/bashrc
 #?
 #?   $ @resolve | head -1
-#?   /path/to/repo/bash/bash_profile	/Users/me/.bash_profile	source	bash/bash_profile
+#?   /path/to/repo/bash/bashrc	/home/user/.bashrc	source	bash/bashrc
 #?
 function resolve () {
     declare repo_dir name="${1:-}"

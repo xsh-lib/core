@@ -1,0 +1,48 @@
+# .dotfilemap — Dotfile Map
+#
+# Place this file at the root of your dotfile repository.
+# It tells xsh /dotfile/* where each repo file maps to under HOME.
+#
+# Format:
+#   <repo-path>:<home-path>[:<post-install>]
+#
+#   repo-path      Path relative to the repository root.
+#   home-path      Absolute or ~-prefixed path under HOME.
+#   post-install   Optional. "source" expands to `source <home-path>`
+#                  after install. Any other value is printed as-is.
+#
+# Lines starting with # are comments. Blank lines are ignored.
+#
+# Environment:
+#   XSH_DOTFILE_REPO or WORKSPACE_MACOS_DOTFILE must point to the
+#   repository root that contains this file.
+#
+# Usage:
+#   xsh /dotfile/list                 # list all mapped dotfiles
+#   xsh /dotfile/status               # show sync status ([=] [M] [!])
+#   xsh /dotfile/load <-a | NAME>     # HOME -> repo (save)
+#   xsh /dotfile/install <-a | NAME>  # repo -> HOME (deploy)
+#   xsh /dotfile/diff [-g] <-a|NAME>  # compare files (-g for GUI)
+#   xsh /dotfile/edit [-t] NAME       # edit repo copy (-t for terminal)
+#
+# Example entries:
+
+# shell
+bash/bashrc:~/.bashrc:source
+bash/bash_aliases:~/.bash_aliases:source
+bash/inputrc:~/.inputrc
+zsh/zshrc:~/.zshrc:source
+
+# git
+git/gitconfig:~/.gitconfig
+git/gitignore_global:~/.gitignore_global
+
+# ssh
+ssh/config:~/.ssh/config
+
+# vim / neovim
+vim/vimrc:~/.vimrc
+nvim/init.lua:~/.config/nvim/init.lua
+
+# tmux
+tmux/tmux.conf:~/.tmux.conf

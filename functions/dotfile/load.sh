@@ -12,12 +12,12 @@
 #?            At least one of -a or NAME is required.
 #?
 #? Example:
-#?   $ @load bash_profile
-#?     LOAD bash/bash_profile    <- ~/.bash_profile
+#?   $ @load bashrc
+#?     LOAD bash/bashrc          <- ~/.bashrc
 #?
 #?   $ @load -a
-#?     LOAD bash/bash_profile    <- ~/.bash_profile
-#?     LOAD bash/env-davionlabs  <- ~/.env-davionlabs
+#?     LOAD bash/bashrc          <- ~/.bashrc
+#?     LOAD git/gitconfig        <- ~/.gitconfig
 #?     ...
 #?
 function load () {
