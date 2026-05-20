@@ -18,8 +18,8 @@
 #?            If omitted, all entries are returned.
 #?
 #? Environment:
-#?   XSH_DOTFILE_REPO   Path to the dotfile repository root.
-#?                       Falls back to WORKSPACE_MACOS_DOTFILE if unset.
+#?   XSH_DOTFILE_REPO   Path to the dotfile repository root (required).
+#?                       The directory must contain a .dotfilemap file.
 #?
 #? Return:
 #?   0 on success (at least one entry matched).
@@ -35,9 +35,9 @@
 function resolve () {
     declare repo_dir name="${1:-}"
 
-    repo_dir=${XSH_DOTFILE_REPO:-${WORKSPACE_MACOS_DOTFILE:-}}
+    repo_dir=${XSH_DOTFILE_REPO:-}
     if [[ -z $repo_dir ]]; then
-        printf "ERROR: XSH_DOTFILE_REPO (or WORKSPACE_MACOS_DOTFILE) is not set.\n" >&2
+        printf "ERROR: XSH_DOTFILE_REPO is not set.\n" >&2
         return 255
     fi
     if [[ ! -d $repo_dir ]]; then

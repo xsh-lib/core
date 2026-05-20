@@ -14,8 +14,8 @@
 # Lines starting with # are comments. Blank lines are ignored.
 #
 # Environment:
-#   XSH_DOTFILE_REPO or WORKSPACE_MACOS_DOTFILE must point to the
-#   repository root that contains this file.
+#   XSH_DOTFILE_REPO must point to the repository root that contains
+#   this file. Example: export XSH_DOTFILE_REPO=~/dotfiles
 #
 # Usage:
 #   xsh /dotfile/list                 # list all mapped dotfiles
