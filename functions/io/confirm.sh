@@ -49,14 +49,19 @@ function confirm () {
         return 255
     fi
 
-    declare options=( "-p" "${message} [${positive}/${negative}]: " )
+    # `read -p PROMPT` is bash-only (zsh `read -p` reads from a coprocess):
+    # print the prompt explicitly instead
+    declare prompt="${message} [${positive}/${negative}]: "
+    declare -a options
 
     if [[ -n ${timeout} ]]; then
         options+=( "-t" "${timeout}" )
     fi
 
     declare REPLY
-    while read -r "${options[@]}" REPLY && [[ ${REPLY} != "${positive}" && ${REPLY} != "${negative}" ]]; do
+    while printf '%s' "${prompt}" >&2 \
+              && read -r "${options[@]}" REPLY \
+              && [[ ${REPLY} != "${positive}" && ${REPLY} != "${negative}" ]]; do
         :
     done
 

@@ -12,7 +12,11 @@
 #?   III
 #?
 function first () {
-    # try to declare nothing, new variable may override input variable.
-    set -- "$1[$(xsh /array/ifirst "$1")]"
-    echo "${!1}"
+    declare __ifirst
+    __ifirst=$(xsh /array/ifirst "${1:?}")
+    if [[ -z ${__ifirst} ]]; then
+        # empty array
+        return 1
+    fi
+    eval "echo \"\${${1}[${__ifirst}]}\""
 }

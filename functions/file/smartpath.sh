@@ -28,14 +28,23 @@ function smartpath () {
     declare file=${1:?}
     declare dir=$2
 
+    declare source_file=-bash
+    if [[ -n ${ZSH_VERSION-} ]]; then
+        # zsh has no BASH_SOURCE; prompt escape %x expands to the file
+        # containing the source code currently being executed
+        eval 'source_file=${(%):-%x}'
+    else
+        source_file=${BASH_SOURCE[0]}
+    fi
+
     if xsh /file/is-abspath "${file:?}"; then
         echo "$file"
     elif [[ -n $dir && -f $dir/$file ]]; then
         xsh /file/abspath "$dir/$file"
     elif [[ -f $file ]]; then
         xsh /file/abspath "$file"
-    elif [[ ${BASH_SOURCE[0]} != -bash && -f "$(dirname "${BASH_SOURCE[0]}")/$file" ]]; then
-        xsh /file/abspath "$(dirname "${BASH_SOURCE[0]}")/$file"
+    elif [[ ${source_file} != -bash && -f "$(dirname "${source_file}")/$file" ]]; then
+        xsh /file/abspath "$(dirname "${source_file}")/$file"
     else
         xsh log error "not found: $file $dir"
         return 255

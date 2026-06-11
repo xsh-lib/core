@@ -63,11 +63,11 @@ function search () {
         return 255
     fi
 
-    declare __i __arr_i
+    declare __i __val
     for __i in $(xsh /array/index "$1"); do
-        __arr_i="$1[__i]"
+        eval "__val=\${${1}[${__i}]}"
 
         # shellcheck disable=SC2015
-        test "${!__arr_i}" "$__operand" "$2" && echo "$__i" || :
+        test "${__val}" "$__operand" "$2" && echo "$__i" || :
     done
 }

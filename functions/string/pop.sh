@@ -16,7 +16,8 @@
 #?
 function pop () {
     declare __popping_from_variable_name
-    declare __popping_value=${!1}
+    declare __popping_value
+    eval "__popping_value=\${${1:?}}"
 
     __popping_from_variable_name=$(declare \
               | grep -E -o "^[_]*$1[_]*" \

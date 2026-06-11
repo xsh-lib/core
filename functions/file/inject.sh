@@ -49,6 +49,10 @@
 #? @subshell
 #?
 function inject () {
+    # zsh: build FUNCNAME from zsh's funcstack (0-indexed under the ksh
+    # emulation applied on import, so the indexes match bash's FUNCNAME)
+    # shellcheck disable=SC2034,SC2154
+    [[ -z ${ZSH_VERSION-} ]] || declare -a FUNCNAME=( "${funcstack[@]}" )
 
     declare OPTIND OPTARG opt
 

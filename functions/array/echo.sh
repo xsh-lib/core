@@ -13,7 +13,5 @@
 #?   IV
 #?
 function echo () {
-    # try to declare nothing, new variable may override input variable.
-    set -- "$1[@]"
-    printf "%s\n" "${!1}"
+    eval "printf '%s\n' \"\${${1:?}[@]}\""
 }

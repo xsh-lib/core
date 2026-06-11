@@ -12,7 +12,11 @@
 #?   IV
 #?
 function last () {
-    # try to declare nothing, new variable may override input variable.
-    set -- "$1[$(xsh /array/ilast "$1")]"
-    echo "${!1}"
+    declare __ilast
+    __ilast=$(xsh /array/ilast "${1:?}")
+    if [[ -z ${__ilast} ]]; then
+        # empty array
+        return 1
+    fi
+    eval "echo \"\${${1}[${__ilast}]}\""
 }
