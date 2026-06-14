@@ -1,0 +1,17 @@
+# Coverage is scoped to the function utilities and the cobertura is rewritten to
+# repo-relative paths (functions/...) in CI, so no path fixes are needed here.
+# Coverage is informational, not a merge gate (only function-type utilities are
+# instrumentable; script utilities run as child processes kcov cannot trace).
+# Coverage is scoped to the function utilities and rewritten to repo-relative
+# paths (functions/...) in CI, so no path fixes/ignores are needed here.
+# Informational only (script utilities aren't instrumentable).
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
+
+comment: false
