@@ -4,7 +4,7 @@
 [![GitHub](https://img.shields.io/github/license/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/commits/master)
 
-[![Test](https://github.com/xsh-lib/core/actions/workflows/test.yml/badge.svg)](https://github.com/xsh-lib/core/actions/workflows/test.yml)
+[![CI](https://github.com/xsh-lib/core/actions/workflows/ci.yml/badge.svg)](https://github.com/xsh-lib/core/actions/workflows/ci.yml)
 [![GitHub issues](https://img.shields.io/github/issues/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/pulls)
 
@@ -18,10 +18,18 @@ About xsh and its libraries, check out [xsh document](https://github.com/alexzha
 
 ## Requirements
 
-Tested with bash:
+`xsh-lib/core` is tested in CI ([GitHub Actions](https://github.com/xsh-lib/core/actions/workflows/ci.yml)) on every push and pull request, across the following shell/OS combinations:
 
-* 4.3.48 on Linux
-* 3.2.57 on macOS
+| Shell | Version | OS                    | Tested |
+|-------|---------|-----------------------|:------:|
+| bash  | 3.2     | macOS                 | ✅     |
+| bash  | 4.4     | Linux (rockylinux:8)  | ✅     |
+| bash  | 5.x     | Linux (ubuntu-latest) | ✅     |
+| bash  | 5.x     | macOS (Homebrew)      | ✅     |
+| zsh   | 5.x     | Linux (ubuntu-latest) | ✅     |
+| zsh   | 5.x     | macOS                 | ✅     |
+
+zsh utilities run under xsh's ksh emulation and require **xsh ≥ 0.7.0**.
 
 This project is still at version 0.x, and should be considered immature.
 
