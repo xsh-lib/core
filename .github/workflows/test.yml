@@ -70,4 +70,5 @@ jobs:
       - name: Run tests (${{ matrix.label }})
         # test.sh self-sources ~/.xshrc, so running it under $SHELL_PATH makes
         # the utilities execute under that shell (bash, or zsh's ksh emulation).
-        run: "$SHELL_PATH" ~/.xsh/repo/xsh-lib/core/test.sh
+        run: |
+          "$SHELL_PATH" ~/.xsh/repo/xsh-lib/core/test.sh
