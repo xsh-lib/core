@@ -110,6 +110,14 @@ function gen_array_variables (name, array, quote, single,   i, sep, SEP, key, KE
 #? Output:
 #?   [String]  Generated shell variables for INI file.
 #?
+BEGIN {
+    # Declare the accumulator arrays up front. Otherwise the first reference is
+    # `arr[length(arr)+1]`, where `length(arr)` makes gawk type `arr` as a
+    # scalar and then reject the array subscript ("attempt to use scalar as an
+    # array"). BSD awk (macOS) tolerates it; gawk (most Linux) does not.
+    split("", sns)
+    split("", kns)
+}
 NF>0 && !/^;/ {  # filter out empty and commented lines
     FS = "="
 

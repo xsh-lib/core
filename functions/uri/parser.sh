@@ -71,8 +71,13 @@
 #?   * https://en.wikipedia.org/wiki/Uniform_Resource_Identifier
 #?
 function parser () {
-    # get the last argument
-    declare uri=${!#}
+    # zsh: make `=~` populate BASH_REMATCH like bash does (the setopt is
+    # scoped by the ksh emulation applied on import)
+    # shellcheck disable=SC3044
+    [[ -z ${ZSH_VERSION-} ]] || setopt bash_rematch
+
+    # get the last argument (`${!#}` is bash-only)
+    declare uri=${*: -1}
 
     #? Following regex is based on https://stackoverflow.com/a/45977232 by Patryk Obara.
     #? Extended to support new schemes, such as: file, mailto, news, tel and urn.

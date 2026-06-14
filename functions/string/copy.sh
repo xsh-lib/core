@@ -20,5 +20,7 @@ function copy () {
     else
         unset "$2"  # in case $2 is Array
     fi
-    read -r "$2" <<< "${!1}"
+    # `${!1}` is bash-only; the eval also preserves multiline values that
+    # `read <<<` would truncate at the first newline
+    eval "${2:?}=\${${1:?}}"
 }

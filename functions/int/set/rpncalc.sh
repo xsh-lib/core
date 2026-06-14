@@ -32,10 +32,14 @@ function rpncalc () {
     while [[ $# -gt 0 ]]; do
         if __is_comparator "$1"; then
             # IS OPERATORS
-            o1=${STACK[*]:(-1)}
-            unset "STACK[$((${#STACK[@]} - 1))]"
-            o2=${STACK[*]:(-1)}
-            unset "STACK[$((${#STACK[@]} - 1))]"
+            # NOTE: a negative offset `:(-1)` is unsupported by bash 3.2 and
+            # zsh, and `unset 'STACK[i]'` doesn't remove the element under
+            # zsh: read the last element with an explicit offset and pop it
+            # by re-assigning the array instead
+            o1=${STACK[*]:$((${#STACK[@]} - 1))}
+            STACK=( "${STACK[@]:0:$((${#STACK[@]} - 1))}" )
+            o2=${STACK[*]:$((${#STACK[@]} - 1))}
+            STACK=( "${STACK[@]:0:$((${#STACK[@]} - 1))}" )
 
             STACK+=( "$(x-int-set-set "$o1" "$1" "$o2")" )
         else

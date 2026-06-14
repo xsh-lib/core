@@ -9,11 +9,25 @@ on:
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
+        # bash is the historical target; zsh is the macOS default login shell.
+        # Utilities run under zsh's ksh emulation (provided by xsh).
+        shell: [bash, zsh]
     runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} / ${{ matrix.shell }}
+    # The zsh jobs install xsh from alexzhangs/xsh master, which does not yet
+    # carry zsh support — so they stay red until that release lands. Keep them
+    # non-blocking until then. TODO: remove this once a zsh-supporting xsh is
+    # released to master, so the zsh jobs become gating.
+    continue-on-error: ${{ matrix.shell == 'zsh' }}
 
     steps:
+      - name: Install zsh (Linux)
+        if: matrix.shell == 'zsh' && runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y zsh
+
       - name: Install xsh
         run: |
           git clone --depth=50 --branch=master https://github.com/alexzhangs/xsh.git /tmp/xsh
@@ -25,9 +39,8 @@ jobs:
           source ~/.xshrc
           xsh load -b "${{ github.head_ref || github.ref_name }}" xsh-lib/core
 
-      - name: Run tests
-        shell: bash
-        run: |
-          source ~/.xshrc
-          xsh list
-          bash ~/.xsh/repo/xsh-lib/core/test.sh
+      - name: Run tests (${{ matrix.shell }})
+        # test.sh self-sources ~/.xshrc, so running it as a child of the matrix
+        # shell makes the utilities execute under that shell (bash, or zsh's
+        # ksh emulation). No need to `source ~/.xshrc` here first.
+        run: ${{ matrix.shell }} ~/.xsh/repo/xsh-lib/core/test.sh

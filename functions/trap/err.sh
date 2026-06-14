@@ -44,7 +44,10 @@ function err () {
     while getopts Eer opt; do
         case $opt in
             E)
-                set -E
+                # zsh: traps are inherited by shell functions by default
+                if [[ -z ${ZSH_VERSION-} ]]; then
+                    set -E
+                fi
                 ;;
             e)
                 on_error='exit'
@@ -65,6 +68,9 @@ function err () {
     # shellcheck disable=SC2016
     funcode='
         function __xsh_trap_err_on_err__ () {
+            # zsh: pin bash-compatible (0-indexed) arrays and word splitting
+            [[ -z ${ZSH_VERSION-} ]] || emulate -L ksh
+
             declare ret=$1
             declare command=$2
             declare lineno=$3
@@ -73,7 +79,10 @@ function err () {
             declare source=("${@:6}")
 
             declare max_index
-            max_index=$(printf "%s\n" ${!func[@]} ${!source[@]} | sort -rn | head -1)
+            max_index=$(( (${#func[@]} > ${#source[@]} ? ${#func[@]} : ${#source[@]}) - 1 ))
+            if [[ $max_index -lt 0 ]]; then
+                max_index=
+            fi
 
             printf "\nError code: %s\n" "$ret"
             printf "Traceback (most recent call first)\n"
@@ -103,7 +112,20 @@ function err () {
     fi
 
     # set trap ERR
-    trap '__xsh_trap_err_on_err__ $? \
-         "${BASH_COMMAND}" "${LINENO}" "${FUNCNAME[*]}" "$0" "${BASH_SOURCE[@]}" 1>&2; \
-         '$on_error ERR
+    if [[ -n ${ZSH_VERSION-} ]]; then
+        # LOCAL_TRAPS (set by the ksh emulation applied on import) would
+        # remove the trap when this function returns - disable it so the
+        # trap persists, matching the bash behavior (see Clean section)
+        setopt no_local_traps
+        # zsh has no BASH_COMMAND and no useful LINENO in the trap; pass
+        # funcfiletrace (file:line of each call site) in place of BASH_SOURCE
+        # shellcheck disable=SC2154
+        trap '__xsh_trap_err_on_err__ $? \
+             "?" "?" "${funcstack[*]}" "$0" "${funcfiletrace[@]}" 1>&2; \
+             '$on_error ERR
+    else
+        trap '__xsh_trap_err_on_err__ $? \
+             "${BASH_COMMAND}" "${LINENO}" "${FUNCNAME[*]}" "$0" "${BASH_SOURCE[@]}" 1>&2; \
+             '$on_error ERR
+    fi
 }

@@ -12,7 +12,13 @@
 #?   IV
 #?
 function last () {
-    # try to declare nothing, new variable may override input variable.
-    set -- "$1[@]"
-    echo "${!1:(-1)}"
+    declare __len
+    eval "__len=\${#${1:?}[@]}"
+    if [[ ${__len} -eq 0 ]]; then
+        # empty array
+        return 1
+    fi
+    # NOTE: a negative offset `:(-1)` is unsupported by bash 3.2 and zsh;
+    # use the explicit offset instead
+    eval "echo \"\${${1}[@]:$((__len - 1))}\""
 }

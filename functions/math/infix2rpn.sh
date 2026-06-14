@@ -115,18 +115,23 @@ function infix2rpn () {
         unset operand
     }
 
+    # NOTE: a negative offset `:(-1)` is unsupported by bash 3.2 and zsh:
+    # read the last element with an explicit offset instead.
+    # NOTE: `unset 'STACK[i]'` doesn't remove the element under zsh (zsh
+    # arrays can't be sparse): pop the last element by re-assigning the
+    # array with the last element sliced off instead.
     function __process_operator () {
         if [[ -n $operator ]]; then
-            while [[ ${#STACK[@]} -gt 0 && ${STACK[*]:(-1)} != '(' ]]; do
-                priority=$($COMPARATOR "$operator" "${STACK[@]:(-1)}")
+            while [[ ${#STACK[@]} -gt 0 && ${STACK[*]:$((${#STACK[@]} - 1))} != '(' ]]; do
+                priority=$($COMPARATOR "$operator" "${STACK[@]:$((${#STACK[@]} - 1))}")
                 if [[ -z $priority ]]; then
                     xsh log error "wrong operator in the expression or specified wrong comparator."
                     return 255
                 elif [[ $priority -gt 0 ]]; then
                     break
                 else
-                    OUTPUT+=( "${STACK[@]:(-1)}" )
-                    unset "STACK[$((${#STACK[@]} - 1))]"
+                    OUTPUT+=( "${STACK[@]:$((${#STACK[@]} - 1))}" )
+                    STACK=( "${STACK[@]:0:$((${#STACK[@]} - 1))}" )
                 fi
             done
             STACK+=( "$operator" )
@@ -142,9 +147,23 @@ function infix2rpn () {
 
     # Convert Infix to RPN
 
+    # `read -n1` is bash-only; zsh reads single characters with `-k1`
+    # (`-u0` keeps it reading from stdin rather than the terminal), and
+    # unlike bash it returns the newline character itself - normalize it
+    # to an empty char to match the bash behavior
+    declare -a read_char_opts
+    if [[ -n ${ZSH_VERSION-} ]]; then
+        read_char_opts=( -k1 -u0 )
+    else
+        read_char_opts=( -n1 )
+    fi
+
     declare operand operator priority
     declare char
-    while IFS= read -r -n1 char; do
+    while IFS= read -r "${read_char_opts[@]}" char; do
+        if [[ $char == $'\n' ]]; then
+            char=''
+        fi
         case "$char" in
             # WHITESPACE or TAB
             [[:blank:]])
@@ -161,13 +180,13 @@ function infix2rpn () {
             ')')
                 __process_operand || return $?
 
-                while [[ ${STACK[*]:(-1)} != '(' ]]; do
-                    OUTPUT+=( "${STACK[@]:(-1)}" )
-                    unset "STACK[$((${#STACK[@]} - 1))]"
+                while [[ ${#STACK[@]} -gt 0 && ${STACK[*]:$((${#STACK[@]} - 1))} != '(' ]]; do
+                    OUTPUT+=( "${STACK[@]:$((${#STACK[@]} - 1))}" )
+                    STACK=( "${STACK[@]:0:$((${#STACK[@]} - 1))}" )
                 done
 
-                if [[ ${STACK[*]:(-1)} == '(' ]]; then
-                    unset "STACK[$((${#STACK[@]} - 1))]"
+                if [[ ${#STACK[@]} -gt 0 && ${STACK[*]:$((${#STACK[@]} - 1))} == '(' ]]; then
+                    STACK=( "${STACK[@]:0:$((${#STACK[@]} - 1))}" )
                 else
                     xsh log error "wrong expression found! a right parenthesis ')' without a paired left parentthesis '('."
                     return 255
@@ -189,8 +208,8 @@ function infix2rpn () {
     done <<< "${*//$'\n'/ }"  # Replace newline as whitespace
 
     while [[ ${#STACK[@]} -gt 0 ]]; do
-        OUTPUT+=( "${STACK[@]:(-1)}" )
-        unset "STACK[$((${#STACK[@]} - 1))]"
+        OUTPUT+=( "${STACK[@]:$((${#STACK[@]} - 1))}" )
+        STACK=( "${STACK[@]:0:$((${#STACK[@]} - 1))}" )
     done
 
     unset -f __process_operand __process_operator

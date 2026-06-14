@@ -21,15 +21,13 @@ function get () {
         declare -a fmts
 
         while getopts "${OPTION:?}" opt; do
-            # shellcheck disable=SC2254
-            case $opt in
-                $CONDITION)
-                    fmts+=( "%$opt" )
-                    ;;
-                *)
-                    return 255
-                    ;;
-            esac
+            # plain string membership: a dynamic extglob/alternation pattern
+            # would not be matched as a pattern by zsh
+            if [[ ${CONDITION:?} == *"|${opt}|"* ]]; then
+                fmts+=( "%$opt" )
+            else
+                return 255
+            fi
         done
         shift $((OPTIND - 1))
 
@@ -57,13 +55,9 @@ function get () {
     # remove the non-default options
     DEFAULT_OPTIONS=( "${DEFAULT_OPTIONS[@]#[a-zA-Z]}" )
 
-    # generate extglob condition `@(x|y)`
+    # generate the allowed-options condition `|x|y|`
     CONDITION=${list//%/}
-    CONDITION=${CONDITION// /|}
-    CONDITION="@(${CONDITION})"
-
-    # enable extglob in order to use dynamic case condition
-    shopt -s extglob
+    CONDITION="|${CONDITION// /|}|"
 
     # call the real implementation
     __get__ "${@:2}"; declare ret=$?

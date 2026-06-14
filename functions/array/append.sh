@@ -13,14 +13,16 @@
 #?   declare -a arr='([3]="III" [4]="IV" [5]="V" [6]="VI")'
 #?
 function append () {
-    declare __i
+    declare __i __value
 
     if [[ $# -lt 2 ]]; then
         return 255
     fi
 
     for __i in $(seq 2 $#); do
+        # `${!__i}` is bash-only; `${*:N:1}` works in both shells
+        __value=${*:$((__i)):1}
         # clear IFS to avoid triming whitespace
-        IFS='' read -r "$1[$(xsh /array/inext "$1")]" <<< "${!__i}" || return $?
+        IFS='' read -r "$1[$(xsh /array/inext "$1")]" <<< "${__value}" || return $?
     done
 }
