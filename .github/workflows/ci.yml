@@ -29,6 +29,15 @@ jobs:
           - { os: ubuntu-latest, container: '',           shell_path: /usr/bin/zsh, label: zsh-5.x-linux }
 
     steps:
+      # Codecov's uploader builds its file "network" by scanning the workspace git
+      # tree; without a checkout the workspace is empty and every upload is rejected
+      # as REPORT_EMPTY ("received the network and no coverage data"). The test suite
+      # loads the lib via `xsh load`, so this checkout exists ONLY so Codecov can map
+      # the coverage paths to source. Only the coverage job needs it.
+      - name: Check out repository (Codecov source mapping)
+        if: matrix.coverage
+        uses: actions/checkout@v5
+
       # rockylinux:8 (bash 4.4) is a minimal image — install git first (needed
       # to clone xsh), then the tools xsh + the test suite use.
       - name: Pre-install git (rockylinux container)
