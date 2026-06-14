@@ -8,25 +8,54 @@ on:
 
 jobs:
   test:
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    name: ${{ matrix.label }}
+    # Force bash for the setup steps (GHA defaults to sh inside containers).
+    defaults:
+      run:
+        shell: bash
+    # Mirror alexzhangs/xsh's shell matrix: bash 3.2 / 4.4 / 5.x + zsh 5.x.
+    # Utilities run under zsh's ksh emulation (provided by xsh >= 0.7.0).
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        # bash is the historical target; zsh is the macOS default login shell.
-        # Utilities run under zsh's ksh emulation (provided by xsh).
-        shell: [bash, zsh]
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }} / ${{ matrix.shell }}
-    # The zsh jobs install xsh from alexzhangs/xsh master, which does not yet
-    # carry zsh support — so they stay red until that release lands. Keep them
-    # non-blocking until then. TODO: remove this once a zsh-supporting xsh is
-    # released to master, so the zsh jobs become gating.
-    continue-on-error: ${{ matrix.shell == 'zsh' }}
+        include:
+          - { os: ubuntu-latest, container: '',           shell_path: /bin/bash,    label: bash-5.x-linux }
+          - { os: macos-latest,  container: '',           shell_path: /bin/bash,    label: bash-3.2-macos }
+          - { os: macos-latest,  container: '',           shell_path: brew,         label: bash-5.x-macos }
+          - { os: ubuntu-latest, container: rockylinux:8, shell_path: /bin/bash,    label: bash-4.4-linux }
+          - { os: macos-latest,  container: '',           shell_path: /bin/zsh,     label: zsh-5.x-macos }
+          - { os: ubuntu-latest, container: '',           shell_path: /usr/bin/zsh, label: zsh-5.x-linux }
 
     steps:
+      # rockylinux:8 (bash 4.4) is a minimal image — install git first (needed
+      # to clone xsh), then the tools xsh + the test suite use.
+      - name: Pre-install git (rockylinux container)
+        if: matrix.container != ''
+        run: dnf install -y git
+
+      - name: Install dependencies (rockylinux container)
+        if: matrix.container != ''
+        run: |
+          dnf install -y --allowerasing coreutils
+          dnf install -y gawk sed file findutils diffutils procps-ng which tar gzip python3
+          command -v python >/dev/null 2>&1 || ln -sf "$(command -v python3)" /usr/local/bin/python
+          git config --global --add safe.directory '*'
+
       - name: Install zsh (Linux)
-        if: matrix.shell == 'zsh' && runner.os == 'Linux'
+        if: matrix.container == '' && runner.os == 'Linux' && contains(matrix.shell_path, 'zsh')
         run: sudo apt-get update && sudo apt-get install -y zsh
+
+      - name: Install Homebrew bash (macOS bash 5.x)
+        if: matrix.shell_path == 'brew'
+        run: |
+          brew install bash
+          echo "SHELL_PATH=$(brew --prefix)/bin/bash" >> "$GITHUB_ENV"
+
+      - name: Set shell path
+        if: matrix.shell_path != 'brew'
+        run: echo "SHELL_PATH=${{ matrix.shell_path }}" >> "$GITHUB_ENV"
 
       - name: Install xsh
         run: |
@@ -34,13 +63,11 @@ jobs:
           bash /tmp/xsh/install.sh
 
       - name: Load library from current branch
-        shell: bash
         run: |
           source ~/.xshrc
           xsh load -b "${{ github.head_ref || github.ref_name }}" xsh-lib/core
 
-      - name: Run tests (${{ matrix.shell }})
-        # test.sh self-sources ~/.xshrc, so running it as a child of the matrix
-        # shell makes the utilities execute under that shell (bash, or zsh's
-        # ksh emulation). No need to `source ~/.xshrc` here first.
-        run: ${{ matrix.shell }} ~/.xsh/repo/xsh-lib/core/test.sh
+      - name: Run tests (${{ matrix.label }})
+        # test.sh self-sources ~/.xshrc, so running it under $SHELL_PATH makes
+        # the utilities execute under that shell (bash, or zsh's ksh emulation).
+        run: "$SHELL_PATH" ~/.xsh/repo/xsh-lib/core/test.sh
