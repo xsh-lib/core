@@ -60,6 +60,18 @@ xsh log info "/json/parser"
 xsh log info "/uri/parser"
 [[ $(xsh /uri/parser -s https://github.com) == https ]]
 
+# /csv/parser -e exercises output_variable(), which builds `fns[length(fns)+1]`.
+# Under gawk (Linux) that typed `fns` as a scalar and emptied the parse; this
+# asserts the variable output is populated on every shell/OS.
+xsh log info "/csv/parser (-e variable output)"
+__csv_tmp=$(mktemp "${TMPDIR:-/tmp}/xsh-csv-test.XXXXXXXX")
+printf 'name,age\nalice,30\nbob,25\n' > "$__csv_tmp"
+__csv_out=$(xsh /csv/parser -e "$__csv_tmp")
+rm -f "$__csv_tmp"
+[[ $__csv_out == *"FIELDS_name_ROWS"* ]]
+[[ $__csv_out == *alice* ]]
+[[ $__csv_out == *bob* ]]
+
 # ---------- dotfile ----------
 # Tests use a temporary repo with a .dotfilemap to avoid depending on any
 # real dotfile repository.
