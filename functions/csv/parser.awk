@@ -116,6 +116,11 @@ function output_table (array, m, n, ofs,   i, j) {
 #?
 function output_variable (array, m, n, prefix, quote, single,   i, j, fn, fns, fv) {
     i = 1
+    # Pre-type `fns` as an array. Under gawk the first reference `length(fns)` in
+    # `fns[length(fns)+1]` below otherwise types it as a scalar, then the subscript
+    # fails with "attempt to use scalar as an array" (BSD awk on macOS tolerates
+    # it). This empties the parse on Linux — see xsh-lib/xsql query failures.
+    split("", fns)
     for (j=1;j<=n;j++) {
         fv = array[i "," j]
         fn = get_var_name(fv)
