@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-latest, container: '',           shell_path: /bin/bash,    label: bash-5.x-linux }
+          - { os: ubuntu-latest, container: '',           shell_path: /bin/bash,    label: bash-5.x-linux, coverage: true }
           - { os: macos-latest,  container: '',           shell_path: /bin/bash,    label: bash-3.2-macos }
           - { os: macos-latest,  container: '',           shell_path: brew,         label: bash-5.x-macos }
           - { os: ubuntu-latest, container: rockylinux:8, shell_path: /bin/bash,    label: bash-4.4-linux }
@@ -47,6 +47,17 @@ jobs:
         if: matrix.container == '' && runner.os == 'Linux' && contains(matrix.shell_path, 'zsh')
         run: sudo apt-get update && sudo apt-get install -y zsh
 
+      - name: Install kcov (coverage, Linux)
+        if: matrix.coverage
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake binutils-dev libcurl4-openssl-dev libdw-dev libiberty-dev
+          wget -q https://github.com/SimonKagstrom/kcov/archive/refs/tags/v43.tar.gz
+          tar xzf v43.tar.gz
+          (cd kcov-43 && mkdir -p build && cd build && cmake -DCMAKE_INSTALL_PREFIX="$HOME/kcov" .. && make && make install)
+          rm -rf kcov-43 v43.tar.gz
+          echo "$HOME/kcov/bin" >> "$GITHUB_PATH"
+
       - name: Install Homebrew bash (macOS bash 5.x)
         if: matrix.shell_path == 'brew'
         run: |
@@ -70,5 +81,48 @@ jobs:
       - name: Run tests (${{ matrix.label }})
         # test.sh self-sources ~/.xshrc, so running it under $SHELL_PATH makes
         # the utilities execute under that shell (bash, or zsh's ksh emulation).
+        if: matrix.coverage != true
         run: |
           "$SHELL_PATH" ~/.xsh/repo/xsh-lib/core/test.sh
+
+      - name: Run tests with coverage (${{ matrix.label }})
+        # Pass the script DIRECTLY (not `bash test.sh`): kcov then uses its shell
+        # collector. `bash test.sh` makes kcov trace the bash ELF binary and
+        # record 0 lines. --include-path scopes the report to this lib's function
+        # utilities; script-type utilities run as child `bash` and aren't traced.
+        if: matrix.coverage
+        run: |
+          chmod +x "$HOME/.xsh/repo/xsh-lib/core/test.sh"
+          # Scope to the function utilities (script utilities run as child bash and
+          # aren't instrumentable).
+          kcov --include-path="$HOME/.xsh/repo/xsh-lib/core/functions" "$PWD/coverage" "$HOME/.xsh/repo/xsh-lib/core/test.sh"
+          cob="$(find "$PWD/coverage" -name cobertura.xml | head -1)"
+          # Normalize kcov's cobertura for Codecov:
+          #  - <source> -> "." and prefix filenames with functions/ => repo-relative.
+          #  - strip kcov's non-standard branch-* attrs (branches-covered="1.0", etc.)
+          #    that make Codecov reject the report as unusable ("incorrect data format").
+          sed -i -E \
+            -e 's#<source>[^<]*</source>#<source>.</source>#' \
+            -e 's#filename="#filename="functions/#g' \
+            -e 's/ branch(es)?-(rate|covered|valid)="[^"]*"//g' \
+            "$cob"
+          cp "$cob" "$PWD/cobertura.xml"
+          # TEMP ISOLATION TEST: minimal, textbook-valid cobertura referencing one
+          # real tracked file (single line to stay safe inside the YAML block scalar).
+          # If this still REPORT_EMPTYs, the fault is Codecov/repo-side, not kcov.
+          printf '%s' '<?xml version="1.0" ?><coverage line-rate="0.5" lines-covered="1" lines-valid="2" version="1.9" timestamp="0"><sources><source>.</source></sources><packages><package name="p" line-rate="0.5"><classes><class name="upper" filename="functions/string/upper.sh" line-rate="0.5"><methods/><lines><line number="1" hits="1"/><line number="2" hits="0"/></lines></class></classes></package></packages></coverage>' > "$PWD/cobertura.xml"
+
+      - name: Upload coverage to Codecov
+        if: matrix.coverage
+        uses: codecov/codecov-action@v5
+        env:
+          # codecov CLI's GPG self-check on its own download fails intermittently;
+          # skip it (real upload is governed by token presence below).
+          CC_SKIP_VALIDATION: 'true'
+        with:
+          # Sanitized, repo-relative, line-only cobertura.
+          files: ./cobertura.xml
+          disable_search: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # Best-effort: transient Codecov issues shouldn't fail CI.
+          fail_ci_if_error: false
