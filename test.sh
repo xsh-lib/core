@@ -1,13 +1,34 @@
 #!/bin/bash
 
+# Make the `xsh` function available when this script is run as a child process.
+# Under bash, xsh and the imported utilities are exported functions, so a child
+# `bash test.sh` inherits them and this is a no-op. zsh cannot export functions,
+# so a child `zsh test.sh` would otherwise only see the `bin/xsh` shim (which
+# runs bash) — sourcing ~/.xshrc here defines xsh as a real zsh function so the
+# utilities execute under zsh's ksh emulation, which is the whole point of
+# testing under zsh.
+if ! type xsh 2>/dev/null | grep -q 'function'; then
+    # shellcheck source=/dev/null
+    . ~/.xshrc
+fi
+
 set -e -o pipefail
 
 xsh log info 'xsh list /'
 xsh list /
 
 xsh log info "/array/first"
+# Contiguous arrays behave identically in bash and zsh.
 # shellcheck disable=SC2034
-[[ $(arr=([3]="III" [4]="IV"); xsh /array/first arr) == III ]]
+[[ $(arr=(III IV); xsh /array/first arr) == III ]]
+# Sparse-array literal: bash-only. zsh arrays can't be sparse — an
+# `arr=([3]=III [4]=IV)` literal fills indices 0..2 with empty strings, so the
+# first element is "" there (a documented, inherent zsh divergence). Assert the
+# sparse behavior under bash only.
+if [[ -z ${ZSH_VERSION-} ]]; then
+    # shellcheck disable=SC2034
+    [[ $(arr=([3]="III" [4]="IV"); xsh /array/first arr) == III ]]
+fi
 
 xsh log info "/file/mask"
 [[ $(xsh /file/mask -f2 -c1-4 <<< "username password") == "username ****word" ]]
