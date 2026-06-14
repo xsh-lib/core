@@ -5,7 +5,6 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/commits/master)
 
 [![CI](https://github.com/xsh-lib/core/actions/workflows/ci.yml/badge.svg)](https://github.com/xsh-lib/core/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/github/xsh-lib/core/graph/badge.svg?token=9N6P7MY18U)](https://codecov.io/github/xsh-lib/core)
 [![CodeFactor](https://www.codefactor.io/repository/github/xsh-lib/core/badge)](https://www.codefactor.io/repository/github/xsh-lib/core)
 [![GitHub issues](https://img.shields.io/github/issues/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/xsh-lib/core.svg?style=flat-square)](https://github.com/xsh-lib/core/pulls)
